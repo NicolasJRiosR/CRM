@@ -16,6 +16,6 @@ export class InventarioService {
   constructor(private http: HttpClient) {}
 
   getInventario(): Observable<Producto[]> {
-    return this.http.get<Producto[]>('/api/inventario');
+    return this.http.get<Producto[]>('/api/inventario'); //hay que poner el de verdad, el nuestro vaya
   }
 }

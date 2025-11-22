@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { InventarioService, Producto } from '../../services/inventario.service';
-import { CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-inventario-lista',
   standalone: true,
-  imports: [CurrencyPipe],
+  imports: [CommonModule, CurrencyPipe],
   templateUrl: './inventario-lista.component.html',
   styleUrl: './inventario-lista.component.css'
 })
