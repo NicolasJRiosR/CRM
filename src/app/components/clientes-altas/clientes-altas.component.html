@@ -1,0 +1,67 @@
+<div class="flex justify-between items-center mt-6 mb-6 px-4">
+  <h2 class="text-xl font-bold">Alta de Cliente</h2>
+  <a 
+    routerLink="/clientes/lista" 
+    class="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-500 mr-4"
+  >
+    Volver a la lista
+  </a>
+</div>
+
+<form [formGroup]="clienteForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6 px-4">
+
+  <!-- Datos personales -->
+  <fieldset class="border p-4 rounded">
+    <legend class="font-semibold text-lg mb-2">Datos personales</legend>
+
+    <label class="block mb-1">Nombre</label>
+    <input formControlName="nombre" class="border p-2 w-full mb-2" />
+
+    <label class="block mb-1">Apellidos</label>
+    <input formControlName="apellidos" class="border p-2 w-full mb-2" />
+
+    <label class="block mb-1">Email</label>
+    <input formControlName="email" class="border p-2 w-full mb-2" />
+
+    <label class="block mb-1">Teléfono</label>
+    <input formControlName="telefono" class="border p-2 w-full mb-2" />
+
+    <label class="block mb-1">Dirección completa</label>
+    <input formControlName="direccionCompleta" class="border p-2 w-full" />
+  </fieldset>
+
+  <!-- Preferencias -->
+  <fieldset class="border p-4 rounded">
+    <legend class="font-semibold text-lg mb-2">Preferencias del cliente</legend>
+
+    <label class="block mb-1">Talla</label>
+    <input formControlName="talla" class="border p-2 w-full mb-2" />
+
+    <label class="block mb-1">Equipo favorito</label>
+    <input formControlName="equipoFavorito" class="border p-2 w-full" />
+
+    <label class="block mb-1">Jugador favorito</label>
+    <input formControlName="jugadorFavorito" class="border p-2 w-full" />
+  </fieldset>
+
+  <!-- Otros datos -->
+  <fieldset class="border p-4 rounded">
+    <legend class="font-semibold text-lg mb-2">Otros datos del cliente</legend>
+
+    <div class="flex items-center gap-2 mb-2">
+      <input type="checkbox" formControlName="haCompradoAntes" />
+      <label>¿Ha comprado antes en la tienda?</label>
+    </div>
+
+    <div class="flex items-center gap-2 mb-2">
+      <input type="checkbox" formControlName="deseaRecibirPromociones" />
+      <label>¿Desea recibir promociones?</label>
+    </div>
+
+  </fieldset>
+
+  <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-8">
+    Guardar Cliente
+  </button>
+
+</form>

@@ -1,6 +1,7 @@
-<button class="bg-blue-500 text-white px-4 py-2 rounded">
-  Botón Tailwind 
-</button>
+<nav class="bg-gray-800 p-4 text-white flex gap-4">
+  <a routerLink="/inventario/lista" routerLinkActive="font-bold text-yellow-400">Lista</a>
+  <a routerLink="/inventario/altas" routerLinkActive="font-bold text-yellow-400">Altas productos</a>
+  <a routerLink="/clientes/lista" routerLinkActive="font-bold text-yellow-400">Clientes</a>
+</nav>
 
-<app-inventario-lista></app-inventario-lista>
-
+<router-outlet></router-outlet>

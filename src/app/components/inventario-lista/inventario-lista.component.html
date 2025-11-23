@@ -1,23 +1,29 @@
 <div class="p-4">
-  <h2 class="text-xl font-semibold mb-4">Inventario</h2>
-  <table class="min-w-full border border-gray-300 rounded">
+  <h2 class="text-xl font-semibold mb-4 text-center">Inventario</h2>
+
+  <table class="min-w-full table-auto border border-gray-300 rounded">
     <thead class="bg-gray-100">
-      <tr>
-        <th class="px-4 py-2 text-left">Nombre</th>
-        <th class="px-4 py-2 text-left">Stock</th>
-        <th class="px-4 py-2 text-left">Precio</th>
+      <tr class="text-center">
+        <th class="px-4 py-2 align-middle">Jugador</th>
+        <th class="px-4 py-2 align-middle">Equipo</th>
+        <th class="px-4 py-2 align-middle">Año</th>
+        <th class="px-4 py-2 align-middle">Talla</th>
+        <th class="px-4 py-2 align-middle">Stock</th>
       </tr>
     </thead>
+
     <tbody>
       @for (producto of productos; track producto.id) {
-        <tr class="border-t">
-          <td class="px-4 py-2">{{ producto.nombre }}</td>
-          <td class="px-4 py-2">{{ producto.stock }}</td>
-          <td class="px-4 py-2">{{ producto.precio | currency:'EUR' }}</td>
+        <tr class="border-t hover:bg-gray-50 text-center">
+          <td class="px-4 py-2 border-b align-middle">{{ producto.jugador }}</td>
+          <td class="px-4 py-2 border-b align-middle">{{ producto.equipo }}</td>
+          <td class="px-4 py-2 border-b align-middle">{{ producto.anio }}</td>
+          <td class="px-4 py-2 border-b align-middle">{{ producto.talla }}</td>
+          <td class="px-4 py-2 border-b align-middle">{{ producto.stock }}</td>
         </tr>
       } @empty {
-        <tr>
-          <td colspan="3" class="px-4 py-2 text-center text-gray-500">
+        <tr class="text-center">
+          <td colspan="5" class="px-4 py-6 text-gray-500 align-middle">
             No hay productos en el inventario
           </td>
         </tr>

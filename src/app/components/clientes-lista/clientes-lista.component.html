@@ -1,0 +1,29 @@
+<div class="flex justify-between items-center mt-6 mb-6 px-4">
+  <h2 class="text-xl font-bold">Lista de Clientes</h2>
+  <a routerLink="/clientes/alta"  class="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-500 mr-4">
+    Añadir Cliente
+  </a>
+</div>
+
+@if (clientes.length > 0) {
+  <table class="table-auto w-full border">
+    <thead>
+      <tr>
+        <th class="border px-2">Nombre</th>
+        <th class="border px-2">Correo</th>
+        <th class="border px-2">Teléfono</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (cliente of clientes; track cliente.id) {
+        <tr>
+          <td class="border px-2">{{ cliente.nombre }}</td>
+          <td class="border px-2">{{ cliente.correo }}</td>
+          <td class="border px-2">{{ cliente.telefono }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else {
+  <p class="text-gray-500">No hay clientes registrados.</p>
+}
