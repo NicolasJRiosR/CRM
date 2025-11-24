@@ -16,7 +16,7 @@ proxy.conf.json es para evitar CORS durante el desarrollo
 
 ## Base de datos (MySQL)
 - Crear: ejecutar docs/schema.sql y docs/data.sql en MySQL Workbench
-- Autoinicialización opcional: copiar scripts a backend/src/main/resources y usar spring.sql.init.mode=always
+La base de datos es: crmdb
 
 ## Endpoints
 - /api/clientes, /api/productos, /api/proveedores, /api/ventas, /api/compras, /api/interacciones, /api/auth
