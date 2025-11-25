@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { InventarioListaComponent } from './components/inventario-lista/inventario-lista.component';
-
+import { NavbarComponent } from './navbar/NavbarComponent'; 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,InventarioListaComponent],
+  imports: [RouterOutlet,NavbarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'front';
+  title = 'CRM';
 }

@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:9080/api'
+  apiBaseUrl: 'http://localhost:9080',
+  jwtStorageKey: 'crm_token',
 };

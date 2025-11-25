@@ -1,0 +1,22 @@
+<div class="max-w-md mx-auto bg-white dark:bg-gray-800 p-6 rounded shadow">
+  <h1 class="text-xl font-semibold mb-4">Entrar</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div>
+      <label class="block mb-1">Usuario</label>
+      <input class="w-full border rounded px-3 py-2" formControlName="username" />
+    </div>
+    <div>
+      <label class="block mb-1">Contraseña</label>
+      <input type="password" class="w-full border rounded px-3 py-2" formControlName="password" />
+    </div>
+    <button class="bg-brand-700 text-white px-4 py-2 rounded disabled:opacity-50" [disabled]="form.invalid">
+      Entrar
+    </button>
+  </form>
+
+  @if (error) {
+    <p class="text-red-600 mt-3">{{ error }}</p>
+  }
+
+ 
+</div>
