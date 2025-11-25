@@ -1,0 +1,13 @@
+<div class="bg-white dark:bg-gray-800 p-4 rounded shadow max-w-2xl">
+  <h2 class="text-xl font-semibold mb-4">@if(id){Editar} @else {Nuevo} producto</h2>
+  <form [formGroup]="form" (ngSubmit)="save()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div><label>Nombre</label><input class="w-full border rounded px-3 py-2" formControlName="nombre"/></div>
+    <div><label>Stock</label><input type="number" class="w-full border rounded px-3 py-2" formControlName="stock"/></div>
+    <div><label>Precio</label><input type="number" class="w-full border rounded px-3 py-2" formControlName="precio"/></div>
+    <div class="flex items-center gap-2"><input type="checkbox" formControlName="activo"/><span>Activo</span></div>
+    <div class="col-span-full flex gap-3">
+      <button class="bg-brand-700 text-white px-4 py-2 rounded disabled:opacity-50" type="submit" [disabled]="form.invalid">Guardar</button>
+      <button class="bg-gray-200 px-4 py-2 rounded" type="button" (click)="router.navigate(['/productos'])">Cancelar</button>
+    </div>
+  </form>
+</div>

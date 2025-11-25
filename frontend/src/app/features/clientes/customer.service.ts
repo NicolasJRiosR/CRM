@@ -1,0 +1,19 @@
+import { Injectable, signal } from '@angular/core';
+import { ApiService } from '../../shared/services/api.service';
+
+export interface Cliente { id: number; nombre: string; email: string; telefono?: string; activo: boolean; }
+
+@Injectable({ providedIn: 'root' })
+export class CustomerService {
+  clientesSig = signal<Cliente[]>([]);
+  constructor(private api: ApiService) {}
+
+  list(q?: string) {
+    this.api.get<Cliente[]>('/api/clientes', q ? { q } : undefined)
+      .subscribe(res => this.clientesSig.set(res));
+  }
+  find(id: number) { return this.api.get<Cliente>(`/api/clientes/${id}`); }
+  create(c: Omit<Cliente, 'id'>) { return this.api.post<Cliente>('/api/clientes', c); }
+  update(c: Cliente) { return this.api.put<Cliente>(`/api/clientes/${c.id}`, c); }
+  remove(id: number) { return this.api.delete<void>(`/api/clientes/${id}`); }
+}
