@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { VentasService } from './ventas.service';
 import { ProductosService } from '../productos/productos.service';
+import { CustomerService } from '../clientes/customer.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -13,7 +14,10 @@ import { CommonModule } from '@angular/common';
 export class VentasComponent {
   ventasSvc = inject(VentasService);
   productosSvc = inject(ProductosService);
+  clientesSvc = inject(CustomerService);
   fb = inject(FormBuilder);
+
+  clientesSig = this.clientesSvc.clientesSig;
 
   form = this.fb.group({
     productoId: [null, Validators.required],
@@ -22,7 +26,11 @@ export class VentasComponent {
     clienteId: [null],
   });
 
-  ngOnInit() { this.ventasSvc.list(); this.productosSvc.list(); }
+  ngOnInit() {
+    this.ventasSvc.list();
+    this.productosSvc.list();
+    this.clientesSvc.list();
+  }
 
   add() {
     if (this.form.invalid) return;

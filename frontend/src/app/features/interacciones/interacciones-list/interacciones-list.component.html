@@ -1,5 +1,11 @@
 <div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-4xl mx-auto">
-  <h2 class="text-2xl font-bold mb-4">Interacciones</h2>
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold">Interacciones</h2>
+    <a routerLink="/interacciones/nuevo"
+       class="bg-brand-700 text-white px-3 py-2 rounded hover:bg-brand-800">
+      Nueva interacción
+    </a>
+  </div>
 
   <!-- Filtro por cliente -->
   <div class="flex items-center gap-3 mb-6">
@@ -9,7 +15,9 @@
       placeholder="ID del cliente para filtrar"
       class="border rounded px-3 py-2 w-48"
     />
-    <button (click)="filter()" class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">Filtrar</button>
+    <button (click)="filter()" class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+      Filtrar
+    </button>
   </div>
 
   <!-- Lista de interacciones -->
@@ -17,44 +25,21 @@
     @for (i of svc.interaccionesSig(); track i.id) {
       <li class="py-3 flex justify-between items-start">
         <div>
-          <div class="font-semibold text-brand-700">{{ i.tipo }} · {{ i.fecha }}</div>
-          <div class="text-sm text-gray-600">{{ i.nota }}</div>
+          <div class="font-semibold text-brand-700">
+            {{ i.tipo }} · {{ i.fechaHora }}
+          </div>
+          <div class="text-sm text-gray-600">{{ i.descripcion }}</div>
         </div>
-        <span class="text-sm text-gray-700">Cliente: {{ i.clienteId }}</span>
+        <div class="flex flex-col items-end gap-2">
+          <span class="text-sm text-gray-700">
+            Cliente: {{ clienteNombre(i.clienteId) }}
+          </span>
+          <a [routerLink]="['/interacciones', i.id]"
+             class="text-blue-600 underline text-sm">
+            Editar
+          </a>
+        </div>
       </li>
     }
   </ul>
-
-  <!-- Formulario de nueva interacción -->
-  <form [formGroup]="form" (ngSubmit)="add()" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-    <input
-      type="number"
-      formControlName="clienteId"
-      placeholder="ID del cliente"
-      class="border rounded px-3 py-2"
-    />
-    <input
-      type="date"
-      formControlName="fecha"
-      placeholder="Fecha"
-      class="border rounded px-3 py-2"
-    />
-    <select formControlName="tipo" class="border rounded px-3 py-2">
-      <option value="LLAMADA">Llamada</option>
-      <option value="EMAIL">Email</option>
-      <option value="REUNION">Reunión</option>
-    </select>
-    <input
-      formControlName="nota"
-      placeholder="Escribe una nota..."
-      class="border rounded px-3 py-2 md:col-span-4"
-    />
-    <button
-      type="submit"
-      [disabled]="form.invalid"
-      class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 md:col-span-4"
-    >
-      Añadir
-    </button>
-  </form>
 </div>

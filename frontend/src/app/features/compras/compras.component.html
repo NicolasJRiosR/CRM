@@ -7,7 +7,7 @@
         <th class="p-2">ID</th>
         <th class="p-2">Producto</th>
         <th class="p-2">Cantidad</th>
-        <th class="p-2">Costo</th>
+        <th class="p-2">Precio unitario</th>
         <th class="p-2">Fecha</th>
       </tr>
     </thead>
@@ -17,7 +17,7 @@
           <td class="p-2">{{c.id}}</td>
           <td class="p-2">{{c.productoId}}</td>
           <td class="p-2">{{c.cantidad}}</td>
-          <td class="p-2">{{c.costoUnitario}}</td>
+          <td class="p-2">{{c.precioUnitario}}</td>
           <td class="p-2">{{c.fecha}}</td>
         </tr>
       }
@@ -31,7 +31,7 @@
       }
     </select>
     <input class="border rounded px-2 py-1" type="number" placeholder="Cantidad" formControlName="cantidad"/>
-    <input class="border rounded px-2 py-1" type="number" placeholder="Costo unitario" formControlName="costoUnitario"/>
+    <input class="border rounded px-2 py-1" type="number" placeholder="Precio unitario" formControlName="precioUnitario"/>
     <input class="border rounded px-2 py-1" type="number" placeholder="Proveedor ID (opcional)" formControlName="proveedorId"/>
     <button class="bg-brand-700 text-white px-3 py-2 rounded md:col-span-4" type="submit" [disabled]="form.invalid">
       Registrar compra

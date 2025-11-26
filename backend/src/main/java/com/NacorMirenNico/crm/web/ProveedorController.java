@@ -51,22 +51,28 @@ public class ProveedorController {
         Proveedor cur = repo.findById(id)
             .orElseThrow(() -> new NoSuchElementException("Proveedor " + id + " no encontrado"));
         cur.setNombre(dto.getNombre());
-        Proveedor updated = repo.save(cur);
-        return toDTO(updated);
+        cur.setContacto(dto.getContacto());
+        cur.setTelefono(dto.getTelefono());
+        return toDTO(repo.save(cur));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer id) { repo.deleteById(id); }
+    public void delete(@PathVariable Integer id) {
+        repo.deleteById(id);
+    }
 
     private ProveedorDTO toDTO(Proveedor p) {
-        return new ProveedorDTO(p.getId(), p.getNombre());
+        return new ProveedorDTO(p.getId(), p.getNombre(), p.getContacto(), p.getTelefono());
     }
 
     private Proveedor toEntity(ProveedorDTO dto) {
         Proveedor p = new Proveedor();
         p.setId(dto.getId());
         p.setNombre(dto.getNombre());
+        p.setContacto(dto.getContacto());
+        p.setTelefono(dto.getTelefono());
         return p;
     }
 }
+

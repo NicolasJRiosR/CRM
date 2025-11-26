@@ -4,22 +4,22 @@ USE crmdb;
 
 -- Tabla de usuarios (para login con Spring Security)
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    enabled BOOLEAN DEFAULT TRUE
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(60) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    enabled TINYINT DEFAULT 1
 );
 
 -- Roles de usuario
 CREATE TABLE roles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
+    id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(30) NOT NULL UNIQUE
 );
 
 -- Relación usuarios-roles
 CREATE TABLE users_roles (
-    user_id INT NOT NULL,
-    role_id INT NOT NULL,
+    user_id BIGINT UNSIGNED NOT NULL,
+    role_id SMALLINT UNSIGNED NOT NULL,
     PRIMARY KEY (user_id, role_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
@@ -28,16 +28,17 @@ CREATE TABLE users_roles (
 -- Clientes
 CREATE TABLE cliente (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE,
+    nombre VARCHAR(120) NOT NULL,
+    email VARCHAR(254) NOT NULL,
     telefono VARCHAR(20),
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
 -- Proveedores
 CREATE TABLE proveedor (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
+    nombre VARCHAR(120) NOT NULL,
     contacto VARCHAR(100),
     telefono VARCHAR(20)
 );
@@ -45,7 +46,7 @@ CREATE TABLE proveedor (
 -- Productos
 CREATE TABLE producto (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
+    nombre VARCHAR(150) NOT NULL,
     stock INT DEFAULT 0,
     precio DECIMAL(10,2) NOT NULL,
     proveedor_id INT,
@@ -55,11 +56,11 @@ CREATE TABLE producto (
 -- Compras
 CREATE TABLE compra (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    producto_id INT NOT NULL,
     proveedor_id INT NOT NULL,
+    producto_id INT NOT NULL,
+    fecha DATE DEFAULT (CURRENT_DATE),
     cantidad INT NOT NULL,
     precio_unitario DECIMAL(10,2) NOT NULL,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (producto_id) REFERENCES producto(id),
     FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)
 );
@@ -67,11 +68,11 @@ CREATE TABLE compra (
 -- Ventas
 CREATE TABLE venta (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    producto_id INT NOT NULL,
     cliente_id INT NOT NULL,
+    producto_id INT NOT NULL,
+    fecha DATE DEFAULT (CURRENT_DATE),
     cantidad INT NOT NULL,
     precio_unitario DECIMAL(10,2) NOT NULL,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (producto_id) REFERENCES producto(id),
     FOREIGN KEY (cliente_id) REFERENCES cliente(id)
 );
@@ -80,8 +81,8 @@ CREATE TABLE venta (
 CREATE TABLE interaccion (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
-    tipo VARCHAR(50) NOT NULL, -- email, llamada, reunión
-    descripcion TEXT,
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo VARCHAR(30) NOT NULL, -- email, llamada, reunión
+    descripcion VARCHAR(500),
+    fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES cliente(id)
 );

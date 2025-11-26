@@ -1,0 +1,18 @@
+<h2>Nuevo Proveedor</h2>
+
+<form (ngSubmit)="save()">
+  <label>Nombre:</label>
+  <input [value]="proveedor().nombre" (input)="update('nombre', $any($event.target).value)" required />
+
+  <label>Contacto:</label>
+  <input [value]="proveedor().contacto" (input)="update('contacto', $any($event.target).value)" />
+
+  <label>Teléfono:</label>
+  <input [value]="proveedor().telefono" (input)="update('telefono', $any($event.target).value)" />
+
+  <button type="submit">Guardar</button>
+</form>
+
+@if (guardado()) {
+  <p>Proveedor guardado correctamente.</p>
+}

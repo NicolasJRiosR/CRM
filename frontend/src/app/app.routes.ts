@@ -15,6 +15,10 @@ export const routes: Routes = [
         loadChildren: () => import('./features/interacciones/interacciones.routes').then(m => m.INTERACCIONES_ROUTES) },
       { path: 'productos', canActivate: [authGuard],
         loadChildren: () => import('./features/productos/productos.routes').then(m => m.PRODUCTOS_ROUTES) },
+        { 
+         path: 'proveedores', canActivate: [authGuard],
+         loadChildren: () => import('./features/proveedor/proveedores.routes').then(m => m.PROVEEDORES_ROUTES) 
+        },
       { path: 'ventas', canActivate: [authGuard],
         loadChildren: () => import('./features/ventas/ventas.routes').then(m => m.VENTAS_ROUTES) },
       { path: 'compras', canActivate: [authGuard],

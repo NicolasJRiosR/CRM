@@ -22,7 +22,6 @@ import com.NacorMirenNico.crm.repo.ClienteRepository;
 
 import jakarta.validation.Valid;
 
-
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
@@ -32,13 +31,11 @@ public class ClienteController {
         this.repo = repo;
     }
 
-    // Listar todos los clientes
     @GetMapping
     public List<ClienteDTO> list() {
         return repo.findAll().stream().map(this::toDTO).toList();
     }
 
-    // Obtener cliente por ID
     @GetMapping("/{id}")
     public ClienteDTO get(@PathVariable Integer id) {
         Cliente cliente = repo.findById(id)
@@ -46,34 +43,38 @@ public class ClienteController {
         return toDTO(cliente);
     }
 
-    // Crear cliente
     @PostMapping
     public ResponseEntity<ClienteDTO> create(@RequestBody @Valid ClienteDTO dto) {
         Cliente saved = repo.save(toEntity(dto));
         return ResponseEntity.created(URI.create("/api/clientes/" + saved.getId())).body(toDTO(saved));
     }
 
-    // Actualizar cliente
     @PutMapping("/{id}")
     public ClienteDTO update(@PathVariable Integer id, @RequestBody @Valid ClienteDTO dto) {
         Cliente cur = repo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Cliente " + id + " no encontrado"));
         cur.setNombre(dto.getNombre());
         cur.setEmail(dto.getEmail());
+        cur.setTelefono(dto.getTelefono());
+        cur.setFechaRegistro(dto.getFechaRegistro());
         Cliente updated = repo.save(cur);
         return toDTO(updated);
     }
 
-    // Eliminar cliente
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {
         repo.deleteById(id);
     }
 
-    // Conversión DTO ↔ Entidad
     private ClienteDTO toDTO(Cliente c) {
-        return new ClienteDTO(c.getId(), c.getNombre(), c.getEmail());
+        return new ClienteDTO(
+            c.getId(),
+            c.getNombre(),
+            c.getEmail(),
+            c.getTelefono(),
+            c.getFechaRegistro()
+        );
     }
 
     private Cliente toEntity(ClienteDTO dto) {
@@ -81,6 +82,8 @@ public class ClienteController {
         c.setId(dto.getId());
         c.setNombre(dto.getNombre());
         c.setEmail(dto.getEmail());
+        c.setTelefono(dto.getTelefono());
+        c.setFechaRegistro(dto.getFechaRegistro());
         return c;
     }
 }

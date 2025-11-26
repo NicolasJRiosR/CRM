@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.NacorMirenNico.crm.domain.Cliente;
@@ -26,9 +25,7 @@ import com.NacorMirenNico.crm.repo.VentaRepository;
 
 import jakarta.validation.Valid;
 
-
 @RestController
-@RequestMapping("/api/stock")
 public class StockController {
     private final ProductoRepository productos;
     private final ProveedorRepository proveedores;
@@ -45,7 +42,8 @@ public class StockController {
         this.ventas = ventas;
     }
 
-    @PostMapping("/compras")
+    // POST /api/compras
+    @PostMapping("/api/compras")
     public ResponseEntity<CompraDTO> crearCompra(@RequestBody @Valid MovimientoStockRequest rq) {
         Producto p = productos.findById(rq.productoId())
             .orElseThrow(() -> new NoSuchElementException("Producto " + rq.productoId() + " no existe"));
@@ -56,20 +54,21 @@ public class StockController {
         p.setStock(p.getStock() + rq.cantidad());
         productos.save(p);
 
-        // Registrar compra con precioUnitario
+        // Registrar compra
         Compra compra = new Compra();
         compra.setProducto(p);
         compra.setProveedor(prov);
         compra.setCantidad(rq.cantidad());
         compra.setFecha(LocalDate.now());
-        compra.setPrecioUnitario(rq.precioUnitario()); 
+        compra.setPrecioUnitario(rq.precioUnitario());
 
         Compra saved = compras.save(compra);
 
-        return ResponseEntity.created(URI.create("/api/stock/compras/" + saved.getId())).body(toDTO(saved));
+        return ResponseEntity.created(URI.create("/api/compras/" + saved.getId())).body(toDTO(saved));
     }
 
-    @PostMapping("/ventas")
+    // POST /api/ventas
+    @PostMapping("/api/ventas")
     public ResponseEntity<VentaDTO> crearVenta(@RequestBody @Valid MovimientoStockRequest rq) {
         Producto p = productos.findById(rq.productoId())
             .orElseThrow(() -> new NoSuchElementException("Producto " + rq.productoId() + " no existe"));
@@ -85,7 +84,7 @@ public class StockController {
         p.setStock(p.getStock() - rq.cantidad());
         productos.save(p);
 
-        // Registrar venta con precioUnitario
+        // Registrar venta
         Venta venta = new Venta();
         venta.setProducto(p);
         venta.setCliente(cli);
@@ -95,7 +94,7 @@ public class StockController {
 
         Venta saved = ventas.save(venta);
 
-        return ResponseEntity.created(URI.create("/api/stock/ventas/" + saved.getId())).body(toDTO(saved));
+        return ResponseEntity.created(URI.create("/api/ventas/" + saved.getId())).body(toDTO(saved));
     }
 
     // Conversión a DTO
