@@ -1,0 +1,37 @@
+<form [formGroup]="form" (ngSubmit)="save()" class="space-y-4 p-4">
+  <label>
+    Cliente:
+    <select formControlName="clienteId" class="border p-1">
+      @for (c of clientesSig(); track c.id) {
+        <option [value]="c.id">{{ c.nombre }}</option>
+      }
+    </select>
+  </label>
+
+  <label>
+    Fecha y hora:
+    <input type="datetime-local" formControlName="fechaHora" class="border p-1" />
+  </label>
+
+  <label>
+    Tipo:
+    <select formControlName="tipo" class="border p-1">
+      <option value="LLAMADA">Llamada</option>
+      <option value="EMAIL">Email</option>
+      <option value="REUNION">Reunión</option>
+    </select>
+  </label>
+
+  <label>
+    Descripción:
+    <textarea formControlName="descripcion" rows="4" class="border p-1 w-full"></textarea>
+  </label>
+
+  @if (form.invalid) {
+    <p class="text-red-600">Completa todos los campos correctamente.</p>
+  }
+
+  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+    Guardar
+  </button>
+</form>

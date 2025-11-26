@@ -18,7 +18,7 @@ export class ComprasComponent {
   form = this.fb.group({
     productoId: [null, Validators.required],
     cantidad: [1, [Validators.required, Validators.min(1)]],
-    costoUnitario: [0, [Validators.required, Validators.min(0)]],
+    precioUnitario: [0, [Validators.required, Validators.min(0)]],
     proveedorId: [null],
   });
 
@@ -32,7 +32,7 @@ export class ComprasComponent {
     this.comprasSvc.create(this.form.value as any).subscribe(() => {
       this.comprasSvc.list();
       this.productosSvc.list(); // stock actualizado por backend
-      this.form.reset({ cantidad: 1, costoUnitario: 0 });
+      this.form.reset({ cantidad: 1, precioUnitario: 0 });
     });
   }
 }

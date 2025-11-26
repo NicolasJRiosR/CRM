@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.NacorMirenNico.crm.domain.Cliente;
 import com.NacorMirenNico.crm.domain.Interaccion;
 import com.NacorMirenNico.crm.dto.InteraccionDTO;
+import com.NacorMirenNico.crm.repo.ClienteRepository;
 import com.NacorMirenNico.crm.repo.InteraccionRepository;
 
 import jakarta.validation.Valid;
@@ -25,7 +27,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/interacciones")
 public class InteraccionController {
     private final InteraccionRepository repo;
-    public InteraccionController(InteraccionRepository repo) { this.repo = repo; }
+    private final ClienteRepository clientes;
+
+    public InteraccionController(InteraccionRepository repo, ClienteRepository clientes) {
+        this.repo = repo;
+        this.clientes = clientes;
+    }
 
     @GetMapping
     public List<InteraccionDTO> list() {
@@ -47,10 +54,18 @@ public class InteraccionController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer id) { repo.deleteById(id); }
+    public void delete(@PathVariable Integer id) {
+        repo.deleteById(id);
+    }
 
     private InteraccionDTO toDTO(Interaccion i) {
-        return new InteraccionDTO(i.getId(), i.getCliente().getId(), i.getTipo(), i.getDescripcion(), i.getFechaHora());
+        return new InteraccionDTO(
+            i.getId(),
+            i.getCliente().getId(),
+            i.getTipo(),
+            i.getDescripcion(),
+            i.getFechaHora()
+        );
     }
 
     private Interaccion toEntity(InteraccionDTO dto) {
@@ -59,6 +74,11 @@ public class InteraccionController {
         i.setTipo(dto.getTipo());
         i.setDescripcion(dto.getDescripcion());
         i.setFechaHora(dto.getFechaHora());
+
+        Cliente cli = clientes.findById(dto.getClienteId())
+            .orElseThrow(() -> new NoSuchElementException("Cliente " + dto.getClienteId() + " no existe"));
+        i.setCliente(cli);
+
         return i;
     }
 }

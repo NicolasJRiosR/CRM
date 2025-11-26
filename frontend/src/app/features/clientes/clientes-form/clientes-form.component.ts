@@ -20,15 +20,18 @@ export class ClientesFormComponent {
   current: Cliente | null = null;
 
   form = this.fb.group({
-    nombre: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    telefono: [''],
-    activo: [true],
-  });
+  nombre: ['', Validators.required],
+  email: ['', [Validators.required, Validators.email]],
+  telefono: [''],
+});
+
 
   ngOnInit() {
     if (this.id) {
-      this.svc.find(this.id).subscribe(found => { this.current = found; this.form.patchValue(found); });
+      this.svc.find(this.id).subscribe(found => { 
+        this.current = found; 
+        this.form.patchValue(found); 
+      });
     }
   }
 

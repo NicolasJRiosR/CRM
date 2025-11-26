@@ -3,10 +3,10 @@ INSERT INTO roles (name) VALUES ('ROLE_ADMIN'), ('ROLE_USER');
 
 -- Usuario admin
 INSERT INTO users (username, password, enabled) VALUES 
-('admin', '{bcrypt}$2a$10$7QkzYhYkFfQ9u7hFzZkF9Oq9uFvQkzYhYkFfQ9u7hFzZkF9Oq9uFv', TRUE);
+('admin', '{bcrypt}$2a$10$7QkzYhYkFfQ9u7hFzZkF9Oq9uFvQkzYhYkFfQ9u7hFzZkF9Oq9uFv', 1);
 -- Nota: la contraseña encriptada corresponde a "adminpass"
 
-INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
+INSERT INTO users_roles (user_id, role_id) VALUES (1, 1);
 
 -- Clientes
 INSERT INTO cliente (nombre, email, telefono) VALUES
@@ -24,12 +24,12 @@ INSERT INTO producto (nombre, stock, precio, proveedor_id) VALUES
 ('Smartphone', 20, 800.00, 2);
 
 -- Compras
-INSERT INTO compra (producto_id, proveedor_id, cantidad, precio_unitario) VALUES
+INSERT INTO compra (proveedor_id, producto_id, cantidad, precio_unitario) VALUES
 (1, 1, 5, 1100.00),
 (2, 2, 10, 750.00);
 
 -- Ventas
-INSERT INTO venta (producto_id, cliente_id, cantidad, precio_unitario) VALUES
+INSERT INTO venta (cliente_id, producto_id, cantidad, precio_unitario) VALUES
 (1, 1, 1, 1200.00),
 (2, 2, 2, 800.00);
 

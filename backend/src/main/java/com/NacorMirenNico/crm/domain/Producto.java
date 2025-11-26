@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -13,6 +15,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 
 @Entity
@@ -27,6 +30,11 @@ public class Producto {
 
     @PositiveOrZero
     private Integer stock = 0;
+
     @PositiveOrZero
     private BigDecimal precio;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "proveedor_id", nullable = false)
+    private Proveedor proveedor;
 }

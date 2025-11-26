@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ProductosService } from '../productos.service';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';   
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
@@ -11,5 +11,8 @@ import { CommonModule } from '@angular/common';
 })
 export class ProductosListComponent {
   svc = inject(ProductosService);
-  ngOnInit() { this.svc.list(); }
+
+  ngOnInit() {
+    this.svc.list();
+  }
 }

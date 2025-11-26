@@ -6,27 +6,30 @@
   <table class="w-full table-auto">
     <thead>
       <tr class="text-left">
-        <th class="p-2">ID</th><th class="p-2">Nombre</th><th class="p-2">Stock</th><th class="p-2">Precio</th><th class="p-2">Activo</th>
+        <th class="p-2">ID</th>
+        <th class="p-2">Nombre</th>
+        <th class="p-2">Stock</th>
+        <th class="p-2">Precio</th>
       </tr>
     </thead>
     <tbody>
       @for (p of svc.productosSig(); track p.id) {
         <tr>
           <td class="p-2">{{p.id}}</td>
-          <td class="p-2"><a [routerLink]="['/productos', p.id]" class="underline">{{p.nombre}}</a></td>
           <td class="p-2">
-              <span 
-                [ngClass]="{
-                  'bg-green-100 text-green-800 px-2 py-1 rounded': p.stock > 50,
-                  'bg-yellow-100 text-yellow-800 px-2 py-1 rounded': p.stock <= 50 && p.stock > 10,
-                  'bg-red-100 text-red-800 px-2 py-1 rounded': p.stock <= 10
-                }">
-                {{ p.stock > 50 ? 'Disponible' : p.stock > 10 ? 'Bajo' : 'Crítico' }} ({{ p.stock }})
-              </span>
-           </td>
-
+            <a [routerLink]="['/productos', p.id]" class="underline">{{p.nombre}}</a>
+          </td>
+          <td class="p-2">
+            <span 
+              [ngClass]="{
+                'bg-green-100 text-green-800 px-2 py-1 rounded': p.stock > 50,
+                'bg-yellow-100 text-yellow-800 px-2 py-1 rounded': p.stock <= 50 && p.stock > 10,
+                'bg-red-100 text-red-800 px-2 py-1 rounded': p.stock <= 10
+              }">
+              {{ p.stock > 50 ? 'Disponible' : p.stock > 10 ? 'Bajo' : 'Crítico' }} ({{ p.stock }})
+            </span>
+          </td>
           <td class="p-2">{{p.precio}}</td>
-          <td class="p-2">{{p.activo ? '✔' : '✘'}}</td>
         </tr>
       }
     </tbody>
