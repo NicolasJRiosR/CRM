@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CustomerService } from '../customer.service';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
 @Component({
   standalone: true,
   selector: 'app-clientes-list',
@@ -12,7 +13,6 @@ export class ClientesListComponent {
   svc = inject(CustomerService);
   q = '';
 
- 
   clientes() {
     return this.svc.clientesSig();
   }
@@ -23,9 +23,5 @@ export class ClientesListComponent {
 
   search() {
     this.svc.list(this.q);
-  }
-
-  del(id: number) {
-    this.svc.remove(id).subscribe(() => this.svc.list(this.q));
   }
 }

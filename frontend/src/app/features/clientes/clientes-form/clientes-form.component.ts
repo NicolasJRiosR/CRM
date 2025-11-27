@@ -20,11 +20,10 @@ export class ClientesFormComponent {
   current: Cliente | null = null;
 
   form = this.fb.group({
-  nombre: ['', Validators.required],
-  email: ['', [Validators.required, Validators.email]],
-  telefono: [''],
-});
-
+    nombre: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    telefono: [''],
+  });
 
   ngOnInit() {
     if (this.id) {

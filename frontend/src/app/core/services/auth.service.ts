@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 export interface User { id: number; username: string; roles: string[]; }
-export interface LoginResponse { token: string; user: User; }
+export interface LoginResponse { token: string;}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -23,7 +23,7 @@ export class AuthService {
   setSession(res: LoginResponse) {
     sessionStorage.setItem(this.key, res.token);
     this.tokenSig.set(res.token);
-    this.userSig.set(res.user);
+   
   }
 
   logout() {
