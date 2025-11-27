@@ -56,7 +56,7 @@ public class AuthService {
         } catch (BadCredentialsException e) {
             throw e;
         } catch (Exception e) {
-            System.err.println("❌ Error en autenticación: " + e.getMessage());
+            System.err.println(" Error en autenticación: " + e.getMessage());
             e.printStackTrace();
             throw new BadCredentialsException("Error de autenticación");
         }

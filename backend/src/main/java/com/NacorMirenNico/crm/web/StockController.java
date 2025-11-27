@@ -2,12 +2,14 @@ package com.NacorMirenNico.crm.web;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +47,18 @@ public class StockController {
         this.ventas = ventas;
     }
 
+    //  GET /api/compras
+    @GetMapping("/api/compras")
+    public List<CompraDTO> listarCompras() {
+        return compras.findAll().stream().map(this::toDTO).toList();
+    }
+
+    // GET /api/ventas
+    @GetMapping("/api/ventas")
+    public List<VentaDTO> listarVentas() {
+        return ventas.findAll().stream().map(this::toDTO).toList();
+    }
+
     // POST /api/compras
     @PostMapping("/api/compras")
     public ResponseEntity<CompraDTO> crearCompra(@RequestBody @Valid MovimientoStockRequest rq) {
@@ -53,11 +67,9 @@ public class StockController {
         Proveedor prov = proveedores.findById(rq.entidadId())
             .orElseThrow(() -> new NoSuchElementException("Proveedor " + rq.entidadId() + " no existe"));
 
-        // Actualizar stock
         p.setStock(p.getStock() + rq.cantidad());
         productos.save(p);
 
-        // Registrar compra
         Compra compra = new Compra();
         compra.setProducto(p);
         compra.setProveedor(prov);
@@ -83,11 +95,9 @@ public class StockController {
         Cliente cli = clientes.findById(rq.entidadId())
             .orElseThrow(() -> new NoSuchElementException("Cliente " + rq.entidadId() + " no existe"));
 
-        // Actualizar stock
         p.setStock(p.getStock() - rq.cantidad());
         productos.save(p);
 
-        // Registrar venta
         Venta venta = new Venta();
         venta.setProducto(p);
         venta.setCliente(cli);
@@ -123,7 +133,7 @@ public class StockController {
         );
     }
 
-     @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<?> handleNotFound(NoSuchElementException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", ex.getMessage()));
     }
