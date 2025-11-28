@@ -1,19 +1,72 @@
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-  <!-- Gráfico de barras -->
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-    <h3 class="text-lg font-semibold mb-4 text-brand-700">Clientes vs Leads</h3>
-    <div #bar class="w-full h-64"></div>
-  </div>
+<!-- Contenedor principal -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 w-[1000px] mx-auto">
+  <!-- Título -->
+  <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white text-center">Resumen de métricas</h3>
 
+  <!-- Tabla de métricas -->
+  <div class="overflow-x-auto flex justify-center mb-6">
+    <table class="table-fixed w-[800px] text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-lg">
+      <thead class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 uppercase">
+        <tr>
+          <th class="px-3 py-2 text-center">Métrica</th>
+          <th class="px-3 py-2 text-center">Valor actual</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
+        @if (metrics.length > 0) {
+          @for (metric of metrics; track metric.name) {
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+              <td class="px-3 py-2 whitespace-nowrap text-center">{{ metric.name }}</td>
+              <td class="px-3 py-2 font-semibold text-center">{{ metric.value }}</td>
+            </tr>
+          }
+        } @else {
+          <tr>
+            <td colspan="2" class="px-3 py-2 text-center text-gray-500 dark:text-gray-400">
+              No hay métricas disponibles
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Gráficos en dos columnas -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-[1000px] mx-auto">
   <!-- Gráfico de línea -->
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-    <h3 class="text-lg font-semibold mb-4 text-brand-700">Ventas semana</h3>
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mt-8 h-[400px] overflow-x-auto ">
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">Crecimiento de clientes</h3>
     <div #line class="w-full h-64"></div>
   </div>
 
-  <!-- Gráfico de donut -->
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-    <h3 class="text-lg font-semibold mb-4 text-brand-700">Stock por estado</h3>
-    <div #donut class="w-full h-64"></div>
+<!-- Gráfico de donut -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mt-8 h-[400px] flex flex-col relative">
+  <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">Stock disponible</h3>
+  <div class="absolute top-12 right-6 text-sm text-gray-600 dark:text-gray-300 space-y-2 text-right">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-3 h-3 rounded-full bg-[#238bd1ff]"></span>
+      <span>Disponible ({{ counts.disponible }})</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-3 h-3 rounded-full bg-[#F44336]"></span>
+      <span>Agotado ({{ counts.agotado }})</span>
+    </div>
+  </div>
+
+  <div #donut class="w-full flex justify-center items-center h-64 mt-4"></div>
+</div>
+
+  <!-- Gráfico de linea tipo: Stacked Area Graph -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mt-4 h-[400px]">
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">Top 3 productos mas vendidos</h3>
+    <div #top class="w-full h-64"></div>
+  </div>
+
+  <!-- Grafico de burbujas-->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mt-4 h-[400px]">
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-white text-center">Comparativa Compras vs Ventas</h3>
+    <div #comparativa class="w-full h-64"></div>
   </div>
 </div>
+

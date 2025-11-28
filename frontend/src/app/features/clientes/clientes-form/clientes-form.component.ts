@@ -21,9 +21,21 @@ export class ClientesFormComponent {
 
   form = this.fb.group({
     nombre: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    telefono: [''],
+
+    // El campo "email" es obligatorio y debe cumplir requisitos como tener un @,
+    // terminar en .com, .es, .net o .org y sino dara error
+    // - Contener un @
+    email: ['', [
+      Validators.required,
+      Validators.pattern(/^[\w.-]+@[\w.-]+\.(com|es|net|org)$/i)
+    ]],
+
+    telefono: ['', [
+      Validators.required,
+      Validators.pattern(/^(?:\s*\d\s*){9}$/) // exactamente 9 dígitos, espacios permitidos
+    ]],
   });
+
 
   ngOnInit() {
     if (this.id) {

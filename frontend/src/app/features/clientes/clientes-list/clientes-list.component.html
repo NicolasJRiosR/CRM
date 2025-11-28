@@ -1,43 +1,113 @@
 <div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-2xl font-bold">Listado de Clientes</h2>
-    <a routerLink="/clientes/nuevo"
-       class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
-      + Nuevo cliente
-    </a>
   </div>
 
-  <table class="w-full table-auto border-collapse">
-    <thead class="bg-gray-100">
+  <!-- FILTROS -->
+  <div
+    [formGroup]="filtroForm"
+    class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+  >
+    <input
+      type="text"
+      placeholder="Filtrar por ID..."
+      formControlName="id"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
+
+    <input
+      type="text"
+      placeholder="Filtrar por nombre..."
+      formControlName="nombre"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
+
+    <input
+      type="text"
+      placeholder="Filtrar por email..."
+      formControlName="email"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
+
+    <!-- BOTONES FILTRACION -->
+    <div class="md:col-span-3 flex justify-between items-center">
+      <!-- Botones de filtración a la izquierda -->
+      <div class="flex gap-3">
+        <button
+          type="button"
+          (click)="filtrar()"
+          class="bg-brand-700 hover:bg-brand-600 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+        >
+          Filtrar
+        </button>
+        <button
+          type="button"
+          (click)="limpiar()"
+          class="bg-gray-300 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow-md active:scale-95"
+        >
+          Limpiar
+        </button>
+      </div>
+
+      <!-- Botón de nuevo cliente a la derecha -->
+      <a routerLink="/clientes/nuevo"
+         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
+        + Nuevo cliente
+      </a>
+    </div>
+  </div>
+
+  <!-- TABLA DE CLIENTES -->
+<div>
+  <table
+    class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
+  >
+    <thead
+      class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+    >
       <tr>
-        <th class="p-2">ID</th>
-        <th class="p-2">Nombre</th>
-        <th class="p-2">Email</th>
-        <th class="p-2">Teléfono</th>
-        <th class="p-2">Fecha registro</th>
-        <th class="p-2">Acciones</th>
+        <th class="p-3 font-semibold">ID</th>
+        <th class="p-3 font-semibold">Nombre</th>
+        <th class="p-3 font-semibold">Email</th>
+        <th class="p-3 font-semibold">Teléfono</th>
+        <th class="p-3 font-semibold">Fecha registro</th>
+        <th class="p-3 font-semibold">Acciones</th>
       </tr>
     </thead>
+
     <tbody>
-      @for (c of clientes(); track c.id) {
-        <tr class="hover:bg-gray-50">
-          <td class="p-2">{{c.id}}</td>
-          <td class="p-2">
-            <a [routerLink]="['/clientes', c.id]"
-               class="text-brand-700 hover:underline">
-              {{c.nombre}}
-            </a>
-          </td>
-          <td class="p-2">{{c.email}}</td>
-          <td class="p-2">{{c.telefono}}</td>
-          <td class="p-2">{{c.fechaRegistro}}</td>
-          <td class="p-2">
-            <a [routerLink]="['/clientes', c.id]"
-               class="text-blue-600 hover:underline">
-              Editar
-            </a>
+      @if (clientesFiltrados().length === 0) {
+        <tr class="border-t dark:border-gray-700">
+          <td colspan="6" class="p-4 text-center text-gray-500">
+            No se encontraron clientes con esos filtros
           </td>
         </tr>
+      } @else {
+        @for (c of clientesFiltrados(); track c.id) {
+          <tr
+            class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+          >
+            <td class="p-3">{{c.id}}</td>
+            <td class="p-3">
+              <div class="inline-block min-w-[160px] pl-2">
+                {{c.nombre}}
+              </div>
+            </td>
+            <td class="p-3">
+              <div class="inline-block min-w-[220px] pl-2">
+                {{c.email}}
+              </div>
+            </td>
+            <td class="p-3">{{ formatTelefono(c.telefono ?? '') }}</td>
+            <td class="p-3">{{c.fechaRegistro | date:'dd/MM/yyyy'}}</td>
+            <td class="p-3">
+              <a [routerLink]="['/clientes', c.id]" 
+                 class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800">
+                Editar
+              </a>
+            </td>
+          </tr>
+        }
       }
     </tbody>
   </table>

@@ -6,17 +6,25 @@ export interface Cliente {
   nombre: string;
   email: string;
   telefono?: string;
-  fechaRegistro?: string; // ✅ ISO string (ej: "2025-11-26T09:05:45")
+  fechaRegistro?: Date; 
 }
 
 @Injectable({ providedIn: 'root' })
+
 export class CustomerService {
   clientesSig = signal<Cliente[]>([]);
   constructor(private api: ApiService) {}
 
   list(q?: string) {
     this.api.get<Cliente[]>('/api/clientes', q ? { q } : undefined)
-      .subscribe(res => this.clientesSig.set(res));
+      .subscribe(res => {
+        const clientesConvertidos = res.map(c => ({
+          ...c,
+          fechaRegistro: c.fechaRegistro ? new Date(c.fechaRegistro) : undefined
+        }));
+        this.clientesSig.set(clientesConvertidos);
+      });
+
   }
 
   find(id: number) {
