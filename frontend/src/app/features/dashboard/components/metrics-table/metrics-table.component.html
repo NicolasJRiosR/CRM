@@ -1,0 +1,27 @@
+<!-- Tabla de métricas -->
+<div class="overflow-x-auto flex justify-center mb-6">
+  <table class="table-fixed w-[800px] text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-lg">
+    <thead class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 uppercase">
+      <tr>
+        <th class="px-3 py-2 text-center">Métrica</th>
+        <th class="px-3 py-2 text-center">Valor actual</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
+      @if (metrics.length > 0) {
+        @for (metric of metrics; track metric.name) {
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+            <td class="px-3 py-2 whitespace-nowrap text-center">{{ metric.name }}</td>
+            <td class="px-3 py-2 font-semibold text-center">{{ metric.value }}</td>
+          </tr>
+        }
+      } @else {
+        <tr>
+          <td colspan="2" class="px-3 py-2 text-center text-gray-500 dark:text-gray-400">
+            No hay métricas disponibles
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
