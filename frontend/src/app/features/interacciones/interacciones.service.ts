@@ -27,4 +27,8 @@ export class InteraccionesService {
       fechaHora: i.fechaHora      
     });
   }
+  update(i: Interaccion) {
+  return this.api.put<Interaccion>(`/api/interacciones/${i.id}`, i);
+}
+
 }

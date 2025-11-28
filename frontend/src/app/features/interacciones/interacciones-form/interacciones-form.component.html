@@ -1,37 +1,57 @@
-<form [formGroup]="form" (ngSubmit)="save()" class="space-y-4 p-4">
-  <label>
-    Cliente:
-    <select formControlName="clienteId" class="border p-1">
-      @for (c of clientesSig(); track c.id) {
-        <option [value]="c.id">{{ c.nombre }}</option>
+<div class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto">
+  <h2 class="text-2xl font-bold mb-6 text-center">
+    @if(id){Editar interacción} @else{Nueva interacción}
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+    <div>
+      <label class="block text-sm font-medium mb-1">Cliente</label>
+      <select formControlName="clienteId" class="w-full border rounded px-3 py-2 focus:ring">
+        @for (c of clientesSig(); track c.id) {
+          <option [value]="c.id">{{ c.nombre }}</option>
+        }
+      </select>
+      @if (form.get('clienteId')?.invalid && form.get('clienteId')?.touched) {
+        <div class="text-red-600 text-sm mt-1">Selecciona un cliente válido</div>
       }
-    </select>
-  </label>
+    </div>
 
-  <label>
-    Fecha y hora:
-    <input type="datetime-local" formControlName="fechaHora" class="border p-1" />
-  </label>
+    <div>
+      <label class="block text-sm font-medium mb-1">Fecha y hora</label>
+      <input type="datetime-local" formControlName="fechaHora"
+             class="w-full border rounded px-3 py-2 focus:ring"/>
+      @if (form.get('fechaHora')?.invalid && form.get('fechaHora')?.touched) {
+        <div class="text-red-600 text-sm mt-1">Introduce una fecha válida</div>
+      }
+    </div>
 
-  <label>
-    Tipo:
-    <select formControlName="tipo" class="border p-1">
-      <option value="LLAMADA">Llamada</option>
-      <option value="EMAIL">Email</option>
-      <option value="REUNION">Reunión</option>
-    </select>
-  </label>
+    <div>
+      <label class="block text-sm font-medium mb-1">Tipo</label>
+      <select formControlName="tipo" class="w-full border rounded px-3 py-2 focus:ring">
+        <option value="LLAMADA">Llamada</option>
+        <option value="EMAIL">Email</option>
+        <option value="REUNION">Reunión</option>
+      </select>
+    </div>
 
-  <label>
-    Descripción:
-    <textarea formControlName="descripcion" rows="4" class="border p-1 w-full"></textarea>
-  </label>
+    <div>
+      <label class="block text-sm font-medium mb-1">Descripción</label>
+      <textarea formControlName="descripcion" rows="4"
+                class="w-full border rounded px-3 py-2 focus:ring"></textarea>
+      @if (form.get('descripcion')?.invalid && form.get('descripcion')?.touched) {
+        <div class="text-red-600 text-sm mt-1">La descripción es obligatoria (máx. 500 caracteres)</div>
+      }
+    </div>
 
-  @if (form.invalid) {
-    <p class="text-red-600">Completa todos los campos correctamente.</p>
-  }
-
-  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
-    Guardar
-  </button>
-</form>
+    <div class="flex gap-3 justify-center pt-4">
+      <button type="submit" [disabled]="form.invalid"
+              class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
+        Guardar
+      </button>
+      <button type="button" (click)="router.navigate(['/interacciones'])"
+              class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

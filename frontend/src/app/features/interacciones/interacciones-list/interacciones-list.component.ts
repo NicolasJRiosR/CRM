@@ -2,7 +2,7 @@ import { Component, inject, effect, computed, signal } from '@angular/core';
 import { InteraccionesService } from '../interacciones.service';
 import { CustomerService } from '../../clientes/customer.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -37,46 +37,24 @@ export class InteraccionesListComponent {
   });
 
   // ----------------------------
-  //   MÉTODOS DE FILTRAR Y LIMPIAR
+  //   LISTA FILTRADA
   // ----------------------------
-  filtrar() {
-    const { cliente, fecha, tipo } = this.filtroForm.value;
-    this.appliedFiltersSig.set({
-      cliente: (cliente ?? '').toString(),
-      fecha: fecha ?? '',
-      tipo: tipo ?? '',
-    });
-  }
-
-  limpiar() {
-    this.filtroForm.reset({ cliente: '', fecha: '', tipo: '' });
-    this.appliedFiltersSig.set({ cliente: '', fecha: '', tipo: '' });
-  }
-
- // ----------------------------
-//   LISTA FILTRADA
-// ----------------------------
-interaccionesFiltradas = computed(() => {
+  interaccionesFiltradas = computed(() => {
   const filters = this.appliedFiltersSig();
   const clienteFiltro = filters.cliente.trim().toLowerCase();
   const fechaFiltro = filters.fecha.trim();
   const tipoFiltro = filters.tipo.trim().toLowerCase();
 
-  return this.svc.interaccionesSig().filter((i) => {
-    // Buscar nombre del cliente en el mapa
-    const nombreCliente = (this.clienteNombre(i.clienteId) ?? '').toLowerCase();
-
-    const matchCliente =
-      !clienteFiltro || nombreCliente.includes(clienteFiltro);
-
-    const matchFecha =
-      !fechaFiltro || i.fechaHora.startsWith(fechaFiltro);
-
-    const matchTipo =
-      !tipoFiltro || i.tipo.toLowerCase().includes(tipoFiltro);
-
-    return matchCliente && matchFecha && matchTipo;
-  });
+  return this.svc.interaccionesSig()
+    .filter((i) => {
+      const nombreCliente = (this.clienteNombre(i.clienteId) ?? '').toLowerCase();
+      const matchCliente = !clienteFiltro || nombreCliente.includes(clienteFiltro);
+      const matchFecha = !fechaFiltro || i.fechaHora.startsWith(fechaFiltro);
+      const matchTipo = !tipoFiltro || i.tipo.toLowerCase().includes(tipoFiltro);
+      return matchCliente && matchFecha && matchTipo;
+    })
+    
+    .sort((a, b) => new Date(b.fechaHora).getTime() - new Date(a.fechaHora).getTime());
 });
 
 
@@ -89,6 +67,20 @@ interaccionesFiltradas = computed(() => {
   ngOnInit() {
     this.svc.list();
     this.clientesSvc.list();
+
+    // Aplica el filtro automáticamente al escribir
+    this.filtroForm.valueChanges.subscribe(({ cliente, fecha, tipo }) => {
+      this.appliedFiltersSig.set({
+        cliente: (cliente ?? '').toString(),
+        fecha: fecha ?? '',
+        tipo: tipo ?? '',
+      });
+    });
+  }
+
+  limpiar() {
+    this.filtroForm.reset({ cliente: '', fecha: '', tipo: '' });
+    this.appliedFiltersSig.set({ cliente: '', fecha: '', tipo: '' });
   }
 
   clienteNombre(id: number): string {

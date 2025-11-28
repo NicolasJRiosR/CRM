@@ -1,50 +1,125 @@
-<div><div class="flex justify-between items-center mb-3">
-  <h2 class="text-xl font-semibold">Productos</h2>
-  <button 
-    class="bg-brand-700 text-white px-3 py-2 rounded hover:bg-brand-800"
-    (click)="router.navigate(['/productos/nuevo'])">
-    Nuevo
-  </button>
-</div>
+<div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Productos</h2>
+  </div>
 
+  <!-- FILTROS -->
+  <div
+    [formGroup]="filtroForm"
+    class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+  >
+    <input
+      type="text"
+      placeholder="Filtrar por ID..."
+      formControlName="id"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
 
-  <table class="w-full table-auto">
-    <thead>
-      <tr class="text-left">
-        <th class="p-2">ID</th>
-        <th class="p-2">Nombre</th>
-        <th class="p-2">Stock</th>
-        <th class="p-2">Precio</th>
-        <th class="p-2">Proveedor</th>
-        <th class="p-2">Acciones</th>
+    <input
+      type="text"
+      placeholder="Filtrar por nombre..."
+      formControlName="nombre"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
+
+    <input
+      type="text"
+      placeholder="Filtrar por proveedor..."
+      formControlName="proveedor"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
+
+    <select
+      formControlName="stockCategoria"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    >
+      <option value="">Todas las categorías</option>
+      <option value="SIN_STOCK">Sin Stock</option>
+      <option value="CRITICO">Crítico</option>
+      <option value="BAJO">Bajo</option>
+      <option value="DISPONIBLE">Disponible</option>
+    </select>
+
+    <!-- BOTONES FILTRACION -->
+    <div class="md:col-span-4 flex justify-between items-center mt-2">
+      <!-- Botón limpiar a la izquierda -->
+      <div class="flex gap-3">
+        <button
+          type="button"
+          (click)="limpiar()"
+          class="bg-gray-300 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow-md active:scale-95"
+        >
+          Limpiar
+        </button>
+      </div>
+
+      <!-- Botón nuevo producto a la derecha -->
+      <button 
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
+        (click)="router.navigate(['/productos/nuevo'])">
+        + Nuevo producto
+      </button>
+    </div>
+  </div>
+
+  <!-- TABLA DE PRODUCTOS -->
+  <table
+    class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
+  >
+    <thead
+      class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+    >
+      <tr>
+        <th class="p-3 font-semibold">ID</th>
+        <th class="p-3 font-semibold">Nombre</th>
+        <th class="p-3 font-semibold">Stock</th>
+        <th class="p-3 font-semibold">Precio</th>
+        <th class="p-3 font-semibold">Proveedor</th>
+        <th class="p-3 font-semibold">Acciones</th>
       </tr>
     </thead>
     <tbody>
-      @for (p of svc.productosSig(); track p.id) {
-        <tr>
-          <td class="p-2">{{p.id}}</td>
-          <td class="p-2">{{p.nombre}}</td>
-          <td class="p-2">
-            <span 
-              [ngClass]="{
-                'bg-green-100 text-green-800 px-2 py-1 rounded': p.stock > 50,
-                'bg-yellow-100 text-yellow-800 px-2 py-1 rounded': p.stock <= 50 && p.stock > 10,
-                'bg-orange-100 text-orange-800 px-2 py-1 rounded': p.stock <= 10 && p.stock > 0,
-                'bg-red-100 text-red-800 px-2 py-1 rounded': p.stock <= 0
-              }">
-              {{ p.stock > 50 ? 'Disponible' : p.stock > 10 ? 'Bajo' :  p.stock >= 1 ? 'Crítico':'Sin Stock' }} ({{ p.stock }})
-            </span>
-          </td>
-          <td class="p-2">{{p.precio}}</td>
-          <td class="p-2">{{p.proveedorNombre}}</td>
-          <td class="p-2 flex gap-2">
-            <button 
-              class="bg-blue-600 text-white px-3 py-1 rounded"
-              (click)="router.navigate(['/productos', p.id])">
-              Editar
-            </button>
+      @if (productosFiltrados().length === 0) {
+        <tr class="border-t dark:border-gray-700">
+          <td colspan="6" class="p-4 text-center text-gray-500">
+            No se encontraron productos con esos filtros
           </td>
         </tr>
+      } @else {
+        @for (p of productosFiltrados(); track p.id) {
+          <tr
+            class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+          >
+            <td class="p-3">{{p.id}}</td>
+            <td class="p-3">{{p.nombre}}</td>
+            <td class="p-3">
+              <span 
+  [ngStyle]="{
+    'background-color': p.stock > 50 ? '#26a69a' : 
+                       p.stock > 10 ? '#ffca28' : 
+                       p.stock >= 1 ? '#b71c1c' : '#7f0000',
+    'color': '#fff',
+    'padding': '0.25rem 0.5rem',
+    'border-radius': '0.25rem',
+    'display': 'inline-block'
+  }">
+  {{ p.stock > 50 ? 'Disponible' : 
+     p.stock > 10 ? 'Bajo' :  
+     p.stock >= 1 ? 'Crítico' : 'Sin Stock' }} ({{ p.stock }})
+</span>
+
+            </td>
+            <td class="p-3">{{p.precio}}</td>
+            <td class="p-3">{{p.proveedorNombre}}</td>
+            <td class="p-3">
+              <button 
+                class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
+                (click)="router.navigate(['/productos', p.id])">
+                Editar
+              </button>
+            </td>
+          </tr>
+        }
       }
     </tbody>
   </table>
