@@ -47,19 +47,27 @@ export class VentasComponent {
   mostrarFormulario = false;
 
   productosEffect = effect(() => {
-  const productos = this.productosSig();
-  this.productoMap = {};
-  productos.forEach((p) => {
-    this.productoMap[p.id] = p.nombre;
+    const productos = this.productosSig();
+    this.productoMap = {};
+    productos.forEach((p) => {
+      this.productoMap[p.id] = p.nombre;
+    });
   });
-});
 
-ngOnInit() {
-  this.ventasSvc.list();
-  this.productosSvc.list();
-  this.clientesSvc.list();
-}
+  ngOnInit() {
+    this.ventasSvc.list();
+    this.productosSvc.list();
+    this.clientesSvc.list();
 
+    // Aplicar filtros automáticamente al cambiar cualquier campo del filtro
+    this.filtroForm.valueChanges.subscribe((values) => {
+      this.appliedFiltersSig.set({
+        id: (values.id ?? '').toString(),
+        fecha: values.fecha ?? '',
+        producto: values.producto ?? '',
+      });
+    });
+  }
 
   ventasFiltradas = computed(() => {
     const filters = this.appliedFiltersSig();

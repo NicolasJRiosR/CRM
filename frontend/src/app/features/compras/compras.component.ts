@@ -50,6 +50,15 @@ export class ComprasComponent {
   ngOnInit() {
     this.comprasSvc.list();
     this.productosSvc.list();
+
+    // Aplicar filtros automáticamente al cambiar cualquier campo
+    this.filtroForm.valueChanges.subscribe((values) => {
+      this.appliedFiltersSig.set({
+        producto: values.producto ?? '',
+        proveedor: values.proveedor ?? '',
+        fecha: values.fecha ?? '',
+      });
+    });
   }
 
   // Filtrado
@@ -59,11 +68,14 @@ export class ComprasComponent {
     const provFiltro = filters.proveedor.trim().toLowerCase();
     const fechaFiltro = filters.fecha.trim();
 
-    return this.comprasSig().filter((c) => {
-      const producto = this.productosSig().find((p) => p.id === c.productoId);
-      const nombreProducto = producto ? producto.nombre.toLowerCase() : '';
+    const productosMap = new Map(
+      this.productosSig().map((p) => [p.id, p.nombre.toLowerCase()]),
+    );
 
+    return this.comprasSig().filter((c) => {
+      const nombreProducto = productosMap.get(c.productoId) ?? '';
       const matchProducto = !prodFiltro || nombreProducto.includes(prodFiltro);
+
       const matchProveedor =
         !provFiltro ||
         (c.proveedorId?.toString() ?? '').toLowerCase().includes(provFiltro);
@@ -74,15 +86,6 @@ export class ComprasComponent {
       return matchProducto && matchProveedor && matchFecha;
     });
   });
-
-  filtrar() {
-    const { producto, proveedor, fecha } = this.filtroForm.value;
-    this.appliedFiltersSig.set({
-      producto: producto ?? '',
-      proveedor: proveedor ?? '',
-      fecha: fecha ?? '',
-    });
-  }
 
   limpiar() {
     this.filtroForm.reset({ producto: '', proveedor: '', fecha: '' });

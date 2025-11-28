@@ -1,5 +1,14 @@
-<div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-  <h2 class="text-2xl font-bold mb-4 text-brand-700 dark:text-brand-400">
+<div
+  class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow w-full max-w-5xl mx-auto"
+>
+  <!-- TÍTULO -->
+  <h2
+    class="{{
+      mostrarFormulario
+        ? 'text-2xl font-bold mb-6 text-black dark:text-white text-center'
+        : 'text-2xl font-bold mb-6 text-black dark:text-white text-left'
+    }}"
+  >
     {{
       mostrarFormulario
         ? editandoCompra
@@ -9,48 +18,51 @@
     }}
   </h2>
 
-  <!-- LISTADO DE COMPRAS -->
+  <!-- LISTADO -->
   <div *ngIf="!mostrarFormulario">
     <!-- FILTROS -->
     <div
       [formGroup]="filtroForm"
-      class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+      class="bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-inner grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
     >
-      <input
-        type="text"
-        placeholder="Filtrar por producto..."
-        formControlName="producto"
-        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
-      />
-      <input
-        type="text"
-        placeholder="Filtrar por proveedor..."
-        formControlName="proveedor"
-        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
-      />
-      <input
-        type="date"
-        placeholder="Filtrar por fecha..."
-        formControlName="fecha"
-        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
-      />
+      <div>
+        <label class="block text-sm font-medium mb-1"></label>
+        <input
+          type="text"
+          placeholder="Filtrar por ID..."
+          formControlName="id"
+          class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+        />
+      </div>
 
+      <div>
+        <label class="block text-sm font-medium mb-1"></label>
+        <input
+          type="date"
+          formControlName="fecha"
+          class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1"></label>
+        <input
+          type="text"
+          placeholder="Filtrar por producto..."
+          formControlName="producto"
+          class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+        />
+      </div>
+
+      <!-- Botones -->
       <div
-        class="md:col-span-3 flex justify-between items-center flex-wrap gap-3"
+        class="md:col-span-3 flex justify-between items-center mt-2 flex-wrap gap-3"
       >
-        <!-- Izquierda: Filtrar y Limpiar -->
         <div class="flex gap-3">
           <button
             type="button"
-            (click)="filtrar()"
-            class="bg-brand-700 hover:bg-brand-600 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
-          >
-            Filtrar
-          </button>
-          <button
-            type="button"
             (click)="limpiar()"
-            class="bg-gray-300 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow-md active:scale-95"
+            class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
           >
             Limpiar
           </button>
@@ -59,97 +71,109 @@
         <button
           type="button"
           (click)="toggleFormulario()"
-          class="bg-brand-700 hover:bg-brand-600 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+          class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
         >
-          {{ mostrarFormulario ? "← Volver al listado" : "+ Nueva compra" }}
+          {{ mostrarFormulario ? "← Volver" : "+ Nueva compra" }}
         </button>
       </div>
     </div>
 
     <!-- TABLA -->
-    <table
-      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
-    >
-      <thead
-        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
-      >
-        <tr>
-          <th class="p-3 font-semibold">ID</th>
-          <th class="p-3 font-semibold">Producto</th>
-          <th class="p-3 font-semibold">Cantidad</th>
-          <th class="p-3 font-semibold">Precio</th>
-          <th class="p-3 font-semibold">Fecha</th>
-          <th class="p-3 font-semibold">Proveedor</th>
-          <th class="p-3 font-semibold">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (c of comprasFiltradas(); track c.id) {
-          <tr
-            class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
-          >
-            <td class="p-3">{{ c.id }}</td>
-            <td class="p-3">{{ getNombreProductoDirecto(c.productoId) }}</td>
-            <td class="p-3">{{ c.cantidad }}</td>
-            <td class="p-3">{{ c.precioUnitario }}</td>
-            <td class="p-3">{{ getFechaSlash(c.fecha) }}</td>
-            <td class="p-3">{{ c.proveedorId ?? "N/A" }}</td>
-            <td class="p-3">
-              <button
-                type="button"
-                (click)="editarCompra(c)"
-                class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
-              >
-                Editar
-              </button>
-            </td>
+    <div class="overflow-x-auto rounded-xl shadow">
+      <table class="w-full table-auto border-collapse text-center">
+        <thead
+          class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+        >
+          <tr>
+            <th class="p-3 font-semibold">ID</th>
+            <th class="p-3 font-semibold">Producto</th>
+            <th class="p-3 font-semibold">Cantidad</th>
+            <th class="p-3 font-semibold">Precio</th>
+            <th class="p-3 font-semibold">Fecha</th>
+            <th class="p-3 font-semibold">Acciones</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (c of comprasFiltradas(); track c.id) {
+            <tr
+              class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+            >
+              <td class="p-3">{{ c.id }}</td>
+              <td class="p-3">{{ getNombreProductoDirecto(c.productoId) }}</td>
+              <td class="p-3">{{ c.cantidad }}</td>
+              <td class="p-3">{{ c.precioUnitario }}</td>
+              <td class="p-3">{{ getFechaSlash(c.fecha) }}</td>
+              <td class="p-3">
+                <button
+                  type="button"
+                  (click)="editarCompra(c)"
+                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
+                >
+                  Editar
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- FORMULARIO DE NUEVA/EDITAR COMPRA -->
+  <!-- FORMULARIO -->
   <form
     *ngIf="mostrarFormulario"
     [formGroup]="form"
     (ngSubmit)="editandoCompra ? update() : add()"
-    class="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl shadow-inner grid grid-cols-1 md:grid-cols-4 gap-3"
+    class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-inner space-y-4 max-w-xl mx-auto"
   >
-    <select
-      formControlName="productoId"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-gray-50 dark:bg-gray-600"
-    >
-      @for (p of productosSig(); track p.id) {
-        <option [value]="p.id">{{ p.nombre }} (stock: {{ p.stock }})</option>
-      }
-    </select>
+    <div>
+      <label class="block text-sm font-medium mb-1">Producto</label>
+      <select
+        formControlName="productoId"
+        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+      >
+        @for (p of productosSig(); track p.id) {
+          <option [value]="p.id">{{ p.nombre }} (stock: {{ p.stock }})</option>
+        }
+      </select>
+    </div>
 
-    <input
-      type="number"
-      placeholder="Cantidad"
-      formControlName="cantidad"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-gray-50 dark:bg-gray-600"
-    />
-    <input
-      type="number"
-      placeholder="Precio unitario"
-      formControlName="precioUnitario"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-gray-50 dark:bg-gray-600"
-    />
-    <input
-      type="number"
-      placeholder="Proveedor ID (opcional)"
-      formControlName="proveedorId"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-gray-50 dark:bg-gray-600"
-    />
+    <div>
+      <label class="block text-sm font-medium mb-1">Cantidad</label>
+      <input
+        type="number"
+        formControlName="cantidad"
+        placeholder="Cantidad"
+        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+      />
+    </div>
 
-    <button
-      type="submit"
-      [disabled]="form.invalid"
-      class="bg-brand-700 hover:bg-brand-600 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 md:col-span-4"
-    >
-      {{ editandoCompra ? "Modificar compra" : "Registrar compra" }}
-    </button>
+    <div>
+      <label class="block text-sm font-medium mb-1">Precio unitario</label>
+      <input
+        type="number"
+        formControlName="precioUnitario"
+        placeholder="Precio unitario"
+        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+      />
+    </div>
+
+    <div class="flex justify-center gap-4 pt-4">
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
+      >
+        {{ editandoCompra ? "Modificar compra" : "Registrar compra" }}
+      </button>
+
+      <button
+        type="button"
+        (click)="toggleFormulario()"
+        class="bg-gray-200 dark:bg-gray-600 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500"
+      >
+        Cancelar
+      </button>
+    </div>
   </form>
 </div>
