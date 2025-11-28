@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { ProveedoresService, Proveedor } from '../ProveedoresService';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-proveedor-form',
@@ -9,22 +10,48 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule]
 })
-export class ProveedorFormComponent {
-  proveedor = signal<Omit<Proveedor, 'id'>>({ nombre: '', contacto: '', telefono: '' });
+export class ProveedorFormComponent implements OnInit {
+  proveedor = signal<Proveedor>({ id: 0, nombre: '', contacto: '', telefono: '' });
   guardado = signal(false);
+  isEdit = false;
 
-  constructor(private proveedoresService: ProveedoresService) {}
+  constructor(
+    private proveedoresService: ProveedoresService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
-  update<K extends keyof Omit<Proveedor, 'id'>>(key: K, value: Omit<Proveedor, 'id'>[K]) {
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEdit = true;
+      this.proveedoresService.find(+id).subscribe(p => this.proveedor.set(p));
+    }
+  }
+
+  update<K extends keyof Proveedor>(key: K, value: Proveedor[K]) {
     this.proveedor.update(p => ({ ...p, [key]: value }));
   }
 
   save() {
     this.guardado.set(false);
-    this.proveedoresService.create(this.proveedor()).subscribe(() => {
-      this.proveedor.set({ nombre: '', contacto: '', telefono: '' });
-      this.proveedoresService.list();
-      this.guardado.set(true);
-    });
+    if (this.isEdit) {
+      this.proveedoresService.update(this.proveedor()).subscribe(() => {
+        this.proveedoresService.list();
+        this.guardado.set(true);
+        this.router.navigate(['/proveedores']);
+      });
+    } else {
+      this.proveedoresService.create({
+        nombre: this.proveedor().nombre,
+        contacto: this.proveedor().contacto,
+        telefono: this.proveedor().telefono
+      }).subscribe(() => {
+        this.proveedor.set({ id: 0, nombre: '', contacto: '', telefono: '' });
+        this.proveedoresService.list();
+        this.guardado.set(true);
+        this.router.navigate(['/proveedores']);
+      });
+    }
   }
 }

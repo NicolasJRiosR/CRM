@@ -1,4 +1,4 @@
-<h2>Nuevo Proveedor</h2>
+<h2>{{ isEdit ? 'Editar Proveedor' : 'Nuevo Proveedor' }}</h2>
 
 <form (ngSubmit)="save()">
   <label>Nombre:</label>
@@ -10,9 +10,9 @@
   <label>Teléfono:</label>
   <input [value]="proveedor().telefono" (input)="update('telefono', $any($event.target).value)" />
 
-  <button type="submit">Guardar</button>
+  <button type="submit">{{ isEdit ? 'Actualizar' : 'Guardar' }}</button>
 </form>
 
 @if (guardado()) {
-  <p>Proveedor guardado correctamente.</p>
+  <p>Proveedor {{ isEdit ? 'actualizado' : 'guardado' }} correctamente.</p>
 }

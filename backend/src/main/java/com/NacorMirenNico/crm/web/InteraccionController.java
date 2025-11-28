@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -57,6 +58,31 @@ public class InteraccionController {
     public void delete(@PathVariable Integer id) {
         repo.deleteById(id);
     }
+    @PutMapping("/{id}")
+public ResponseEntity<InteraccionDTO> update(
+        @PathVariable Integer id,
+        @RequestBody @Valid InteraccionDTO dto) {
+
+    Interaccion interaccion = repo.findById(id)
+        .orElseThrow(() -> new NoSuchElementException("Interacción " + id + " no encontrada"));
+
+    interaccion.setTipo(dto.getTipo());
+    interaccion.setDescripcion(dto.getDescripcion());
+    interaccion.setFechaHora(dto.getFechaHora());
+
+    Cliente cli = clientes.findById(dto.getClienteId())
+        .orElseThrow(() -> new NoSuchElementException("Cliente " + dto.getClienteId() + " no existe"));
+    interaccion.setCliente(cli);
+
+    Interaccion saved = repo.save(interaccion);
+    return ResponseEntity.ok(toDTO(saved));
+}
+
+
+
+
+
+
 
     private InteraccionDTO toDTO(Interaccion i) {
         return new InteraccionDTO(

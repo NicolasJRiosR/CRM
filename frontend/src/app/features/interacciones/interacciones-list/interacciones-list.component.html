@@ -1,10 +1,6 @@
 <div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-4xl mx-auto">
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold">Interacciones</h2>
-    <a routerLink="/interacciones/nuevo"
-       class="bg-brand-700 text-white px-3 py-2 rounded hover:bg-brand-800">
-      Nueva interacción
-    </a>
   </div>
 
   <!-- FILTROS -->
@@ -18,7 +14,6 @@
       formControlName="cliente"
       class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
     />
-
 
     <input
       type="date"
@@ -37,45 +32,56 @@
       <option value="REUNION">Reunión</option>
     </select>
 
-    <!-- Botones -->
-    <div class="md:col-span-3 flex gap-3">
-      <button
-        type="button"
-        (click)="filtrar()"
-        class="bg-brand-700 hover:bg-brand-600 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
-      >
-        Filtrar
-      </button>
-      <button
-        type="button"
-        (click)="limpiar()"
-        class="bg-gray-300 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow-md active:scale-95"
-      >
-        Limpiar
-      </button>
+    <!-- BOTONES FILTRACION -->
+    <div class="md:col-span-3 flex justify-between items-center">
+      <!-- Botón limpiar a la izquierda -->
+      <div class="flex gap-3">
+        <button
+          type="button"
+          (click)="limpiar()"
+          class="bg-gray-300 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow-md active:scale-95"
+        >
+          Limpiar
+        </button>
+      </div>
+
+      <!-- Botón nueva interacción a la derecha -->
+      <a routerLink="/interacciones/nuevo"
+         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
+        + Nueva interacción
+      </a>
     </div>
   </div>
 
   <!-- LISTA FILTRADA -->
-  <ul class="divide-y divide-gray-200 mb-6">
+ <ul class="divide-y divide-gray-200 mb-6">
+  @if (interaccionesFiltradas().length === 0) {
+    <li class="py-3 text-center text-gray-500">
+      No se encontraron interacciones con esos filtros
+    </li>
+  } @else {
     @for (i of interaccionesFiltradas(); track i.id) {
-      <li class="py-3 flex justify-between items-start">
-        <div>
-          <div class="font-semibold text-brand-700">
-            {{ i.tipo }} · {{ i.fechaHora }}
-          </div>
-          <div class="text-sm text-gray-600">{{ i.descripcion }}</div>
+      <li class="py-3 flex flex-col gap-2">
+        <!-- Primera fila: tipo, fecha y cliente juntos -->
+        <div class="font-semibold text-brand-700 flex flex-wrap gap-2 items-center">
+          <span>{{ i.tipo }}</span>
+          <span>· {{ i.fechaHora | date:'dd/MM/yyyy - HH:mm' }}</span>
+          <span>· {{ clienteNombre(i.clienteId) }}</span>
         </div>
-        <div class="flex flex-col items-end gap-2">
-          <span class="text-sm text-gray-700">
-            Cliente: {{ clienteNombre(i.clienteId) }}
-          </span>
+
+        <!-- Descripción -->
+        <div class="text-sm text-gray-600">{{ i.descripcion }}</div>
+
+        <!-- Botón editar -->
+        <div>
           <a [routerLink]="['/interacciones', i.id]"
-             class="text-blue-600 underline text-sm">
+             class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800">
             Editar
           </a>
         </div>
       </li>
     }
-  </ul>
+  }
+</ul>
+
 </div>

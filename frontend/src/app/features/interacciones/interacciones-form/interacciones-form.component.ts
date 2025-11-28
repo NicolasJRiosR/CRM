@@ -21,7 +21,7 @@ export class InteraccionesFormComponent {
   clientesSig = this.clientesSvc.clientesSig;
 
   id = Number(this.route.snapshot.paramMap.get('id'));
-  current = signal<Interaccion | null>(null);
+  current: Interaccion | null = null;
 
   form = this.fb.group({
     clienteId: [0, [Validators.required, Validators.min(1)]],
@@ -36,7 +36,7 @@ export class InteraccionesFormComponent {
       this.svc.list();
       const found = this.svc.interaccionesSig().find(i => i.id === this.id);
       if (found) {
-        this.current.set(found);
+        this.current = found;
         this.form.patchValue(found);
       }
     }
@@ -45,6 +45,12 @@ export class InteraccionesFormComponent {
   save() {
     if (this.form.invalid) return;
     const value = this.form.value as Omit<Interaccion, 'id'>;
-    this.svc.create(value).subscribe(() => this.router.navigate(['/interacciones']));
+
+    if (this.current) {
+      const payload = { ...this.current, ...value };
+      this.svc.update(payload).subscribe(() => this.router.navigate(['/interacciones']));
+    } else {
+      this.svc.create(value).subscribe(() => this.router.navigate(['/interacciones']));
+    }
   }
 }

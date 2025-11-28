@@ -1,10 +1,12 @@
 import { Component, computed, OnInit } from '@angular/core';
 import { ProveedoresService } from '../ProveedoresService';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-proveedor-list',
   templateUrl: './proveedor-list.component.html',
-  standalone: true
+  standalone: true,
+  imports: [RouterLink]
 })
 export class ProveedorListComponent implements OnInit {
   proveedores = computed(() => this.proveedoresService.proveedoresSig());
@@ -13,9 +15,5 @@ export class ProveedorListComponent implements OnInit {
 
   ngOnInit() {
     this.proveedoresService.list();
-  }
-
-  deleteProveedor(id: number) {
-    this.proveedoresService.remove(id).subscribe(() => this.proveedoresService.list());
   }
 }
