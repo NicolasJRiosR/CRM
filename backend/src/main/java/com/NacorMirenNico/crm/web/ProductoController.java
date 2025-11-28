@@ -58,8 +58,16 @@ public class ProductoController {
     }
 
     private ProductoDTO toDTO(Producto p) {
-        return new ProductoDTO(p.getId(), p.getNombre(), p.getStock(), p.getPrecio(), p.getProveedor().getId());
-    }
+    return new ProductoDTO(
+        p.getId(),
+        p.getNombre(),
+        p.getStock(),
+        p.getPrecio(),
+        p.getProveedor().getId(),
+        p.getProveedor().getNombre()
+    );
+}
+
 
     private Producto toEntity(ProductoDTO dto) {
         Producto p = new Producto();

@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductosService, Producto } from '../productos.service';
 import { ProveedoresService } from '../../proveedor/ProveedoresService';
-
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -29,7 +28,7 @@ export class ProductosFormComponent {
   id = Number(this.route.snapshot.paramMap.get('id'));
   current: Producto | null = null;
 
-  // señal de proveedores
+  // señal reactiva de proveedores
   proveedoresSig = this.proveedoresSvc.proveedoresSig;
 
   form = this.fb.nonNullable.group({
@@ -41,10 +40,15 @@ export class ProductosFormComponent {
 
   ngOnInit() {
     this.proveedoresSvc.list(); // carga proveedores
-    if (this.id) {
+    if (this.id > 0) {
       this.svc.find(this.id).subscribe(p => {
         this.current = p;
-        this.form.patchValue(p);
+        this.form.patchValue({
+          nombre: p.nombre,
+          stock: p.stock,
+          precio: p.precio,
+          proveedorId: p.proveedorId
+        });
       });
     }
   }
@@ -60,5 +64,9 @@ export class ProductosFormComponent {
     } else {
       this.svc.create(value).subscribe(() => this.router.navigate(['/productos']));
     }
+  }
+
+  cancel() {
+    this.router.navigate(['/productos']);
   }
 }

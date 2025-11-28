@@ -7,7 +7,9 @@ export interface Producto {
   stock: number;
   precio: number;
   proveedorId: number;
+  proveedorNombre?: string; 
 }
+
 
 @Injectable({ providedIn: 'root' })
 export class ProductosService {
