@@ -1,41 +1,114 @@
-<h2>Lista de Proveedores</h2>
+<div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Listado de Proveedores</h2>
+  </div>
 
-<!-- Botón para crear nuevo proveedor -->
-<div class="mb-4">
-  <a [routerLink]="['/proveedores/nuevo']"
-     class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
-    Nuevo Proveedor
-  </a>
-</div>
+  <!-- FILTROS -->
+  <div
+    [formGroup]="filtroForm"
+    class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+  >
+    <input
+      type="text"
+      placeholder="Filtrar por ID..."
+      formControlName="id"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
 
-@if (proveedores().length > 0) {
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Contacto</th>
-        <th>Teléfono</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (p of proveedores(); track p.id) {
+    <input
+      type="text"
+      placeholder="Filtrar por nombre..."
+      formControlName="nombre"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
+
+    <input
+      type="text"
+      placeholder="Filtrar por contacto..."
+      formControlName="contacto"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
+
+    <!-- BOTONES FILTRACION -->
+    <div class="md:col-span-3 flex justify-between items-center">
+      <!-- Botones de filtración a la izquierda -->
+      <div class="flex gap-3">
+        <button
+          type="button"
+          (click)="limpiar()"
+          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+        >
+          Limpiar
+        </button>
+      </div>
+
+      <!-- Botón de nuevo proveedor a la derecha -->
+      <a
+        routerLink="/proveedores/nuevo"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
+      >
+        + Nuevo proveedor
+      </a>
+    </div>
+  </div>
+
+  <!-- TABLA DE PROVEEDORES -->
+  <div>
+    <table
+      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
+    >
+      <thead
+        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+      >
         <tr>
-          <td>{{ p.id }}</td>
-          <td>{{ p.nombre }}</td>
-          <td>{{ p.contacto }}</td>
-          <td>{{ p.telefono }}</td>
-          <td>
-            <a [routerLink]="['/proveedores', p.id]"
-               class="text-blue-600 hover:underline">
-              Editar
-            </a>
-          </td>
+          <th class="p-3 font-semibold">ID</th>
+          <th class="p-3 font-semibold">Nombre</th>
+          <th class="p-3 font-semibold">Contacto</th>
+          <th class="p-3 font-semibold">Teléfono</th>
+          <th class="p-3 font-semibold">Acciones</th>
         </tr>
-      }
-    </tbody>
-  </table>
-} @else {
-  <p>No hay proveedores registrados.</p>
-}
+      </thead>
+
+      <tbody>
+        @if (proveedoresFiltrados().length === 0) {
+          <tr class="border-t dark:border-gray-700">
+            <td colspan="5" class="p-4 text-center text-gray-500">
+              No se encontraron proveedores con esos filtros
+            </td>
+          </tr>
+        } @else {
+          @for (p of proveedoresFiltrados(); track p.id) {
+            <tr
+              class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+            >
+              <td class="p-3">{{ p.id }}</td>
+
+              <td class="p-3">
+                <div class="inline-block min-w-[160px] pl-2">
+                  {{ p.nombre }}
+                </div>
+              </td>
+
+              <td class="p-3">
+                <div class="inline-block min-w-[160px] pl-2">
+                  {{ p.contacto }}
+                </div>
+              </td>
+
+              <td class="p-3">{{ p.telefono }}</td>
+
+              <td class="p-3">
+                <a
+                  [routerLink]="['/proveedores', p.id]"
+                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
+                >
+                  Editar
+                </a>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
