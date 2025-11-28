@@ -13,7 +13,6 @@ export class ProveedorListComponent implements OnInit {
   private fb = inject(FormBuilder);
   private proveedoresService = inject(ProveedoresService);
 
-  // Lista reactiva desde el service (signal)
   proveedores = computed(() => this.proveedoresService.proveedoresSig());
 
   // Formulario de filtros
@@ -23,14 +22,12 @@ export class ProveedorListComponent implements OnInit {
     contacto: [''],
   });
 
-  // Signal que realmente dispara los filtros
   filtrosSig = signal({
     id: '',
     nombre: '',
     contacto: '',
   });
 
-  // Filtrado reactivo con computed()
   proveedoresFiltrados = computed(() => {
     const filtros = this.filtrosSig();
 
@@ -53,7 +50,6 @@ export class ProveedorListComponent implements OnInit {
   ngOnInit() {
     this.proveedoresService.list();
 
-    // 🔥 Actualiza filtros en tiempo real
     this.filtroForm.valueChanges.subscribe((values) => {
       this.filtrosSig.set({
         id: values.id ?? '',
