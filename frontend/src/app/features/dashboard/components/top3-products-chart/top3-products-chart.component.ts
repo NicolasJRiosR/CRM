@@ -11,11 +11,11 @@ import * as d3 from 'd3';
 export class Top3ProductsChartComponent {
   @Input() series: any[] = [];
   @Input() keys: string[] = [];
-  @ViewChild('host', { static: true }) host!: ElementRef;
+  @ViewChild('top', { static: true }) top!: ElementRef;
 
   ngOnChanges() {
     if (!this.series?.length || !this.keys?.length) return;
-    this.renderTopProductsLineChart(this.host.nativeElement, this.series, this.keys);
+    this.renderTopProductsLineChart(this.top.nativeElement, this.series, this.keys);
   }
 
 

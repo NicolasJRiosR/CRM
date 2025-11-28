@@ -10,11 +10,11 @@ import * as d3 from 'd3';
 })
 export class CrecimientoClientesCharComponent implements OnChanges {
   @Input() serie: { date: Date; value: number }[] = [];
-  @ViewChild('host', { static: true }) host!: ElementRef;
+  @ViewChild('line', { static: true }) line!: ElementRef;
 
   ngOnChanges() {
     if (!this.serie?.length) return;
-    this.renderClientsGrowthLine(this.host.nativeElement, this.serie);
+    this.renderClientsGrowthLine(this.line.nativeElement, this.serie);
   }
 
   private daysRange(start: Date, end: Date): Date[] {
@@ -61,6 +61,7 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     const w = Math.min(el.clientWidth, 450);
     const h = 290;
     const m = { t: 8, r: 8, b: 20, l: 28 };
+    const maxY = Math.max(d3.max(data, d => d.value) ?? 0, 10); // fuerza máximo a 10
 
     const svg = d3.select(el).append('svg')
       .attr('width', w)
@@ -70,16 +71,18 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .domain(d3.extent(data, d => d.date) as [Date, Date])
       .range([m.l, w - m.r]);
 
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.value) ?? 10])
-      .range([h - m.b, m.t]);
-
     const xAxis = d3.axisBottom<Date>(x)
       .ticks(d3.timeWeek.every(1))
       .tickFormat(d3.timeFormat('%d %b') as any);
 
+    const y = d3.scaleLinear()
+      .domain([0, maxY])
+      .range([h - m.b, m.t]);
+
     const yAxis = d3.axisLeft<number>(y)
+      .tickValues(d3.range(2, maxY + 2, 2))
       .tickFormat(d3.format('d'));
+
 
     svg.append('g')
       .attr('transform', `translate(0, ${h - m.b})`)
