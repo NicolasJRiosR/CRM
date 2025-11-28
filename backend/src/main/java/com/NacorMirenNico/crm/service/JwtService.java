@@ -15,7 +15,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     // Usa una clave fija, no generada cada vez
-    private final String SECRET = "claveSecretaMuySegura123456789012345678901234567890"; 
+    private final String SECRET = "claveSecretaMuySegura123456789012345678901234567890";
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
