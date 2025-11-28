@@ -1,40 +1,155 @@
-<div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
-  <h2 class="text-xl font-semibold mb-3">Compras</h2>
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+  <h2 class="text-2xl font-bold mb-4 text-brand-700 dark:text-brand-400">
+    {{
+      mostrarFormulario
+        ? editandoCompra
+          ? "Modificación de compra"
+          : "Nueva compra"
+        : "Listado de compras"
+    }}
+  </h2>
 
-  <table class="w-full table-auto mb-4">
-    <thead>
-      <tr class="text-left">
-        <th class="p-2">ID</th>
-        <th class="p-2">Producto</th>
-        <th class="p-2">Cantidad</th>
-        <th class="p-2">Precio unitario</th>
-        <th class="p-2">Fecha</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (c of comprasSvc.comprasSig(); track c.id) {
+  <!-- LISTADO DE COMPRAS -->
+  <div *ngIf="!mostrarFormulario">
+    <!-- FILTROS -->
+    <div
+      [formGroup]="filtroForm"
+      class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+    >
+      <input
+        type="text"
+        placeholder="Filtrar por producto..."
+        formControlName="producto"
+        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      />
+      <input
+        type="text"
+        placeholder="Filtrar por proveedor..."
+        formControlName="proveedor"
+        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      />
+      <input
+        type="date"
+        placeholder="Filtrar por fecha..."
+        formControlName="fecha"
+        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      />
+
+      <div
+        class="md:col-span-3 flex justify-between items-center flex-wrap gap-3"
+      >
+        <!-- Izquierda: Filtrar y Limpiar -->
+        <div class="flex gap-3">
+          <button
+            type="button"
+            (click)="filtrar()"
+            class="bg-brand-700 hover:bg-brand-600 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+          >
+            Filtrar
+          </button>
+          <button
+            type="button"
+            (click)="limpiar()"
+            class="bg-gray-300 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow-md active:scale-95"
+          >
+            Limpiar
+          </button>
+        </div>
+
+        <button
+          type="button"
+          (click)="toggleFormulario()"
+          class="bg-brand-700 hover:bg-brand-600 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+        >
+          {{ mostrarFormulario ? "← Volver al listado" : "+ Nueva compra" }}
+        </button>
+      </div>
+    </div>
+
+    <!-- TABLA -->
+    <table
+      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
+    >
+      <thead
+        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+      >
         <tr>
-          <td class="p-2">{{c.id}}</td>
-          <td class="p-2">{{c.productoId}}</td>
-          <td class="p-2">{{c.cantidad}}</td>
-          <td class="p-2">{{c.precioUnitario}}</td>
-          <td class="p-2">{{c.fecha}}</td>
+          <th class="p-3 font-semibold">ID</th>
+          <th class="p-3 font-semibold">Producto</th>
+          <th class="p-3 font-semibold">Cantidad</th>
+          <th class="p-3 font-semibold">Precio</th>
+          <th class="p-3 font-semibold">Fecha</th>
+          <th class="p-3 font-semibold">Proveedor</th>
+          <th class="p-3 font-semibold">Acciones</th>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (c of comprasFiltradas(); track c.id) {
+          <tr
+            class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+          >
+            <td class="p-3">{{ c.id }}</td>
+            <td class="p-3">{{ getNombreProductoDirecto(c.productoId) }}</td>
+            <td class="p-3">{{ c.cantidad }}</td>
+            <td class="p-3">{{ c.precioUnitario }}</td>
+            <td class="p-3">{{ getFechaSlash(c.fecha) }}</td>
+            <td class="p-3">{{ c.proveedorId ?? "N/A" }}</td>
+            <td class="p-3">
+              <button
+                type="button"
+                (click)="editarCompra(c)"
+                class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
+              >
+                Editar
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 
-  <form [formGroup]="form" (ngSubmit)="add()" class="grid grid-cols-1 md:grid-cols-4 gap-3">
-    <select class="border rounded px-2 py-1" formControlName="productoId">
-      @for (p of productosSvc.productosSig(); track p.id) {
+  <!-- FORMULARIO DE NUEVA/EDITAR COMPRA -->
+  <form
+    *ngIf="mostrarFormulario"
+    [formGroup]="form"
+    (ngSubmit)="editandoCompra ? update() : add()"
+    class="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl shadow-inner grid grid-cols-1 md:grid-cols-4 gap-3"
+  >
+    <select
+      formControlName="productoId"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-gray-50 dark:bg-gray-600"
+    >
+      @for (p of productosSig(); track p.id) {
         <option [value]="p.id">{{ p.nombre }} (stock: {{ p.stock }})</option>
       }
     </select>
-    <input class="border rounded px-2 py-1" type="number" placeholder="Cantidad" formControlName="cantidad"/>
-    <input class="border rounded px-2 py-1" type="number" placeholder="Precio unitario" formControlName="precioUnitario"/>
-    <input class="border rounded px-2 py-1" type="number" placeholder="Proveedor ID (opcional)" formControlName="proveedorId"/>
-    <button class="bg-brand-700 text-white px-3 py-2 rounded md:col-span-4" type="submit" [disabled]="form.invalid">
-      Registrar compra
+
+    <input
+      type="number"
+      placeholder="Cantidad"
+      formControlName="cantidad"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-gray-50 dark:bg-gray-600"
+    />
+    <input
+      type="number"
+      placeholder="Precio unitario"
+      formControlName="precioUnitario"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-gray-50 dark:bg-gray-600"
+    />
+    <input
+      type="number"
+      placeholder="Proveedor ID (opcional)"
+      formControlName="proveedorId"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-gray-50 dark:bg-gray-600"
+    />
+
+    <button
+      type="submit"
+      [disabled]="form.invalid"
+      class="bg-brand-700 hover:bg-brand-600 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 md:col-span-4"
+    >
+      {{ editandoCompra ? "Modificar compra" : "Registrar compra" }}
     </button>
   </form>
 </div>
