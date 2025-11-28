@@ -39,7 +39,7 @@ export class StockDisponibleCharComponent {
     .domain(['disponible', 'agotado'])
     .range(['#238bd1ff', '#F44336']);
 
-  // 👉 Leyenda arriba derecha
+  // Leyenda arriba derecha
   const legend = svg.append('g')
     .attr('transform', `translate(${width - 120}, 20)`); // más a la derecha
 
@@ -63,7 +63,7 @@ export class StockDisponibleCharComponent {
     .style('font-weight', '600')
     .style('fill', '#333');
 
-  // 👉 Donut más arriba
+  // Donut más arriba
   const chartGroup = svg.append('g')
     .attr('transform', `translate(${width / 2}, ${height / 2 - 20})`);
 
@@ -83,8 +83,5 @@ export class StockDisponibleCharComponent {
     .attr('stroke', '#fff')
     .attr('stroke-width', 1);
 }
-
-
-
 
 }
