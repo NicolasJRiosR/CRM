@@ -7,22 +7,58 @@
     </a>
   </div>
 
-  <!-- Filtro por cliente -->
-  <div class="flex items-center gap-3 mb-6">
+  <!-- FILTROS -->
+  <div
+    [formGroup]="filtroForm"
+    class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+  >
     <input
-      type="number"
-      [(ngModel)]="clienteId"
-      placeholder="ID del cliente para filtrar"
-      class="border rounded px-3 py-2 w-48"
+      type="text"
+      placeholder="Filtrar por nombre de cliente..."
+      formControlName="cliente"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
     />
-    <button (click)="filter()" class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-      Filtrar
-    </button>
+
+
+    <input
+      type="date"
+      placeholder="Filtrar por fecha..."
+      formControlName="fecha"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    />
+
+    <select
+      formControlName="tipo"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+    >
+      <option value="">Todos los tipos</option>
+      <option value="LLAMADA">Llamada</option>
+      <option value="EMAIL">Email</option>
+      <option value="REUNION">Reunión</option>
+    </select>
+
+    <!-- Botones -->
+    <div class="md:col-span-3 flex gap-3">
+      <button
+        type="button"
+        (click)="filtrar()"
+        class="bg-brand-700 hover:bg-brand-600 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+      >
+        Filtrar
+      </button>
+      <button
+        type="button"
+        (click)="limpiar()"
+        class="bg-gray-300 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow-md active:scale-95"
+      >
+        Limpiar
+      </button>
+    </div>
   </div>
 
-  <!-- Lista de interacciones -->
+  <!-- LISTA FILTRADA -->
   <ul class="divide-y divide-gray-200 mb-6">
-    @for (i of svc.interaccionesSig(); track i.id) {
+    @for (i of interaccionesFiltradas(); track i.id) {
       <li class="py-3 flex justify-between items-start">
         <div>
           <div class="font-semibold text-brand-700">
