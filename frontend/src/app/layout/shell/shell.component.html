@@ -1,14 +1,22 @@
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+<div
+  class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+>
   <header class="bg-[#090c7a] shadow">
-    <div class="container mx-auto max-w-7xl px-4 flex items-center justify-between py-4">
+    <div
+      class="container mx-auto max-w-7xl px-4 flex items-center justify-between py-4"
+    >
       <!-- Logo -->
-      <a routerLink="/" class="font-bold text-white text-lg">Hall of T-Shirts CRM</a>
+      <a routerLink="/" class="font-bold text-white text-lg"
+        >Hall of T-Shirts CRM</a
+      >
 
       <!-- Navegación -->
       <nav class="flex gap-4 text-white">
         <a routerLink="/dashboard" class="hover:text-gray-300">Dashboard</a>
         <a routerLink="/clientes" class="hover:text-gray-300">Clientes</a>
-        <a routerLink="/interacciones" class="hover:text-gray-300">Interacciones</a>
+        <a routerLink="/interacciones" class="hover:text-gray-300"
+          >Interacciones</a
+        >
         <a routerLink="/productos" class="hover:text-gray-300">Productos</a>
         <a routerLink="/ventas" class="hover:text-gray-300">Ventas</a>
         <a routerLink="/compras" class="hover:text-gray-300">Compras</a>
@@ -16,8 +24,11 @@
 
       @if (auth.userSig(); as u) {
         <div class="flex items-center gap-3">
-          <span class="text-sm  text-white">Hola, {{ u.username }}</span>
-          <button class="bg-red-600 px-3 py-1 rounded hover:bg-red-700" (click)="logout()">
+          <span class="text-sm text-white">Hola, {{ u.username }}</span>
+          <button
+            class="bg-red-600 px-3 py-1 rounded hover:bg-red-700"
+            (click)="logout()"
+          >
             Logout ➜
           </button>
         </div>
