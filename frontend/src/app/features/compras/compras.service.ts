@@ -29,7 +29,7 @@ export class ComprasService {
       productoId: c.productoId,
       cantidad: c.cantidad,
       precioUnitario: c.precioUnitario,
-      proveedorId: c.proveedorId, // CORREGIDO: antes era entidadId
+      entidadId: c.proveedorId, // mapear proveedorId → entidadId
     });
   }
 
@@ -39,7 +39,8 @@ export class ComprasService {
       productoId: c.productoId,
       cantidad: c.cantidad,
       precioUnitario: c.precioUnitario,
-      proveedorId: c.proveedorId,
+      entidadId: c.proveedorId, // mapear proveedorId → entidadId
     });
   }
 }
+

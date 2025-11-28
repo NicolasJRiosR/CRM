@@ -46,19 +46,20 @@ export class VentasComponent {
   editandoVenta = false;
   mostrarFormulario = false;
 
-  ngOnInit() {
-    this.ventasSvc.list();
-    this.productosSvc.list();
-    this.clientesSvc.list();
+  productosEffect = effect(() => {
+  const productos = this.productosSig();
+  this.productoMap = {};
+  productos.forEach((p) => {
+    this.productoMap[p.id] = p.nombre;
+  });
+});
 
-    effect(() => {
-      const productos = this.productosSig();
-      this.productoMap = {};
-      productos.forEach((p) => {
-        this.productoMap[p.id] = p.nombre;
-      });
-    });
-  }
+ngOnInit() {
+  this.ventasSvc.list();
+  this.productosSvc.list();
+  this.clientesSvc.list();
+}
+
 
   ventasFiltradas = computed(() => {
     const filters = this.appliedFiltersSig();
