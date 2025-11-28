@@ -1,8 +1,13 @@
-<div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
-  <div class="flex justify-between items-center mb-3">
-    <h2 class="text-xl font-semibold">Productos</h2>
-    <a routerLink="/productos/nuevo" class="bg-brand-700 text-white px-3 py-2 rounded">Nuevo</a>
-  </div>
+<div><div class="flex justify-between items-center mb-3">
+  <h2 class="text-xl font-semibold">Productos</h2>
+  <button 
+    class="bg-brand-700 text-white px-3 py-2 rounded hover:bg-brand-800"
+    (click)="router.navigate(['/productos/nuevo'])">
+    Nuevo
+  </button>
+</div>
+
+
   <table class="w-full table-auto">
     <thead>
       <tr class="text-left">
@@ -10,15 +15,15 @@
         <th class="p-2">Nombre</th>
         <th class="p-2">Stock</th>
         <th class="p-2">Precio</th>
+        <th class="p-2">Proveedor</th>
+        <th class="p-2">Acciones</th>
       </tr>
     </thead>
     <tbody>
       @for (p of svc.productosSig(); track p.id) {
         <tr>
           <td class="p-2">{{p.id}}</td>
-          <td class="p-2">
-            <a [routerLink]="['/productos', p.id]" class="underline">{{p.nombre}}</a>
-          </td>
+          <td class="p-2">{{p.nombre}}</td>
           <td class="p-2">
             <span 
               [ngClass]="{
@@ -30,6 +35,14 @@
             </span>
           </td>
           <td class="p-2">{{p.precio}}</td>
+          <td class="p-2">{{p.proveedorNombre}}</td>
+          <td class="p-2 flex gap-2">
+            <button 
+              class="bg-blue-600 text-white px-3 py-1 rounded"
+              (click)="router.navigate(['/productos', p.id])">
+              Editar
+            </button>
+          </td>
         </tr>
       }
     </tbody>

@@ -29,4 +29,5 @@ public class ProductoDTO {
 
     @NotNull
     private Integer proveedorId;
+    private String proveedorNombre;
 }
