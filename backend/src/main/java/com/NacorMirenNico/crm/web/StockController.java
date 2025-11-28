@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -109,6 +111,71 @@ public class StockController {
 
         return ResponseEntity.created(URI.create("/api/ventas/" + saved.getId())).body(toDTO(saved));
     }
+    @PutMapping("/api/ventas/{id}")
+    public ResponseEntity<VentaDTO> actualizarVenta(
+        @PathVariable Integer id,
+        @RequestBody @Valid MovimientoStockRequest rq) {
+
+    Venta venta = ventas.findById(id)
+        .orElseThrow(() -> new NoSuchElementException("Venta " + id + " no existe"));
+
+    Producto p = productos.findById(rq.productoId())
+        .orElseThrow(() -> new NoSuchElementException("Producto " + rq.productoId() + " no existe"));
+    Cliente cli = clientes.findById(rq.entidadId())
+        .orElseThrow(() -> new NoSuchElementException("Cliente " + rq.entidadId() + " no existe"));
+
+    // Ajuste de stock: diferencia entre nueva cantidad y la anterior
+    int diferencia = rq.cantidad() - venta.getCantidad();
+    int nuevoStock = p.getStock() - diferencia;
+
+    if (nuevoStock < 0) {
+        throw new IllegalArgumentException("Stock insuficiente: " + p.getStock() + " < diferencia " + diferencia);
+    }
+
+    p.setStock(nuevoStock);
+    productos.save(p);
+
+    venta.setProducto(p);
+    venta.setCliente(cli);
+    venta.setCantidad(rq.cantidad());
+    venta.setPrecioUnitario(rq.precioUnitario());
+    venta.setFecha(LocalDate.now());
+
+    Venta saved = ventas.save(venta);
+    return ResponseEntity.ok(toDTO(saved));
+}
+   @PutMapping("/api/compras/{id}")
+    public ResponseEntity<CompraDTO> actualizarCompra(
+        @PathVariable Integer id,
+        @RequestBody @Valid MovimientoStockRequest rq) {
+
+    // Buscar la compra original
+    Compra compra = compras.findById(id)
+        .orElseThrow(() -> new NoSuchElementException("Compra " + id + " no existe"));
+
+    // Buscar producto y proveedor
+    Producto p = productos.findById(rq.productoId())
+        .orElseThrow(() -> new NoSuchElementException("Producto " + rq.productoId() + " no existe"));
+    Proveedor prov = proveedores.findById(rq.entidadId())
+        .orElseThrow(() -> new NoSuchElementException("Proveedor " + rq.entidadId() + " no existe"));
+
+    // Ajuste de stock: diferencia entre nueva cantidad y la anterior
+    int diferencia = rq.cantidad() - compra.getCantidad();
+    p.setStock(p.getStock() + diferencia);
+    productos.save(p);
+
+    // Actualizar la compra
+    compra.setProducto(p);
+    compra.setProveedor(prov);
+    compra.setCantidad(rq.cantidad());
+    compra.setPrecioUnitario(rq.precioUnitario());
+    compra.setFecha(LocalDate.now());
+
+    Compra saved = compras.save(compra);
+    return ResponseEntity.ok(toDTO(saved));
+}
+
+
 
     // Conversión a DTO
     private CompraDTO toDTO(Compra c) {
