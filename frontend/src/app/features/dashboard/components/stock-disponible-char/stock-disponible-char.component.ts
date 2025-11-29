@@ -41,7 +41,7 @@ export class StockDisponibleCharComponent {
 
   // Leyenda arriba derecha
   const legend = svg.append('g')
-    .attr('transform', `translate(${width - 120}, 20)`); // más a la derecha
+    .attr('transform', `translate(${width - 120}, 5)`); // sube 15px
 
   const legendItems = legend.selectAll('.legend-item')
     .data(data)
@@ -64,8 +64,9 @@ export class StockDisponibleCharComponent {
     .style('fill', '#333');
 
   // Donut más arriba
-  const chartGroup = svg.append('g')
-    .attr('transform', `translate(${width / 2}, ${height / 2 - 20})`);
+const chartGroup = svg.append('g')
+  .attr('transform', `translate(${width / 2 - 10}, ${height / 2 - 20})`);
+
 
   const pie = d3.pie<{ estado: 'disponible' | 'agotado'; value: number }>()
     .value(d => d.value);
