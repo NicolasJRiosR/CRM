@@ -4,6 +4,7 @@ import { ProductosService } from '../productos/productos.service';
 import { CustomerService } from '../clientes/customer.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MetricsService } from '../../shared/services/metrics.service';
 
 @Component({
   standalone: true,
@@ -12,6 +13,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './ventas.component.html',
 })
 export class VentasComponent {
+  constructor(private metricsSvc: MetricsService) {}
+
   ventasSvc = inject(VentasService);
   productosSvc = inject(ProductosService);
   clientesSvc = inject(CustomerService);
@@ -118,13 +121,17 @@ export class VentasComponent {
   // NUEVA VENTA
   // ------------------------------------------------
   add() {
+    console.log('[Ventas] Entrando en metodo add()');      
+    this.ventasSvc.list();
+
     if (this.form.invalid) return;
 
     const venta = this.form.value as Venta;
 
     this.ventasSvc.create(venta).subscribe(() => {
-      console.log('Venta creada ✅');
+      console.log('[Ventas] Venta creada, llamando a refresh');
       this.ventasSvc.list();
+      this.metricsSvc.refresh(); //refresca el dashboard
       this.form.reset({ cantidad: 1, precioUnitario: 0, clienteId: null });
       this.mostrarFormulario = false;
     });
@@ -152,6 +159,7 @@ export class VentasComponent {
       next: () => {
         console.log('Venta actualizada');
         this.ventasSvc.list();
+        this.metricsSvc.refresh(); //refresca el dashboard
         this.form.reset({ cantidad: 1, precioUnitario: 0, clienteId: null });
         this.editandoVenta = false;
         this.mostrarFormulario = false;

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
+import { MetricsService } from '../../shared/services/metrics.service';
 
 // importa los hijos
 import { StockDisponibleCharComponent } from './components/stock-disponible-char/stock-disponible-char.component';
-import { Top3ProductsChartComponent } from './components/top3-products-chart/top3-products-chart.component';
 import { GraficoBurbujasCharComponent } from './components/grafico-burbujas-char/grafico-burbujas-char.component';
 import { MetricsTableComponent } from './components/metrics-table/metrics-table.component';
 import { CrecimientoClientesCharComponent } from './components/crecimiento-clientes-char/crecimiento-clientes-char.component';
@@ -27,13 +28,14 @@ type MetricKey =
     MetricsTableComponent,
     CrecimientoClientesCharComponent,
     StockDisponibleCharComponent,
-    Top3ProductsChartComponent,
     GraficoBurbujasCharComponent,
   ],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
   counts = { disponible: 0, agotado: 0 };
+
+  bubbleData: { nombre: string; precio: number; vendidos: number; stock: number }[] = [];
 
   metricOrder: { key: MetricKey; name: string }[] = [
     { key: 'clientesTotales', name: 'Clientes totales' },
@@ -53,13 +55,15 @@ export class DashboardComponent {
   // Datos para hijos
   clientesSerie: { date: Date; value: number }[] = [];
   stockData: { nombre: string; stock: number }[] = [];
-  topSeries: any[] = [];
-  topKeys: string[] = [];
   interaccionesData: any[] = [];
   comprasSerie: { date: Date; value: number }[] = [];
   ventasSerie: { date: Date; value: number }[] = [];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private metricsSvc: MetricsService) {
+    this.metricsSvc.registerRefresh(() => {
+      console.log('[Dashboard] Recibido refresh desde MetricsService');
+      this.loadMetrics();
+    });
     this.loadMetrics();
   }
 
@@ -86,15 +90,18 @@ export class DashboardComponent {
       error: err => console.error('Error clientes:', err)
     });
 
-    // PRODUCTOS
-    let productosCache: Record<string, any> = {};
-    this.http.get<any[]>('http://localhost:9080/api/productos').subscribe({
-      next: productos => {
-        productosCache = productos.reduce((acc, p) => {
+    // PRODUCTOS + VENTAS juntos
+    forkJoin({
+      productos: this.http.get<any[]>('http://localhost:9080/api/productos'),
+      ventas: this.http.get<any[]>('http://localhost:9080/api/ventas')
+    }).subscribe({
+      next: ({ productos, ventas }) => {
+        const productosCache = productos.reduce((acc, p) => {
           acc[String(p.id ?? p.productoId)] = p;
           return acc;
         }, {} as Record<string, any>);
 
+        // métricas de productos
         this.metricValues['productosCatalogo'] = productos.length;
         this.metricValues['stockCriticoAlerta'] = productos.filter(p => (p.stock ?? 0) < 10).length;
         this.metricValues['sinstock'] = productos.filter(p => (p.stock ?? 0) === 0).length;
@@ -106,33 +113,37 @@ export class DashboardComponent {
         });
 
         this.stockData = productos.map(p => ({ nombre: p.nombre, stock: p.stock ?? 0 }));
-      },
-      error: err => console.error('Error productos:', err)
-    });
 
-    // VENTAS
-    this.http.get<any[]>('http://localhost:9080/api/ventas').subscribe({
-      next: ventas => {
-        const hoy = new Date();
-        const haceUnaSemana = new Date();
-        haceUnaSemana.setDate(hoy.getDate() - 7);
-
-        // Para pruebas, usa directamente el array ficticio
-        const ventasUltimaSemana = ventas;
-
-        const ventasTotales = ventasUltimaSemana.length;
-        const ingresosTotales = ventasUltimaSemana.reduce(
+        // métricas de ventas
+        const ventasTotales = ventas.length;
+        const ingresosTotales = ventas.reduce(
           (sum, v) => sum + (v.cantidad * v.precioUnitario),
           0
         );
 
         const conteoPorProducto: Record<string, number> = {};
-        ventasUltimaSemana.forEach(v => {
+        ventas.forEach(v => {
           const idProd = String(v.productoId ?? '');
           if (!idProd) return;
           conteoPorProducto[idProd] = (conteoPorProducto[idProd] || 0) + 1;
         });
 
+        // bubbleData
+        this.bubbleData = Object.entries(conteoPorProducto)
+          .map(([id, vendidos]) => {
+            const prod = productosCache[id];
+            return {
+              nombre: prod?.nombre ?? id,
+              precio: prod?.precioUnitario ?? prod?.precio ?? 0,
+              vendidos,
+              stock: prod?.stock ?? 0
+            };
+          })
+          .sort((a, b) => b.vendidos - a.vendidos)
+          .slice(0, 10);
+        this.bubbleData = [...this.bubbleData];
+
+        // producto más vendido
         const topEntry = Object.entries(conteoPorProducto).sort((a, b) => b[1] - a[1])[0];
         const topId = topEntry?.[0];
         const topNombre =
@@ -143,39 +154,8 @@ export class DashboardComponent {
         this.metricValues['ventasTotales'] = ventasTotales;
         this.metricValues['ingresosTotales'] = ingresosTotales;
         this.metricValues['productoMasVendido'] = topNombre;
-
-        const top3Ids = Object.entries(conteoPorProducto)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 3)
-          .map(([id]) => id);
-
-        const top3Names = top3Ids.map(id => productosCache[id]?.nombre ?? id);
-
-        const grouped: Record<string, Record<string, number>> = {};
-        ventasUltimaSemana.forEach(v => {
-          const fecha = new Date(v.fecha ?? Date.now());
-          const key = fecha.toISOString().slice(0, 10);
-          const idProd = String(v.productoId ?? '');
-          if (!top3Ids.includes(idProd)) return;
-
-          if (!grouped[key]) grouped[key] = {};
-          grouped[key][idProd] = (grouped[key][idProd] || 0) + v.cantidad;
-        });
-
-        const fechasUltimaSemana = this.daysRange(haceUnaSemana, hoy).map(d => this.toDay(d));
-
-        this.topSeries = fechasUltimaSemana.map(fecha => {
-          const row: any = { fecha };
-          top3Ids.forEach((id, i) => {
-            const nombre = top3Names[i];
-            row[nombre] = grouped[fecha]?.[id] || 0;
-          });
-          return row;
-        });
-
-        this.topKeys = top3Names;
       },
-      error: err => console.error('Error ventas:', err)
+      error: err => console.error('Error productos/ventas:', err)
     });
 
     // INTERACCIONES
@@ -211,7 +191,7 @@ export class DashboardComponent {
       error: err => console.error('Error interacciones:', err)
     });
 
-    // --- COMPRAS ---
+    // COMPRAS + comparativa ventas
     this.http.get<any[]>('http://localhost:9080/api/compras').subscribe({
       next: compras => {
         this.comprasSerie = compras.map(c => ({
@@ -219,7 +199,6 @@ export class DashboardComponent {
           value: c.total ?? c.monto ?? 1
         }));
 
-        // --- VENTAS (para comparativa) ---
         this.http.get<any[]>('http://localhost:9080/api/ventas').subscribe({
           next: ventas => {
             this.ventasSerie = ventas.map(v => ({

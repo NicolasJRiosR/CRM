@@ -22,14 +22,9 @@
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px]">
     <app-stock-disponible-char [counts]="counts"></app-stock-disponible-char>
   </div>
-
-  <!-- Top 3 productos -->
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px]">
-    <app-top3-products-chart [series]="topSeries" [keys]="topKeys"></app-top3-products-chart>
-  </div>
-
-  <!-- Interacciones -->
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px]">
-    <app-grafico-burbujas-char [data]="interaccionesData"></app-grafico-burbujas-char>
-  </div>
 </div>
+
+  <!--Burbujas -->
+  <div class="bg-white w-[1000px] mx-auto dark:bg-gray-800 mt-6 rounded-lg shadow p-4 h-[500px]">
+    <app-grafico-burbujas-char [products]="bubbleData"></app-grafico-burbujas-char>
+  </div>
