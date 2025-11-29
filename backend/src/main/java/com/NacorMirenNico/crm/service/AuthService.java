@@ -41,17 +41,17 @@ public class AuthService {
             System.out.println("Password matches: " + matches);
             
             if (!matches) {
-                System.out.println("❌ Contraseña incorrecta");
+                System.out.println("Contraseña incorrecta");
                 throw new BadCredentialsException("Contraseña incorrecta");
             }
             
-            System.out.println("✅ Autenticación exitosa");
+            System.out.println("Autenticación exitosa");
             
             // Genera el token JWT
             return jwtService.generateToken(user);
             
         } catch (UsernameNotFoundException e) {
-            System.out.println("❌ Usuario no encontrado: " + username);
+            System.out.println("Usuario no encontrado: " + username);
             throw new BadCredentialsException("Usuario no encontrado");
         } catch (BadCredentialsException e) {
             throw e;

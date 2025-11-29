@@ -25,12 +25,13 @@ export class VentasComponent {
   ventasSig = this.ventasSvc.ventasSig;
 
   form = this.fb.group({
-    id: [null as number | null],
-    productoId: [null as number | null, Validators.required],
-    cantidad: [1, [Validators.required, Validators.min(1)]],
-    precioUnitario: [0, [Validators.required, Validators.min(0.01)]],
-    clienteId: [null as number | null],
-  });
+  id: [null as number | null],
+  productoId: [null as number | null, Validators.required],
+  cantidad: [1, [Validators.required, Validators.min(1)]],
+  precioUnitario: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0.01)]],
+  clienteId: [null as number | null],
+});
+
 
   filtroForm = this.fb.group({
     id: [''],
@@ -45,16 +46,17 @@ export class VentasComponent {
   });
 
   productoMap: Record<number, string> = {};
-
   editandoVenta = false;
   mostrarFormulario = false;
 
   productosEffect = effect(() => {
     const productos = this.productosSig();
     this.productoMap = {};
-    productos.forEach((p) => {
-      this.productoMap[p.id] = p.nombre;
-    });
+    productos.forEach((p) => (this.productoMap[p.id] = p.nombre));
+
+    // Si ya hay un producto seleccionado y acaban de cargarse/actualizarse los productos, recalculamos precio
+    const pid = this.form.get('productoId')?.value;
+    if (pid != null) this.updatePrecioFromProducto(pid);
   });
 
   ngOnInit() {
@@ -62,14 +64,33 @@ export class VentasComponent {
     this.productosSvc.list();
     this.clientesSvc.list();
 
-    // Aplicar filtros automáticamente al cambiar cualquier campo del filtro
-    this.filtroForm.valueChanges.subscribe((values) => {
-      this.appliedFiltersSig.set({
-        id: (values.id ?? '').toString(),
-        fecha: values.fecha ?? '',
-        producto: values.producto ?? '',
-      });
+    // filtros
+    this.form.get('productoId')?.valueChanges.subscribe(productoId => {
+  const id = typeof productoId === 'string' ? Number(productoId) : productoId;
+  const producto = this.productosSig().find(p => p.id === id);
+  this.form.get('precioUnitario')?.setValue(producto?.precio ?? 0);
+});
+
+
+    // Actualiza precio al cambiar el producto (coerción a número)
+    this.form.get('productoId')?.valueChanges.subscribe((productoId) => {
+      this.updatePrecioFromProducto(productoId);
     });
+  }
+
+  private updatePrecioFromProducto(productoId: unknown) {
+    if (productoId == null) {
+      this.form.get('precioUnitario')?.setValue(0);
+      return;
+    }
+    const idNum = typeof productoId === 'string' ? Number(productoId) : (productoId as number);
+    if (Number.isNaN(idNum)) {
+      this.form.get('precioUnitario')?.setValue(0);
+      return;
+    }
+    const producto = this.productosSig().find((p) => p.id === idNum);
+    const precio = producto?.precio ?? 0;
+    this.form.get('precioUnitario')?.setValue(precio);
   }
 
   ventasFiltradas = computed(() => {
@@ -79,25 +100,13 @@ export class VentasComponent {
     const prodFiltro = filters.producto.trim().toLowerCase();
 
     return this.ventasSig().filter((v) => {
-      const matchId =
-        !idFiltro || v.id.toString().toLowerCase().includes(idFiltro);
+      const matchId = !idFiltro || v.id.toString().toLowerCase().includes(idFiltro);
       const matchFecha = !fechaFiltro || v.fecha.startsWith(fechaFiltro);
-      const nombreProducto = this.getNombreProductoDirecto(
-        v.productoId,
-      ).toLowerCase();
+      const nombreProducto = this.getNombreProductoDirecto(v.productoId).toLowerCase();
       const matchProducto = !prodFiltro || nombreProducto.includes(prodFiltro);
       return matchId && matchFecha && matchProducto;
     });
   });
-
-  filtrar() {
-    const { id, fecha, producto } = this.filtroForm.value;
-    this.appliedFiltersSig.set({
-      id: (id ?? '').toString(),
-      fecha: fecha ?? '',
-      producto: producto ?? '',
-    });
-  }
 
   limpiar() {
     this.filtroForm.reset({ id: '', fecha: '', producto: '' });
@@ -117,62 +126,67 @@ export class VentasComponent {
     return `${dia}/${mes}/${año}`;
   }
 
-  // ------------------------------------------------
-  // NUEVA VENTA
-  // ------------------------------------------------
   add() {
-    console.log('[Ventas] Entrando en metodo add()');      
+  if (this.form.invalid) return;
+  const raw = this.form.getRawValue();
+
+  this.ventasSvc.create({
+    productoId: raw.productoId!,
+    cantidad: raw.cantidad!,
+    precioUnitario: raw.precioUnitario!,
+    clienteId: raw.clienteId ?? undefined, // convierte null a undefined
+  }).subscribe(() => {
     this.ventasSvc.list();
+    this.metricsSvc.refresh();
+    this.form.reset({
+  cantidad: 1,
+  precioUnitario: 0, // solo el valor
+  clienteId: null,
+});
+this.form.get('precioUnitario')?.disable(); //  deshabilitar aparte
 
-    if (this.form.invalid) return;
+    this.mostrarFormulario = false;
+  });
+}
 
-    const venta = this.form.value as Venta;
 
-    this.ventasSvc.create(venta).subscribe(() => {
-      console.log('[Ventas] Venta creada, llamando a refresh');
-      this.ventasSvc.list();
-      this.metricsSvc.refresh(); //refresca el dashboard
-      this.form.reset({ cantidad: 1, precioUnitario: 0, clienteId: null });
-      this.mostrarFormulario = false;
-    });
-  }
-
-  // ------------------------------------------------
-  // MODIFICAR VENTA
-  // ------------------------------------------------
   update() {
-    if (this.form.invalid) return;
+  if (this.form.invalid || !this.form.value.id) return;
+  const raw = this.form.getRawValue();
 
-    const formData = this.form.value as Venta;
+  this.ventasSvc.update({
+    id: raw.id!,
+    productoId: raw.productoId!,
+    cantidad: raw.cantidad!,
+    precioUnitario: raw.precioUnitario!,
+    clienteId: raw.clienteId ?? undefined, // convierte null a undefined
+    fecha: '', 
+  }).subscribe(() => {
+    this.ventasSvc.list();
+    this.metricsSvc.refresh();
+    this.form.reset({
+  cantidad: 1,
+  precioUnitario: 0,
+  clienteId: null,
+});
+this.form.get('precioUnitario')?.disable();
 
-    if (!formData.id) return;
+    this.editandoVenta = false;
+    this.mostrarFormulario = false;
+  });
+}
 
-    const original = this.ventasSig().find((v) => v.id === formData.id);
-    if (!original) return;
-
-    const ventaActualizada: Venta = {
-      ...original, // mantiene fecha, id, etc
-      ...formData, // actualiza solo lo editable
-    };
-
-    this.ventasSvc.update(ventaActualizada).subscribe({
-      next: () => {
-        console.log('Venta actualizada');
-        this.ventasSvc.list();
-        this.metricsSvc.refresh(); //refresca el dashboard
-        this.form.reset({ cantidad: 1, precioUnitario: 0, clienteId: null });
-        this.editandoVenta = false;
-        this.mostrarFormulario = false;
-      },
-      error: (e) => console.error('PUT ERROR', e),
-    });
-  }
 
   toggleFormulario() {
     this.mostrarFormulario = !this.mostrarFormulario;
     if (!this.mostrarFormulario) {
       this.editandoVenta = false;
-      this.form.reset({ cantidad: 1, precioUnitario: 0, clienteId: null });
+      this.form.reset({
+  cantidad: 1,
+  precioUnitario: 0,
+  clienteId: null,
+});
+this.form.get('precioUnitario')?.disable();
     }
   }
 
@@ -181,9 +195,10 @@ export class VentasComponent {
       id: venta.id,
       productoId: venta.productoId,
       cantidad: venta.cantidad,
-      precioUnitario: venta.precioUnitario,
       clienteId: venta.clienteId ?? null,
     });
+    // forzamos sincronizar precio con el producto (por si cambió en BD)
+    this.updatePrecioFromProducto(venta.productoId);
 
     this.mostrarFormulario = true;
     this.editandoVenta = true;
