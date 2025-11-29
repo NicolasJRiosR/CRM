@@ -58,21 +58,29 @@ export class CrecimientoClientesCharComponent implements OnChanges {
   private renderClientsGrowthLine(el: HTMLElement, data: { date: Date; value: number }[]) {
     d3.select(el).selectAll('*').remove();
 
-    const w = Math.min(el.clientWidth, 450);
+    const w = 470; 
     const h = 290;
-    const m = { t: 8, r: 8, b: 20, l: 28 };
-    const maxY = Math.max(d3.max(data, d => d.value) ?? 0, 10); // fuerza máximo a 10
+    const m = { t: 8, r: 8, b: 20, l: 40 };
+    const maxY = Math.max(d3.max(data, d => d.value) ?? 0, 10);
 
     const svg = d3.select(el).append('svg')
       .attr('width', w)
       .attr('height', h);
 
+    const g = svg.append('g')
+      .attr('transform', 'translate(-21, 0)');
+
     const x = d3.scaleTime()
       .domain(d3.extent(data, d => d.date) as [Date, Date])
-      .range([m.l, w - m.r]);
+      .range([m.l, w - m.r ]);
+
+    const firstDate = data[0].date;
+    const lastDate = data[data.length - 1].date;
+    const ticks = d3.timeDay.range(firstDate, lastDate, 4);
+    const tickValues = [firstDate, ...ticks, lastDate];
 
     const xAxis = d3.axisBottom<Date>(x)
-      .ticks(d3.timeWeek.every(1))
+      .tickValues(tickValues)
       .tickFormat(d3.timeFormat('%d %b') as any);
 
     const y = d3.scaleLinear()
@@ -83,12 +91,11 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .tickValues(d3.range(2, maxY + 2, 2))
       .tickFormat(d3.format('d'));
 
-
-    svg.append('g')
+    g.append('g')
       .attr('transform', `translate(0, ${h - m.b})`)
       .call(xAxis);
 
-    svg.append('g')
+    g.append('g')
       .attr('transform', `translate(${m.l}, 0)`)
       .call(yAxis);
 
@@ -97,14 +104,14 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .y(d => y(d.value))
       .curve(d3.curveMonotoneX);
 
-    svg.append('path')
+    g.append('path')
       .datum(data)
       .attr('fill', 'none')
       .attr('stroke', '#3056d3')
       .attr('stroke-width', 2)
       .attr('d', line);
 
-    svg.selectAll('circle')
+    g.selectAll('circle')
       .data(data)
       .enter()
       .append('circle')
