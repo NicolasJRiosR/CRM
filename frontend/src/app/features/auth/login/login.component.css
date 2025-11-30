@@ -1,0 +1,55 @@
+/* Barrido del lado azul */
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 1s ease-out forwards;
+}
+
+/* Movimiento del logo después del barrido */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 1s; /* empieza después del barrido */
+}
+
+/* Aparición del formulario */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Hover botón */
+button {
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+button:hover {
+  transform: scale(1.05);
+}

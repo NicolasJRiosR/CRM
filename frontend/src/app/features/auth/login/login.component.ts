@@ -8,7 +8,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   selector: 'app-login',
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
-  templateUrl: './login.component.html',   
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   fb = inject(FormBuilder);
@@ -25,8 +26,13 @@ export class LoginComponent {
     if (this.form.invalid) return;
     const { username, password } = this.form.value;
     this.auth.login(username!, password!).subscribe({
-      next: res => { this.auth.setSession(res); this.router.navigate(['/dashboard']); },
-      error: () => { this.error = 'Credenciales inválidas'; },
+      next: (res) => {
+        this.auth.setSession(res);
+        this.router.navigate(['/dashboard']);
+      },
+      error: () => {
+        this.error = 'Credenciales inválidas';
+      },
     });
   }
 }
