@@ -20,7 +20,7 @@ public class SecurityConfig {
         .cors(Customizer.withDefaults())
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            // solo login/registro abiertos
+            // solo login abiertos
             .requestMatchers("/api/auth/**").permitAll()
             // todo lo demás requiere token
             .anyRequest().authenticated()

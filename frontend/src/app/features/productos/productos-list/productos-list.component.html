@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-bold">Productos</h2>
   </div>
 
-  <!-- FILTROS -->
+
   <div
     [formGroup]="filtroForm"
     class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
@@ -40,9 +40,9 @@
       <option value="DISPONIBLE">Disponible</option>
     </select>
 
-    <!-- BOTONES FILTRACION -->
+   
     <div class="md:col-span-4 flex justify-between items-center mt-2">
-      <!-- Botón limpiar a la izquierda -->
+     
       <div class="flex gap-3">
         <button
           type="button"
@@ -53,7 +53,7 @@
         </button>
       </div>
 
-      <!-- Botón nuevo producto a la derecha -->
+   
       <button 
         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
         (click)="router.navigate(['/productos/nuevo'])">
@@ -62,7 +62,7 @@
     </div>
   </div>
 
-  <!-- TABLA DE PRODUCTOS -->
+
   <table
     class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
   >
@@ -94,19 +94,19 @@
             <td class="p-3">{{p.nombre}}</td>
             <td class="p-3">
               <span 
-  [ngStyle]="{
-    'background-color': p.stock > 50 ? '#26a69a' : 
-                       p.stock > 10 ? '#ffca28' : 
-                       p.stock >= 1 ? '#b71c1c' : '#7f0000',
-    'color': '#fff',
-    'padding': '0.25rem 0.5rem',
-    'border-radius': '0.25rem',
-    'display': 'inline-block'
-  }">
-  {{ p.stock > 50 ? 'Disponible' : 
-     p.stock > 10 ? 'Bajo' :  
-     p.stock >= 1 ? 'Crítico' : 'Sin Stock' }} ({{ p.stock }})
-</span>
+              [ngStyle]="{
+                          'background-color': p.stock > 50 ? '#26a69a' : 
+                                            p.stock > 10 ? '#ffca28' : 
+                                            p.stock >= 1 ? '#b71c1c' : '#7f0000',
+                          'color': '#fff',
+                          'padding': '0.25rem 0.5rem',
+                          'border-radius': '0.25rem',
+                          'display': 'inline-block'
+                        }">
+                  {{ p.stock > 50 ? 'Disponible' : 
+                    p.stock > 10 ? 'Bajo' :  
+                    p.stock >= 1 ? 'Crítico' : 'Sin Stock' }} ({{ p.stock }})
+            </span>
 
             </td>
             <td class="p-3">{{p.precio}}</td>

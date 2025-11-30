@@ -16,30 +16,30 @@ export class ComprasService {
 
   constructor(private api: ApiService) {}
 
-  // Listar compras
+
   list() {
     this.api
       .get<Compra[]>('/api/compras')
       .subscribe((c) => this.comprasSig.set(c));
   }
 
-  // Crear nueva compra
+  
   create(c: Omit<Compra, 'id' | 'fecha'>) {
     return this.api.post<Compra>('/api/compras', {
       productoId: c.productoId,
       cantidad: c.cantidad,
       precioUnitario: c.precioUnitario,
-      entidadId: c.proveedorId, // mapear proveedorId → entidadId
+      entidadId: c.proveedorId, 
     });
   }
 
-  // Actualizar compra existente
+  
   update(c: Compra) {
     return this.api.put<Compra>(`/api/compras/${c.id}`, {
       productoId: c.productoId,
       cantidad: c.cantidad,
       precioUnitario: c.precioUnitario,
-      entidadId: c.proveedorId, // mapear proveedorId → entidadId
+      entidadId: c.proveedorId, 
     });
   }
 }

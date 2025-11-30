@@ -49,19 +49,19 @@ public class StockController {
         this.ventas = ventas;
     }
 
-    //  GET /api/compras
+
     @GetMapping("/api/compras")
     public List<CompraDTO> listarCompras() {
         return compras.findAll().stream().map(this::toDTO).toList();
     }
 
-    // GET /api/ventas
+ 
     @GetMapping("/api/ventas")
     public List<VentaDTO> listarVentas() {
         return ventas.findAll().stream().map(this::toDTO).toList();
     }
 
-    // POST /api/compras
+   
     @PostMapping("/api/compras")
     public ResponseEntity<CompraDTO> crearCompra(@RequestBody @Valid MovimientoStockRequest rq) {
         Producto p = productos.findById(rq.productoId())
@@ -84,7 +84,7 @@ public class StockController {
         return ResponseEntity.created(URI.create("/api/compras/" + saved.getId())).body(toDTO(saved));
     }
 
-    // POST /api/ventas
+    
     @PostMapping("/api/ventas")
     public ResponseEntity<VentaDTO> crearVenta(@RequestBody @Valid MovimientoStockRequest rq) {
         Producto p = productos.findById(rq.productoId())
@@ -149,11 +149,11 @@ public class StockController {
         @PathVariable Integer id,
         @RequestBody @Valid MovimientoStockRequest rq) {
 
-    // Buscar la compra original
+   
     Compra compra = compras.findById(id)
         .orElseThrow(() -> new NoSuchElementException("Compra " + id + " no existe"));
 
-    // Buscar producto y proveedor
+ 
     Producto p = productos.findById(rq.productoId())
         .orElseThrow(() -> new NoSuchElementException("Producto " + rq.productoId() + " no existe"));
     Proveedor prov = proveedores.findById(rq.entidadId())
@@ -164,7 +164,7 @@ public class StockController {
     p.setStock(p.getStock() + diferencia);
     productos.save(p);
 
-    // Actualizar la compra
+   
     compra.setProducto(p);
     compra.setProveedor(prov);
     compra.setCantidad(rq.cantidad());

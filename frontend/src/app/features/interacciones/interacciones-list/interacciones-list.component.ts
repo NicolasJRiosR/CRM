@@ -18,27 +18,21 @@ export class InteraccionesListComponent {
 
   clientesMap = new Map<number, string>();
 
-  // ----------------------------
-  //   FORM DE FILTRO
-  // ----------------------------
+ 
   filtroForm = this.fb.group({
     cliente: [''],
     fecha: [''],
     tipo: [''],
   });
 
-  // ----------------------------
-  //   STATE DE FILTROS APLICADOS
-  // ----------------------------
+
   appliedFiltersSig = signal<{ cliente: string; fecha: string; tipo: string }>({
     cliente: '',
     fecha: '',
     tipo: '',
   });
 
-  // ----------------------------
-  //   LISTA FILTRADA
-  // ----------------------------
+
   interaccionesFiltradas = computed(() => {
   const filters = this.appliedFiltersSig();
   const clienteFiltro = filters.cliente.trim().toLowerCase();
@@ -68,7 +62,7 @@ export class InteraccionesListComponent {
     this.svc.list();
     this.clientesSvc.list();
 
-    // Aplica el filtro automáticamente al escribir
+  
     this.filtroForm.valueChanges.subscribe(({ cliente, fecha, tipo }) => {
       this.appliedFiltersSig.set({
         cliente: (cliente ?? '').toString(),

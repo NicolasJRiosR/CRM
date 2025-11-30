@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-bold">Listado de Proveedores</h2>
   </div>
 
-  <!-- FILTROS -->
+
   <div
     [formGroup]="filtroForm"
     class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
@@ -29,9 +29,9 @@
       class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
     />
 
-    <!-- BOTONES FILTRACION -->
+
     <div class="md:col-span-3 flex justify-between items-center">
-      <!-- Botones de filtración a la izquierda -->
+    
       <div class="flex gap-3">
         <button
           type="button"
@@ -42,7 +42,7 @@
         </button>
       </div>
 
-      <!-- Botón de nuevo proveedor a la derecha -->
+    
       <a
         routerLink="/proveedores/nuevo"
         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
@@ -52,7 +52,7 @@
     </div>
   </div>
 
-  <!-- TABLA DE PROVEEDORES -->
+
   <div>
     <table
       class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"

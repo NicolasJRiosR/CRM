@@ -28,7 +28,7 @@ export class ProductosFormComponent {
   id = Number(this.route.snapshot.paramMap.get('id'));
   current: Producto | null = null;
 
-  // señal reactiva de proveedores
+  
   proveedoresSig = this.proveedoresSvc.proveedoresSig;
 
   form = this.fb.nonNullable.group({
@@ -39,7 +39,7 @@ export class ProductosFormComponent {
   });
 
   ngOnInit() {
-    this.proveedoresSvc.list(); // carga proveedores
+    this.proveedoresSvc.list(); 
     if (this.id > 0) {
       this.svc.find(this.id).subscribe(p => {
         this.current = p;

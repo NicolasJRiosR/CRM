@@ -15,7 +15,7 @@ export class ProveedorListComponent implements OnInit {
 
   proveedores = computed(() => this.proveedoresService.proveedoresSig());
 
-  // Formulario de filtros
+ 
   filtroForm: FormGroup = this.fb.group({
     id: [''],
     nombre: [''],

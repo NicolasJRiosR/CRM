@@ -14,34 +14,26 @@ export class ClientesListComponent {
   svc = inject(CustomerService);
   fb = inject(FormBuilder);
 
-  // ----------------------------
-  //   FORM DE FILTRO
-  // ----------------------------
+
   filtroForm = this.fb.group({
     id: [''],
     nombre: [''],
     email: [''],
   });
 
-  // ----------------------------
-  //   STATE DE FILTROS APLICADOS
-  // ----------------------------
+ 
   appliedFiltersSig = signal<{ id: string; nombre: string; email: string }>({
     id: '',
     nombre: '',
     email: '',
   });
 
-  // ----------------------------
-  //   LISTA COMPLETA DE CLIENTES
-  // ----------------------------
+
   clientes() {
     return this.svc.clientesSig();
   }
 
-  // ----------------------------
-  //   LISTA FILTRADA
-  // ----------------------------
+
   clientesFiltrados = computed(() => {
     const filters = this.appliedFiltersSig();
     const idFiltro = filters.id.trim().toLowerCase();
@@ -56,9 +48,7 @@ export class ClientesListComponent {
     });
   });
 
-  // ----------------------------
-  //   INICIALIZACIÓN
-  // ----------------------------
+
   ngOnInit() {
     this.svc.list();
 
@@ -72,17 +62,13 @@ export class ClientesListComponent {
     });
   }
 
-  // ----------------------------
-  //   FORMATO DE TELÉFONO
-  // ----------------------------
+
   formatTelefono(t: string): string {
     const limpio = t.replace(/\D/g, '');
     return limpio.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
   }
 
-  // ----------------------------
-  //   MÉTODOS DE FILTRAR Y LIMPIAR
-  // ----------------------------
+
   filtrar() {
     const { id, nombre, email } = this.filtroForm.value;
     this.appliedFiltersSig.set({

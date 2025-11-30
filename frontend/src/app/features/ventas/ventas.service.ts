@@ -26,7 +26,7 @@ export class VentasService {
       productoId: v.productoId,
       cantidad: v.cantidad,
       precioUnitario: v.precioUnitario,
-      entidadId: v.clienteId, //  mapear clienteId → entidadId
+      entidadId: v.clienteId, 
     });
   }
   update(v: Venta) {
@@ -34,7 +34,7 @@ export class VentasService {
       productoId: v.productoId,
       cantidad: v.cantidad,
       precioUnitario: v.precioUnitario,
-      entidadId: v.clienteId ?? null, // cliente opcional
+      entidadId: v.clienteId ?? null, 
     });
   }
 }

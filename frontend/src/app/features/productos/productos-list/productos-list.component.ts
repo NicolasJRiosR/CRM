@@ -15,9 +15,7 @@ export class ProductosListComponent {
   router = inject(Router);
   fb = inject(FormBuilder);
 
-  // ----------------------------
-  //   FORM DE FILTRO
-  // ----------------------------
+
   filtroForm = this.fb.group({
     id: [''],
     nombre: [''],
@@ -25,9 +23,7 @@ export class ProductosListComponent {
     stockCategoria: [''], 
   });
 
-  // ----------------------------
-  //   STATE DE FILTROS APLICADOS
-  // ----------------------------
+  
   appliedFiltersSig = signal<{ id: string; nombre: string; proveedor: string; stockCategoria: string }>({
     id: '',
     nombre: '',
@@ -35,9 +31,7 @@ export class ProductosListComponent {
     stockCategoria: '',
   });
 
-  // ----------------------------
-  //   LISTA FILTRADA
-  // ----------------------------
+
   productosFiltrados = computed(() => {
     const filters = this.appliedFiltersSig();
     const idFiltro = filters.id.trim().toLowerCase();
@@ -50,7 +44,7 @@ export class ProductosListComponent {
       const matchNombre = !nombreFiltro || p.nombre.toLowerCase().includes(nombreFiltro);
       const matchProveedor = !proveedorFiltro || (p.proveedorNombre ?? '').toLowerCase().includes(proveedorFiltro);
 
-      //  filtro por categoría de stock
+  
       let matchStock = true;
       if (stockCategoria) {
         if (stockCategoria === 'SIN_STOCK') matchStock = p.stock <= 0;
@@ -66,7 +60,7 @@ export class ProductosListComponent {
   ngOnInit() {
     this.svc.list();
 
-    // Aplica el filtro automáticamente al escribir
+   
     this.filtroForm.valueChanges.subscribe(({ id, nombre, proveedor, stockCategoria }) => {
       this.appliedFiltersSig.set({
         id: (id ?? '').toString(),

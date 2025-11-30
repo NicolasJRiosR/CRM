@@ -1,13 +1,17 @@
 package com.NacorMirenNico.crm.web;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.*;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -52,7 +56,7 @@ public class ErrorHandler {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage(), req, List.of());
     }
 
-    // Método auxiliar para construir la respuesta
+   
     private ResponseEntity<ApiError> build(HttpStatus status, String msg, org.springframework.web.context.request.WebRequest req, List<Violation> v) {
         ApiError body = new ApiError(
             OffsetDateTime.now(),

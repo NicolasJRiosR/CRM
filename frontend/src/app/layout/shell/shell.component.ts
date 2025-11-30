@@ -14,7 +14,7 @@ export class ShellComponent {
   router = inject(Router);
 
   logout() {
-    localStorage.removeItem('token'); // o sessionStorage
+    localStorage.removeItem('token'); 
     this.router.navigate(['/login']);
   }
 }

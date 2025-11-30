@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-bold">Interacciones</h2>
   </div>
 
-  <!-- FILTROS -->
+  
   <div
     [formGroup]="filtroForm"
     class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
@@ -32,9 +32,9 @@
       <option value="REUNION">Reunión</option>
     </select>
 
-    <!-- BOTONES FILTRACION -->
+   
     <div class="md:col-span-3 flex justify-between items-center">
-      <!-- Botón limpiar a la izquierda -->
+      
       <div class="flex gap-3">
         <button
           type="button"
@@ -45,7 +45,7 @@
         </button>
       </div>
 
-      <!-- Botón nueva interacción a la derecha -->
+      
       <a routerLink="/interacciones/nuevo"
          class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
         + Nueva interacción
@@ -53,7 +53,7 @@
     </div>
   </div>
 
-  <!-- LISTA FILTRADA -->
+  
  <ul class="divide-y divide-gray-200 mb-6">
   @if (interaccionesFiltradas().length === 0) {
     <li class="py-3 text-center text-gray-500">
@@ -62,17 +62,17 @@
   } @else {
     @for (i of interaccionesFiltradas(); track i.id) {
       <li class="py-3 flex flex-col gap-2">
-        <!-- Primera fila: tipo, fecha y cliente juntos -->
+        
         <div class="font-semibold text-brand-700 flex flex-wrap gap-2 items-center">
           <span>{{ i.tipo }}</span>
           <span>· {{ i.fechaHora | date:'dd/MM/yyyy - HH:mm' }}</span>
           <span>· {{ clienteNombre(i.clienteId) }}</span>
         </div>
 
-        <!-- Descripción -->
+        
         <div class="text-sm text-gray-600">{{ i.descripcion }}</div>
 
-        <!-- Botón editar -->
+      
         <div>
           <a [routerLink]="['/interacciones', i.id]"
              class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800">

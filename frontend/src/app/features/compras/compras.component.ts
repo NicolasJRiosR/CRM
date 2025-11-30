@@ -18,7 +18,7 @@ export class ComprasComponent {
   comprasSig = this.comprasSvc.comprasSig;
   productosSig = this.productosSvc.productosSig;
 
-  // Formulario principal
+  
   form = this.fb.group({
     productoId: [null as number | null, Validators.required],
     cantidad: [1, [Validators.required, Validators.min(1)]],
@@ -26,7 +26,7 @@ export class ComprasComponent {
     proveedorId: [undefined as number | undefined],
   });
 
-  // Filtros
+
   filtroForm = this.fb.group({
     producto: [''],
     proveedor: [''],
@@ -51,7 +51,7 @@ export class ComprasComponent {
     this.comprasSvc.list();
     this.productosSvc.list();
 
-    // Aplicar filtros automáticamente al cambiar cualquier campo
+    
     this.filtroForm.valueChanges.subscribe((values) => {
       this.appliedFiltersSig.set({
         producto: values.producto ?? '',
@@ -61,7 +61,7 @@ export class ComprasComponent {
     });
   }
 
-  // Filtrado
+  
   comprasFiltradas = computed(() => {
     const filters = this.appliedFiltersSig();
     const prodFiltro = filters.producto.trim().toLowerCase();
@@ -118,9 +118,7 @@ export class ComprasComponent {
     return `${dia}/${mes}/${año}`;
   }
 
-  // ------------------------------------------------
-  // NUEVA COMPRA
-  // ------------------------------------------------
+  
   add() {
     if (this.form.invalid) return;
 
@@ -137,9 +135,7 @@ export class ComprasComponent {
     });
   }
 
-  // ------------------------------------------------
-  // EDITAR COMPRA
-  // ------------------------------------------------
+  
   editarCompra(compra: Compra) {
     this.form.patchValue({
       productoId: compra.productoId,
@@ -157,7 +153,7 @@ export class ComprasComponent {
 
     const compraActualizada: Compra = {
       id: this.compraEditandoId,
-      fecha: new Date().toISOString(), // o mantener la original si tu backend lo requiere
+      fecha: new Date().toISOString(), 
       productoId: this.form.value.productoId!,
       cantidad: this.form.value.cantidad!,
       precioUnitario: this.form.value.precioUnitario!,

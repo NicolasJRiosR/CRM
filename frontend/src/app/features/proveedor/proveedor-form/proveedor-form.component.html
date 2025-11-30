@@ -6,7 +6,7 @@
   </h2>
 
   <form (ngSubmit)="save()" class="space-y-4">
-    <!-- NOMBRE -->
+  
     <div>
       <label class="block text-sm font-medium mb-1">Nombre</label>
       <input
@@ -18,7 +18,7 @@
       />
     </div>
 
-    <!-- CONTACTO -->
+    
     <div>
       <label class="block text-sm font-medium mb-1">Contacto</label>
       <input
@@ -29,7 +29,7 @@
       />
     </div>
 
-    <!-- TELEFONO -->
+   
     <div>
       <label class="block text-sm font-medium mb-1">Teléfono</label>
       <input
@@ -40,7 +40,7 @@
       />
     </div>
 
-    <!-- BOTONES -->
+
     <div class="flex gap-3 justify-center pt-4">
       <button
         type="submit"
@@ -59,7 +59,7 @@
     </div>
   </form>
 
-  <!-- MENSAJE DE CONFIRMACIÓN -->
+  
   @if (guardado()) {
     <p class="text-green-600 mt-4 text-center">
       Proveedor {{ isEdit ? "actualizado" : "guardado" }} correctamente.
