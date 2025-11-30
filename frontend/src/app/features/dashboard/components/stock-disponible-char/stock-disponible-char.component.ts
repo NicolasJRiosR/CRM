@@ -28,7 +28,7 @@ export class StockDisponibleCharComponent {
 
   const width = element.clientWidth || 200;
   const height = element.clientHeight || 200;
-  const radius = Math.min(width, height) / 2 - 55; // más pequeño
+  const radius = Math.min(width, height) / 2 - 55; 
 
   const svg = d3.select(element)
     .append('svg')
@@ -41,7 +41,7 @@ export class StockDisponibleCharComponent {
 
   // Leyenda arriba derecha
   const legend = svg.append('g')
-    .attr('transform', `translate(${width - 120}, 5)`); // sube 15px
+    .attr('transform', `translate(${width - 120}, 5)`); 
 
   const legendItems = legend.selectAll('.legend-item')
     .data(data)
@@ -63,7 +63,7 @@ export class StockDisponibleCharComponent {
     .style('font-weight', '600')
     .style('fill', '#333');
 
-  // Donut más arriba
+  
 const chartGroup = svg.append('g')
   .attr('transform', `translate(${width / 2 - 10}, ${height / 2 - 20})`);
 

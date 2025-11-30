@@ -24,7 +24,7 @@ public class AuthService {
 
     public String authenticate(String username, String password) {
         try {
-            System.out.println("=== INICIANDO AUTENTICACIÓN ===");
+            System.out.println("---- INICIANDO AUTENTICACIÓN -------");
             System.out.println("Usuario: " + username);
             System.out.println("Password recibida: " + password);
             
@@ -36,7 +36,7 @@ public class AuthService {
             System.out.println("Enabled: " + user.isEnabled());
             System.out.println("Authorities: " + user.getAuthorities());
             
-            // Verifica la contraseña manualmente
+           
             boolean matches = passwordEncoder.matches(password, user.getPassword());
             System.out.println("Password matches: " + matches);
             
@@ -47,7 +47,7 @@ public class AuthService {
             
             System.out.println("Autenticación exitosa");
             
-            // Genera el token JWT
+           
             return jwtService.generateToken(user);
             
         } catch (UsernameNotFoundException e) {
