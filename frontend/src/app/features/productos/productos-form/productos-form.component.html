@@ -1,9 +1,13 @@
 <div class="bg-white dark:bg-gray-800 p-4 rounded shadow max-w-2xl">
   <h2 class="text-xl font-semibold mb-4">
-    {{ id > 0 ? 'Editar producto' : 'Nuevo producto' }}
+    {{ id > 0 ? "Editar producto" : "Nuevo producto" }}
   </h2>
 
-  <form [formGroup]="form" (ngSubmit)="save()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="save()"
+    class="grid grid-cols-1 md:grid-cols-2 gap-4"
+  >
     <div>
       <label class="block mb-1">Nombre</label>
       <input class="w-full border rounded px-3 py-2" formControlName="nombre" />
@@ -11,17 +15,28 @@
 
     <div>
       <label class="block mb-1">Stock</label>
-      <input type="number" class="w-full border rounded px-3 py-2" formControlName="stock" />
+      <input
+        type="number"
+        class="w-full border rounded px-3 py-2"
+        formControlName="stock"
+      />
     </div>
 
     <div>
       <label class="block mb-1">Precio</label>
-      <input type="number" class="w-full border rounded px-3 py-2" formControlName="precio" />
+      <input
+        type="number"
+        class="w-full border rounded px-3 py-2"
+        formControlName="precio"
+      />
     </div>
 
     <div>
       <label class="block mb-1">Proveedor</label>
-      <select class="w-full border rounded px-3 py-2" formControlName="proveedorId">
+      <select
+        class="w-full border rounded px-3 py-2"
+        formControlName="proveedorId"
+      >
         @for (prov of proveedoresSig(); track prov.id) {
           <option [value]="prov.id">{{ prov.nombre }}</option>
         }
@@ -29,11 +44,18 @@
     </div>
 
     <div class="col-span-full flex gap-3">
-      <button class="bg-brand-700 text-white px-4 py-2 rounded disabled:opacity-50"
-              type="submit" [disabled]="form.invalid">
+      <button
+        class="bg-brand-700 text-white px-4 py-2 rounded disabled:opacity-50"
+        type="submit"
+        [disabled]="form.invalid"
+      >
         Guardar
       </button>
-      <button class="bg-gray-200 px-4 py-2 rounded" type="button" (click)="cancel()">
+      <button
+        class="bg-gray-200 px-4 py-2 rounded"
+        type="button"
+        (click)="cancel()"
+      >
         Cancelar
       </button>
     </div>

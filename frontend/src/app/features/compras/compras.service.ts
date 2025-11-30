@@ -16,31 +16,29 @@ export class ComprasService {
 
   constructor(private api: ApiService) {}
 
-
   list() {
     this.api
       .get<Compra[]>('/api/compras')
       .subscribe((c) => this.comprasSig.set(c));
   }
 
-  
   create(c: Omit<Compra, 'id' | 'fecha'>) {
     return this.api.post<Compra>('/api/compras', {
       productoId: c.productoId,
       cantidad: c.cantidad,
       precioUnitario: c.precioUnitario,
-      entidadId: c.proveedorId, 
+      entidadId: c.proveedorId,
+      fecha: new Date().toISOString(),
     });
   }
 
-  
   update(c: Compra) {
     return this.api.put<Compra>(`/api/compras/${c.id}`, {
       productoId: c.productoId,
       cantidad: c.cantidad,
       precioUnitario: c.precioUnitario,
-      entidadId: c.proveedorId, 
+      entidadId: c.proveedorId,
+      fecha: c.fecha,
     });
   }
 }
-

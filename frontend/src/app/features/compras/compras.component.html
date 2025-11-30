@@ -1,13 +1,12 @@
 <div
   class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow w-full max-w-5xl mx-auto"
 >
-
   <h2
-    class="{{
+    [class]="
       mostrarFormulario
         ? 'text-2xl font-bold mb-6 text-black dark:text-white text-center'
         : 'text-2xl font-bold mb-6 text-black dark:text-white text-left'
-    }}"
+    "
   >
     {{
       mostrarFormulario
@@ -23,10 +22,9 @@
     <!-- FILTROS -->
     <div
       [formGroup]="filtroForm"
-      class="bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-inner grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
+      class="bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-inner grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"
     >
       <div>
-        <label class="block text-sm font-medium mb-1"></label>
         <input
           type="text"
           placeholder="Filtrar por ID..."
@@ -36,7 +34,6 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-1"></label>
         <input
           type="date"
           formControlName="fecha"
@@ -45,7 +42,6 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-1"></label>
         <input
           type="text"
           placeholder="Filtrar por producto..."
@@ -54,9 +50,17 @@
         />
       </div>
 
-     
+      <div>
+        <input
+          type="text"
+          placeholder="Filtrar por proveedor..."
+          formControlName="proveedor"
+          class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+        />
+      </div>
+
       <div
-        class="md:col-span-3 flex justify-between items-center mt-2 flex-wrap gap-3"
+        class="md:col-span-4 flex justify-between items-center mt-2 flex-wrap gap-3"
       >
         <div class="flex gap-3">
           <button
@@ -78,7 +82,7 @@
       </div>
     </div>
 
-    
+    <!-- TABLA -->
     <div class="overflow-x-auto rounded-xl shadow">
       <table class="w-full table-auto border-collapse text-center">
         <thead
@@ -89,37 +93,38 @@
             <th class="p-3 font-semibold">Producto</th>
             <th class="p-3 font-semibold">Cantidad</th>
             <th class="p-3 font-semibold">Precio</th>
+            <th class="p-3 font-semibold">Proveedor</th>
             <th class="p-3 font-semibold">Fecha</th>
             <th class="p-3 font-semibold">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          @for (c of comprasFiltradas(); track c.id) {
-            <tr
-              class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
-            >
-              <td class="p-3">{{ c.id }}</td>
-              <td class="p-3">{{ getNombreProductoDirecto(c.productoId) }}</td>
-              <td class="p-3">{{ c.cantidad }}</td>
-              <td class="p-3">{{ c.precioUnitario }}</td>
-              <td class="p-3">{{ getFechaSlash(c.fecha) }}</td>
-              <td class="p-3">
-                <button
-                  type="button"
-                  (click)="editarCompra(c)"
-                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
-                >
-                  Editar
-                </button>
-              </td>
-            </tr>
-          }
+          <tr
+            *ngFor="let c of comprasFiltradas(); trackBy: trackByCompraId"
+            class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+          >
+            <td class="p-3">{{ c.id }}</td>
+            <td class="p-3">{{ getNombreProductoDirecto(c.productoId) }}</td>
+            <td class="p-3">{{ c.cantidad }}</td>
+            <td class="p-3">{{ c.precioUnitario }}</td>
+            <td class="p-3">{{ getNombreProveedor(c.proveedorId) }}</td>
+            <td class="p-3">{{ getFechaSlash(c.fecha) }}</td>
+            <td class="p-3">
+              <button
+                type="button"
+                (click)="editarCompra(c)"
+                class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
+              >
+                Editar
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  
+  <!-- FORMULARIO -->
   <form
     *ngIf="mostrarFormulario"
     [formGroup]="form"
@@ -132,9 +137,21 @@
         formControlName="productoId"
         class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
       >
-        @for (p of productosSig(); track p.id) {
-          <option [value]="p.id">{{ p.nombre }} (stock: {{ p.stock }})</option>
-        }
+        <option *ngFor="let p of productosSig()" [value]="p.id">
+          {{ p.nombre }} (stock: {{ p.stock }})
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Proveedor</label>
+      <select
+        formControlName="proveedorId"
+        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+      >
+        <option *ngFor="let prov of proveedoresSig()" [value]="prov.id">
+          {{ prov.nombre }}
+        </option>
       </select>
     </div>
 
