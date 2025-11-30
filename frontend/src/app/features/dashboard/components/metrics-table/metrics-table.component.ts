@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./metrics-table.component.css']
 })
 export class MetricsTableComponent {
-  // El padre le pasa un array de métricas
+  
   @Input() metrics: { name: string; value: any }[] = [];
 }
 

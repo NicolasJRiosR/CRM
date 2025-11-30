@@ -50,7 +50,7 @@ public class AuthController {
         String password = request.get("password");
         String hash = passwordEncoder.encode(password);
         
-        System.out.println("=== HASH GENERADO ===");
+        System.out.println("----- HASH GENERADO ------");
         System.out.println("Password: " + password);
         System.out.println("Hash: " + hash);
         System.out.println("Longitud: " + hash.length());

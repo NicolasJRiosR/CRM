@@ -24,14 +24,16 @@ export class VentasComponent {
   productosSig = this.productosSvc.productosSig;
   ventasSig = this.ventasSvc.ventasSig;
 
-  form = this.fb.group({
-  id: [null as number | null],
-  productoId: [null as number | null, Validators.required],
-  cantidad: [1, [Validators.required, Validators.min(1)]],
-  precioUnitario: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0.01)]],
-  clienteId: [null as number | null],
-});
+  
+  productosDisponibles = computed(() => this.productosSig().filter(p => p.stock > 0));
 
+  form = this.fb.group({
+    id: [null as number | null],
+    productoId: [null as number | null, Validators.required],
+    cantidad: [1, [Validators.required, Validators.min(1)]],
+    precioUnitario: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0.01)]],
+    clienteId: [null as number | null, Validators.required],
+  });
 
   filtroForm = this.fb.group({
     id: [''],
@@ -53,8 +55,6 @@ export class VentasComponent {
     const productos = this.productosSig();
     this.productoMap = {};
     productos.forEach((p) => (this.productoMap[p.id] = p.nombre));
-
-    // Si ya hay un producto seleccionado y acaban de cargarse/actualizarse los productos, recalculamos precio
     const pid = this.form.get('productoId')?.value;
     if (pid != null) this.updatePrecioFromProducto(pid);
   });
@@ -64,15 +64,12 @@ export class VentasComponent {
     this.productosSvc.list();
     this.clientesSvc.list();
 
-    // filtros
     this.form.get('productoId')?.valueChanges.subscribe(productoId => {
-  const id = typeof productoId === 'string' ? Number(productoId) : productoId;
-  const producto = this.productosSig().find(p => p.id === id);
-  this.form.get('precioUnitario')?.setValue(producto?.precio ?? 0);
-});
+      const id = typeof productoId === 'string' ? Number(productoId) : productoId;
+      const producto = this.productosSig().find(p => p.id === id);
+      this.form.get('precioUnitario')?.setValue(producto?.precio ?? 0);
+    });
 
-
-    // Actualiza precio al cambiar el producto (coerción a número)
     this.form.get('productoId')?.valueChanges.subscribe((productoId) => {
       this.updatePrecioFromProducto(productoId);
     });
@@ -127,66 +124,62 @@ export class VentasComponent {
   }
 
   add() {
-  if (this.form.invalid) return;
-  const raw = this.form.getRawValue();
+    if (this.form.invalid) return;
+    const raw = this.form.getRawValue();
 
-  this.ventasSvc.create({
-    productoId: raw.productoId!,
-    cantidad: raw.cantidad!,
-    precioUnitario: raw.precioUnitario!,
-    clienteId: raw.clienteId ?? undefined, // convierte null a undefined
-  }).subscribe(() => {
-    this.ventasSvc.list();
-    this.metricsSvc.refresh();
-    this.form.reset({
-  cantidad: 1,
-  precioUnitario: 0, // solo el valor
-  clienteId: null,
-});
-this.form.get('precioUnitario')?.disable(); //  deshabilitar aparte
-
-    this.mostrarFormulario = false;
-  });
-}
-
+    this.ventasSvc.create({
+      productoId: raw.productoId!,
+      cantidad: raw.cantidad!,
+      precioUnitario: raw.precioUnitario!,
+      clienteId: raw.clienteId ?? undefined,
+    }).subscribe(() => {
+      this.ventasSvc.list();
+      this.metricsSvc.refresh();
+      this.form.reset({
+        cantidad: 1,
+        precioUnitario: 0,
+        clienteId: null,
+      });
+      this.form.get('precioUnitario')?.disable();
+      this.mostrarFormulario = false;
+    });
+  }
 
   update() {
-  if (this.form.invalid || !this.form.value.id) return;
-  const raw = this.form.getRawValue();
+    if (this.form.invalid || !this.form.value.id) return;
+    const raw = this.form.getRawValue();
 
-  this.ventasSvc.update({
-    id: raw.id!,
-    productoId: raw.productoId!,
-    cantidad: raw.cantidad!,
-    precioUnitario: raw.precioUnitario!,
-    clienteId: raw.clienteId ?? undefined, // convierte null a undefined
-    fecha: '', 
-  }).subscribe(() => {
-    this.ventasSvc.list();
-    this.metricsSvc.refresh();
-    this.form.reset({
-  cantidad: 1,
-  precioUnitario: 0,
-  clienteId: null,
-});
-this.form.get('precioUnitario')?.disable();
-
-    this.editandoVenta = false;
-    this.mostrarFormulario = false;
-  });
-}
-
+    this.ventasSvc.update({
+      id: raw.id!,
+      productoId: raw.productoId!,
+      cantidad: raw.cantidad!,
+      precioUnitario: raw.precioUnitario!,
+      clienteId: raw.clienteId ?? undefined,
+      fecha: '',
+    }).subscribe(() => {
+      this.ventasSvc.list();
+      this.metricsSvc.refresh();
+      this.form.reset({
+        cantidad: 1,
+        precioUnitario: 0,
+        clienteId: null,
+      });
+      this.form.get('precioUnitario')?.disable();
+      this.editandoVenta = false;
+      this.mostrarFormulario = false;
+    });
+  }
 
   toggleFormulario() {
     this.mostrarFormulario = !this.mostrarFormulario;
     if (!this.mostrarFormulario) {
       this.editandoVenta = false;
       this.form.reset({
-  cantidad: 1,
-  precioUnitario: 0,
-  clienteId: null,
-});
-this.form.get('precioUnitario')?.disable();
+        cantidad: 1,
+        precioUnitario: 0,
+        clienteId: null,
+      });
+      this.form.get('precioUnitario')?.disable();
     }
   }
 
@@ -197,9 +190,7 @@ this.form.get('precioUnitario')?.disable();
       cantidad: venta.cantidad,
       clienteId: venta.clienteId ?? null,
     });
-    // forzamos sincronizar precio con el producto (por si cambió en BD)
     this.updatePrecioFromProducto(venta.productoId);
-
     this.mostrarFormulario = true;
     this.editandoVenta = true;
   }

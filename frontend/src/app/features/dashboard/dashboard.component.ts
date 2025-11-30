@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { MetricsService } from '../../shared/services/metrics.service';
 
-// importa los hijos
 import { StockDisponibleCharComponent } from './components/stock-disponible-char/stock-disponible-char.component';
 import { GraficoBurbujasCharComponent } from './components/grafico-burbujas-char/grafico-burbujas-char.component';
 import { MetricsTableComponent } from './components/metrics-table/metrics-table.component';
@@ -58,14 +57,14 @@ export class DashboardComponent {
   ];
   metricValues: Partial<Record<MetricKey, any>> = {};
 
-  // Datos para hijos
+  
   clientesSerie: { date: Date; value: number }[] = [];
   stockData: { nombre: string; stock: number }[] = [];
   interaccionesData: any[] = [];
   comprasSerie: { date: Date; value: number }[] = [];
   ventasSerie: { date: Date; value: number }[] = [];
 
-  // Cache de clientes para poder mostrar nombres
+  
   private clientesCache: Record<string, any> = {};
 
   constructor(private http: HttpClient, private metricsSvc: MetricsService) {
@@ -84,7 +83,7 @@ export class DashboardComponent {
   }
 
   private loadMetrics() {
-    // CLIENTES
+    
     this.http.get<any[]>('http://localhost:9080/api/clientes').subscribe({
       next: clientes => {
         this.metricValues['clientesTotales'] = clientes.length;
@@ -96,7 +95,7 @@ export class DashboardComponent {
 
         this.clientesSerie = this.buildNewClientsDailySeries(clientes);
 
-        // cache de clientes
+        
         this.clientesCache = clientes.reduce((acc, c) => {
           acc[String(c.id ?? c.clienteId)] = c;
           return acc;
@@ -116,10 +115,7 @@ export class DashboardComponent {
           return acc;
         }, {} as Record<string, any>);
         
-        // cliente con más ventas, desempate:
-     /* Si ventas y gasto son exactamente iguales → devuelves "No procede".
-        Si tienen el mismo número de ventas pero distinto gasto → gana el que más gastó.
-        Si tienen distinto número de ventas → gana el que más ventas tiene. */
+      
         
         const statsPorCliente: Record<string, { ventas: number; gasto: number }> = {};
 
@@ -156,7 +152,7 @@ export class DashboardComponent {
 
         this.metricValues['clienteMasVentas'] = clienteMasVentas;
 
-        // métricas de productos
+        
         this.metricValues['productosCatalogo'] = productos.length;
         this.metricValues['stockCriticoAlerta'] = productos.filter(p => (p.stock ?? 0) < 10).length;
         this.metricValues['sinstock'] = productos.filter(p => (p.stock ?? 0) === 0).length;
@@ -169,7 +165,7 @@ export class DashboardComponent {
 
         this.stockData = productos.map(p => ({ nombre: p.nombre, stock: p.stock ?? 0 }));
 
-        // métricas de ventas
+        
         const ventasTotales = ventas.length;
         const ingresosTotales = ventas.reduce(
           (sum, v) => sum + (v.cantidad * v.precioUnitario),
@@ -183,7 +179,7 @@ export class DashboardComponent {
           conteoPorProducto[idProd] = (conteoPorProducto[idProd] || 0) + 1;
         });
 
-        // bubbleData
+       
         this.bubbleData = Object.entries(conteoPorProducto)
           .map(([id, vendidos]) => {
             const prod = productosCache[id];
@@ -198,7 +194,7 @@ export class DashboardComponent {
           .slice(0, 10);
         this.bubbleData = [...this.bubbleData];
 
-        /// producto más vendido con control de empate
+       
         const ordenados = Object.entries(conteoPorProducto).sort((a, b) => b[1] - a[1]);
 
         let productoMasVendido: string;
@@ -218,7 +214,7 @@ export class DashboardComponent {
         this.metricValues['productoMasVendido'] = productoMasVendido;
 
 
-        // clientes activos este mes
+        
         const ahora = new Date();
         const mesActual = ahora.getMonth();
         const añoActual = ahora.getFullYear();
@@ -240,7 +236,7 @@ export class DashboardComponent {
           
         });
 
-    // INTERACCIONES
+    
     this.http.get<any[]>('http://localhost:9080/api/interacciones').subscribe({
       next: interacciones => {
         const total = interacciones.length;
@@ -273,7 +269,7 @@ export class DashboardComponent {
       error: err => console.error('Error interacciones:', err)
     });
 
-    // COMPRAS + comparativa ventas
+    
     this.http.get<any[]>('http://localhost:9080/api/compras').subscribe({
       next: compras => {
         this.comprasSerie = compras.map(c => ({
@@ -281,7 +277,7 @@ export class DashboardComponent {
           value: c.total ?? c.monto ?? 1
         }));
         
-        // 👇 proveedor con más compras
+        
         const conteoPorProveedor: Record<string, number> = {};
         compras.forEach(c => {
           const idProv = String(c.proveedorId ?? c.idProveedor ?? '');
@@ -303,7 +299,7 @@ export class DashboardComponent {
 
         this.metricValues['ProveedorMasCompras'] = proveedorMasCompras;
         
-        //comparativa ventas
+        
         this.http.get<any[]>('http://localhost:9080/api/ventas').subscribe({
           next: ventas => {
             this.ventasSerie = ventas.map(v => ({
@@ -318,7 +314,7 @@ export class DashboardComponent {
     });
   }
 
-  // Helpers
+  
   private buildNewClientsDailySeries(clientes: any[]): { date: Date; value: number }[] {
     const today = new Date();
     const start = new Date();

@@ -1,36 +1,26 @@
 <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow w-full max-w-5xl mx-auto">
-  <h2
-    class="{{ mostrarFormulario
-      ? 'text-2xl font-bold mb-6 text-black dark:text-white text-center'
-      : 'text-2xl font-bold mb-6 text-black dark:text-white' }}">
-    {{ mostrarFormulario ? (editandoVenta ? "Modificación de venta" : "Nueva venta") : "Listado de ventas" }}
+  <h2 class="text-2xl font-bold mb-6 text-black dark:text-white" [class.text-center]="mostrarFormulario">
+    @if (mostrarFormulario) {
+      @if (editandoVenta) { Modificación de venta } @else { Nueva venta }
+    } @else {
+      Listado de ventas
+    }
   </h2>
 
-  <!-- LISTADO -->
-  <div *ngIf="!mostrarFormulario">
-    <!-- FILTROS -->
-    <div [formGroup]="filtroForm"
-         class="bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-inner grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <input type="text" placeholder="Filtrar por ID..." formControlName="id"
-             class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring" />
-      <input type="date" formControlName="fecha"
-             class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring" />
-      <input type="text" placeholder="Filtrar por producto..." formControlName="producto"
-             class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring" />
+  @if (!mostrarFormulario) {
+    <div [formGroup]="filtroForm" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-inner grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <input type="text" placeholder="Filtrar por ID..." formControlName="id" class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring" />
+      <input type="date" formControlName="fecha" class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring" />
+      <input type="text" placeholder="Filtrar por producto..." formControlName="producto" class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring" />
 
       <div class="md:col-span-3 flex justify-between items-center mt-2 flex-wrap gap-3">
-        <button type="button" (click)="limpiar()"
-                class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95">
-          Limpiar
-        </button>
-        <button type="button" (click)="toggleFormulario()"
-                class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
-          {{ mostrarFormulario ? "← Volver" : "+ Nueva venta" }}
+        <button type="button" (click)="limpiar()" class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95">Limpiar</button>
+        <button type="button" (click)="toggleFormulario()" class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
+          @if (mostrarFormulario) { ← Volver } @else { + Nueva venta }
         </button>
       </div>
     </div>
 
-    <!-- TABLA -->
     <div class="overflow-x-auto rounded-xl shadow">
       <table class="w-full table-auto border-collapse text-center">
         <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
@@ -52,67 +42,51 @@
               <td class="p-3">{{ v.precioUnitario }}</td>
               <td class="p-3">{{ getFechaSlash(v.fecha) }}</td>
               <td class="p-3">
-                <button type="button" (click)="editarVenta(v)"
-                        class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800">
-                  Editar
-                </button>
+                <button type="button" (click)="editarVenta(v)" class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800">Editar</button>
               </td>
             </tr>
           }
         </tbody>
       </table>
     </div>
-  </div>
+  }
 
-  <!-- FORMULARIO -->
-  <form *ngIf="mostrarFormulario" [formGroup]="form"
-        (ngSubmit)="editandoVenta ? update() : add()"
-        class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-inner space-y-4 max-w-xl mx-auto">
+  @if (mostrarFormulario) {
+    <form [formGroup]="form" (ngSubmit)="editandoVenta ? update() : add()" class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-inner space-y-4 max-w-xl mx-auto">
+      <div>
+        <label class="block text-sm font-medium mb-1">Producto</label>
+        <select formControlName="productoId" class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring">
+          @for (p of productosDisponibles(); track p.id) {
+            <option [ngValue]="p.id">{{ p.nombre }} (stock: {{ p.stock }})</option>
+          }
+        </select>
+      </div>
 
-    <div>
-      <label class="block text-sm font-medium mb-1">Producto</label>
-      <select formControlName="productoId"
-              class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring">
-        @for (p of productosSig(); track p.id) {
-          <!-- ngValue asegura número, no string -->
-          <option [ngValue]="p.id">{{ p.nombre }} (stock: {{ p.stock }})</option>
-        }
-      </select>
-    </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Cantidad</label>
+        <input type="number" formControlName="cantidad" placeholder="Cantidad" class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring" />
+      </div>
 
-    <div>
-      <label class="block text-sm font-medium mb-1">Cantidad</label>
-      <input type="number" formControlName="cantidad" placeholder="Cantidad"
-             class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring" />
-    </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Precio unitario</label>
+        <input type="number" formControlName="precioUnitario" class="w-full border rounded px-3 py-2 bg-gray-100 dark:bg-gray-600 focus:ring" />
+      </div>
 
-    <div>
-      <label class="block text-sm font-medium mb-1">Precio unitario</label>
-      <!-- El control está deshabilitado por TS, y se actualiza al cambiar producto -->
-      <input type="number" formControlName="precioUnitario"
-             class="w-full border rounded px-3 py-2 bg-gray-100 dark:bg-gray-600 focus:ring" />
-    </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Cliente</label>
+        <select formControlName="clienteId" class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring">
+          @for (c of clientesSig(); track c.id) {
+            <option [ngValue]="c.id">{{ c.nombre }}</option>
+          }
+        </select>
+      </div>
 
-    <div>
-      <label class="block text-sm font-medium mb-1">Cliente</label>
-      <select formControlName="clienteId"
-              class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring">
-        <option [ngValue]="null">Sin cliente</option>
-        @for (c of clientesSig(); track c.id) {
-          <option [ngValue]="c.id">{{ c.nombre }}</option>
-        }
-      </select>
-    </div>
-
-    <div class="flex justify-center gap-4 pt-4">
-      <button type="submit" [disabled]="form.invalid"
-              class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
-        {{ editandoVenta ? "Modificar venta" : "Registrar venta" }}
-      </button>
-      <button type="button" (click)="toggleFormulario()"
-              class="bg-gray-200 dark:bg-gray-600 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500">
-        Cancelar
-      </button>
-    </div>
-  </form>
+      <div class="flex justify-center gap-4 pt-4">
+        <button type="submit" [disabled]="form.invalid" class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
+          @if (editandoVenta) { Modificar venta } @else { Registrar venta }
+        </button>
+        <button type="button" (click)="toggleFormulario()" class="bg-gray-200 dark:bg-gray-600 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500">Cancelar</button>
+      </div>
+    </form>
+  }
 </div>

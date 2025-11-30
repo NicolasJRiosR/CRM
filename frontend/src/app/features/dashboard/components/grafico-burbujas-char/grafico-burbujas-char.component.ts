@@ -15,11 +15,11 @@ export class GraficoBurbujasCharComponent {
   ngOnChanges() {
     console.log('[Burbujas] ngOnChanges triggered. Products:', this.products?.length, this.products);
     if (!this.products?.length) return;
-    this.renderBubbleChart(this.bubble.nativeElement, [...this.products]); // 👈 copia defensiva
+    this.renderBubbleChart(this.bubble.nativeElement, [...this.products]); 
   }
 
   private renderBubbleChart(element: HTMLElement, products: any[]) {
-    d3.select(element).html(''); //borra todo, incluido tooltip y divs
+    d3.select(element).html(''); 
 
     // Solo los 10 más vendidos
     const data = products
@@ -30,7 +30,7 @@ export class GraficoBurbujasCharComponent {
     const height = element.clientHeight || 700;
     const margin = { top: 60, right: 20, bottom: 40, left: 50 };
 
-    const yMax = Math.max(35, d3.max(data, d => d.vendidos)!); // fuerza mínimo de 100
+    const yMax = Math.max(35, d3.max(data, d => d.vendidos)!); 
 
     const svg = d3.select(element)
       .append('svg')
@@ -43,7 +43,7 @@ export class GraficoBurbujasCharComponent {
       .range([margin.left, width - margin.right]);
 
     const y = d3.scaleLinear()
-      .domain([0, yMax]) // ya lo tienes bien
+      .domain([0, yMax]) 
       .range([height - margin.bottom, margin.top]);
 
     const r = d3.scaleSqrt()
@@ -56,13 +56,13 @@ export class GraficoBurbujasCharComponent {
     const xAxis = d3.axisBottom(x).ticks(10).tickFormat(d3.format('d'));
 
     const yAxis = d3.axisLeft(y)
-      .tickValues(d3.range(0, yMax + 1, 5)) // ticks cada 5
+      .tickValues(d3.range(0, yMax + 1, 5)) 
       .tickFormat(d3.format('d'));
 
-    svg.selectAll('.y-axis').remove(); // 👈 borra eje Y anterior si existe
+    svg.selectAll('.y-axis').remove(); 
 
     svg.append('g')
-      .attr('class', 'y-axis') // 👈 clase para poder borrarlo luego
+      .attr('class', 'y-axis') 
       .attr('transform', `translate(${margin.left},0)`)
       .call(yAxis)
       .append('text')
@@ -74,7 +74,7 @@ export class GraficoBurbujasCharComponent {
       .style('font-size', '12px') 
       .text('Unidades vendidas');
 
-    // Tooltip
+   
     const tooltip = d3.select(element)
       .append('div')
       .style('position', 'absolute')
@@ -98,7 +98,7 @@ export class GraficoBurbujasCharComponent {
       .text('Precio (€)');
 
 
-    //Burbujas
+    
     svg.selectAll('circle')
     .data(data)
     .enter()
