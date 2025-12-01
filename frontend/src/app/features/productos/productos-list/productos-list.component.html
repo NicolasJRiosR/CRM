@@ -3,7 +3,6 @@
     <h2 class="text-2xl font-bold">Productos</h2>
   </div>
 
-
   <div
     [formGroup]="filtroForm"
     class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
@@ -14,21 +13,18 @@
       formControlName="id"
       class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
     />
-
     <input
       type="text"
       placeholder="Filtrar por nombre..."
       formControlName="nombre"
       class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
     />
-
     <input
       type="text"
       placeholder="Filtrar por proveedor..."
       formControlName="proveedor"
       class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
     />
-
     <select
       formControlName="stockCategoria"
       class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
@@ -40,28 +36,24 @@
       <option value="DISPONIBLE">Disponible</option>
     </select>
 
-   
     <div class="md:col-span-4 flex justify-between items-center mt-2">
-     
       <div class="flex gap-3">
         <button
           type="button"
           (click)="limpiar()"
-          class="bg-gray-300 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow-md active:scale-95"
+          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
         >
           Limpiar
         </button>
       </div>
-
-   
-      <button 
+      <button
         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
-        (click)="router.navigate(['/productos/nuevo'])">
+        (click)="router.navigate(['/productos/nuevo'])"
+      >
         + Nuevo producto
       </button>
     </div>
   </div>
-
 
   <table
     class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
@@ -90,31 +82,44 @@
           <tr
             class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
           >
-            <td class="p-3">{{p.id}}</td>
-            <td class="p-3">{{p.nombre}}</td>
+            <td class="p-3">{{ p.id }}</td>
+            <td class="p-3">{{ p.nombre }}</td>
             <td class="p-3">
-              <span 
-              [ngStyle]="{
-                          'background-color': p.stock > 50 ? '#26a69a' : 
-                                            p.stock > 10 ? '#ffca28' : 
-                                            p.stock >= 1 ? '#b71c1c' : '#7f0000',
-                          'color': '#fff',
-                          'padding': '0.25rem 0.5rem',
-                          'border-radius': '0.25rem',
-                          'display': 'inline-block'
-                        }">
-                  {{ p.stock > 50 ? 'Disponible' : 
-                    p.stock > 10 ? 'Bajo' :  
-                    p.stock >= 1 ? 'Crítico' : 'Sin Stock' }} ({{ p.stock }})
-            </span>
-
+              <span
+                [ngStyle]="{
+                  'background-color':
+                    p.stock > 50
+                      ? '#26a69a'
+                      : p.stock > 10
+                        ? '#ffca28'
+                        : p.stock >= 1
+                          ? '#b71c1c'
+                          : '#7f0000',
+                  color: '#fff',
+                  padding: '0.25rem 0.5rem',
+                  'border-radius': '0.25rem',
+                  display: 'inline-block',
+                }"
+              >
+                {{
+                  p.stock > 50
+                    ? "Disponible"
+                    : p.stock > 10
+                      ? "Bajo"
+                      : p.stock >= 1
+                        ? "Crítico"
+                        : "Sin Stock"
+                }}
+                ({{ p.stock }})
+              </span>
             </td>
-            <td class="p-3">{{p.precio}}</td>
-            <td class="p-3">{{p.proveedorNombre}}</td>
+            <td class="p-3">{{ p.precio }}</td>
+            <td class="p-3">{{ p.proveedorNombre }}</td>
             <td class="p-3">
-              <button 
+              <button
                 class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
-                (click)="router.navigate(['/productos', p.id])">
+                (click)="router.navigate(['/productos', p.id])"
+              >
                 Editar
               </button>
             </td>

@@ -1,41 +1,45 @@
-<div class="bg-white dark:bg-gray-800 p-4 rounded shadow max-w-2xl">
-  <h2 class="text-xl font-semibold mb-4">
+<div
+  class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto"
+>
+  <h2 class="text-2xl font-bold mb-6 text-center">
     {{ id > 0 ? "Editar producto" : "Nuevo producto" }}
   </h2>
 
-  <form
-    [formGroup]="form"
-    (ngSubmit)="save()"
-    class="grid grid-cols-1 md:grid-cols-2 gap-4"
-  >
+  <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
     <div>
-      <label class="block mb-1">Nombre</label>
-      <input class="w-full border rounded px-3 py-2" formControlName="nombre" />
+      <label class="block text-sm font-medium mb-1">Nombre</label>
+      <input
+        formControlName="nombre"
+        placeholder="Ej. Producto X"
+        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+      />
     </div>
 
     <div>
-      <label class="block mb-1">Stock</label>
+      <label class="block text-sm font-medium mb-1">Stock</label>
       <input
         type="number"
-        class="w-full border rounded px-3 py-2"
         formControlName="stock"
+        placeholder="Ej. 10"
+        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
       />
     </div>
 
     <div>
-      <label class="block mb-1">Precio</label>
+      <label class="block text-sm font-medium mb-1">Precio</label>
       <input
         type="number"
-        class="w-full border rounded px-3 py-2"
         formControlName="precio"
+        placeholder="Ej. 99.99"
+        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
       />
     </div>
 
     <div>
-      <label class="block mb-1">Proveedor</label>
+      <label class="block text-sm font-medium mb-1">Proveedor</label>
       <select
-        class="w-full border rounded px-3 py-2"
         formControlName="proveedorId"
+        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
       >
         @for (prov of proveedoresSig(); track prov.id) {
           <option [value]="prov.id">{{ prov.nombre }}</option>
@@ -43,18 +47,18 @@
       </select>
     </div>
 
-    <div class="col-span-full flex gap-3">
+    <div class="flex gap-3 justify-center pt-4">
       <button
-        class="bg-brand-700 text-white px-4 py-2 rounded disabled:opacity-50"
         type="submit"
         [disabled]="form.invalid"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
       >
         Guardar
       </button>
       <button
-        class="bg-gray-200 px-4 py-2 rounded"
         type="button"
         (click)="cancel()"
+        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
       >
         Cancelar
       </button>

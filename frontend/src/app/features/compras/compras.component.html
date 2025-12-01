@@ -1,6 +1,4 @@
-<div
-  class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow w-full max-w-5xl mx-auto"
->
+<div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">
   <h2
     [class]="
       mostrarFormulario
@@ -17,47 +15,34 @@
     }}
   </h2>
 
-  <!-- LISTADO -->
   <div *ngIf="!mostrarFormulario">
-    <!-- FILTROS -->
     <div
       [formGroup]="filtroForm"
-      class="bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-inner grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"
+      class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
     >
-      <div>
-        <input
-          type="text"
-          placeholder="Filtrar por ID..."
-          formControlName="id"
-          class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
-        />
-      </div>
-
-      <div>
-        <input
-          type="date"
-          formControlName="fecha"
-          class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
-        />
-      </div>
-
-      <div>
-        <input
-          type="text"
-          placeholder="Filtrar por producto..."
-          formControlName="producto"
-          class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
-        />
-      </div>
-
-      <div>
-        <input
-          type="text"
-          placeholder="Filtrar por proveedor..."
-          formControlName="proveedor"
-          class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
-        />
-      </div>
+      <input
+        type="text"
+        placeholder="Filtrar por ID..."
+        formControlName="id"
+        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      />
+      <input
+        type="date"
+        formControlName="fecha"
+        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      />
+      <input
+        type="text"
+        placeholder="Filtrar por producto..."
+        formControlName="producto"
+        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      />
+      <input
+        type="text"
+        placeholder="Filtrar por proveedor..."
+        formControlName="proveedor"
+        class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      />
 
       <div
         class="md:col-span-4 flex justify-between items-center mt-2 flex-wrap gap-3"
@@ -82,9 +67,10 @@
       </div>
     </div>
 
-    <!-- TABLA -->
-    <div class="overflow-x-auto rounded-xl shadow">
-      <table class="w-full table-auto border-collapse text-center">
+    <div class="overflow-x-auto rounded-lg shadow">
+      <table
+        class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
+      >
         <thead
           class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
         >
@@ -104,7 +90,11 @@
             class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
           >
             <td class="p-3">{{ c.id }}</td>
-            <td class="p-3">{{ getNombreProductoDirecto(c.productoId) }}</td>
+            <td class="p-3">
+              <div class="inline-block min-w-[160px] pl-2">
+                {{ getNombreProductoDirecto(c.productoId) }}
+              </div>
+            </td>
             <td class="p-3">{{ c.cantidad }}</td>
             <td class="p-3">{{ c.precioUnitario }}</td>
             <td class="p-3">{{ getNombreProveedor(c.proveedorId) }}</td>
@@ -124,7 +114,6 @@
     </div>
   </div>
 
-  <!-- FORMULARIO -->
   <form
     *ngIf="mostrarFormulario"
     [formGroup]="form"

@@ -24,14 +24,18 @@ export class VentasComponent {
   productosSig = this.productosSvc.productosSig;
   ventasSig = this.ventasSvc.ventasSig;
 
-  
-  productosDisponibles = computed(() => this.productosSig().filter(p => p.stock > 0));
+  productosDisponibles = computed(() =>
+    this.productosSig().filter((p) => p.stock > 0),
+  );
 
   form = this.fb.group({
     id: [null as number | null],
     productoId: [null as number | null, Validators.required],
     cantidad: [1, [Validators.required, Validators.min(1)]],
-    precioUnitario: [{ value: 0, disabled: true }, [Validators.required, Validators.min(0.01)]],
+    precioUnitario: [
+      { value: 0, disabled: true },
+      [Validators.required, Validators.min(0.01)],
+    ],
     clienteId: [null as number | null, Validators.required],
   });
 
@@ -64,14 +68,23 @@ export class VentasComponent {
     this.productosSvc.list();
     this.clientesSvc.list();
 
-    this.form.get('productoId')?.valueChanges.subscribe(productoId => {
-      const id = typeof productoId === 'string' ? Number(productoId) : productoId;
-      const producto = this.productosSig().find(p => p.id === id);
+    this.form.get('productoId')?.valueChanges.subscribe((productoId) => {
+      const id =
+        typeof productoId === 'string' ? Number(productoId) : productoId;
+      const producto = this.productosSig().find((p) => p.id === id);
       this.form.get('precioUnitario')?.setValue(producto?.precio ?? 0);
     });
 
     this.form.get('productoId')?.valueChanges.subscribe((productoId) => {
       this.updatePrecioFromProducto(productoId);
+    });
+
+    this.filtroForm.valueChanges.subscribe((value) => {
+      this.appliedFiltersSig.set({
+        id: value.id ?? '',
+        fecha: value.fecha ?? '',
+        producto: value.producto ?? '',
+      });
     });
   }
 
@@ -80,7 +93,10 @@ export class VentasComponent {
       this.form.get('precioUnitario')?.setValue(0);
       return;
     }
-    const idNum = typeof productoId === 'string' ? Number(productoId) : (productoId as number);
+    const idNum =
+      typeof productoId === 'string'
+        ? Number(productoId)
+        : (productoId as number);
     if (Number.isNaN(idNum)) {
       this.form.get('precioUnitario')?.setValue(0);
       return;
@@ -97,9 +113,12 @@ export class VentasComponent {
     const prodFiltro = filters.producto.trim().toLowerCase();
 
     return this.ventasSig().filter((v) => {
-      const matchId = !idFiltro || v.id.toString().toLowerCase().includes(idFiltro);
+      const matchId =
+        !idFiltro || v.id.toString().toLowerCase().includes(idFiltro);
       const matchFecha = !fechaFiltro || v.fecha.startsWith(fechaFiltro);
-      const nombreProducto = this.getNombreProductoDirecto(v.productoId).toLowerCase();
+      const nombreProducto = this.getNombreProductoDirecto(
+        v.productoId,
+      ).toLowerCase();
       const matchProducto = !prodFiltro || nombreProducto.includes(prodFiltro);
       return matchId && matchFecha && matchProducto;
     });
@@ -127,47 +146,51 @@ export class VentasComponent {
     if (this.form.invalid) return;
     const raw = this.form.getRawValue();
 
-    this.ventasSvc.create({
-      productoId: raw.productoId!,
-      cantidad: raw.cantidad!,
-      precioUnitario: raw.precioUnitario!,
-      clienteId: raw.clienteId ?? undefined,
-    }).subscribe(() => {
-      this.ventasSvc.list();
-      this.metricsSvc.refresh();
-      this.form.reset({
-        cantidad: 1,
-        precioUnitario: 0,
-        clienteId: null,
+    this.ventasSvc
+      .create({
+        productoId: raw.productoId!,
+        cantidad: raw.cantidad!,
+        precioUnitario: raw.precioUnitario!,
+        clienteId: raw.clienteId ?? undefined,
+      })
+      .subscribe(() => {
+        this.ventasSvc.list();
+        this.metricsSvc.refresh();
+        this.form.reset({
+          cantidad: 1,
+          precioUnitario: 0,
+          clienteId: null,
+        });
+        this.form.get('precioUnitario')?.disable();
+        this.mostrarFormulario = false;
       });
-      this.form.get('precioUnitario')?.disable();
-      this.mostrarFormulario = false;
-    });
   }
 
   update() {
     if (this.form.invalid || !this.form.value.id) return;
     const raw = this.form.getRawValue();
 
-    this.ventasSvc.update({
-      id: raw.id!,
-      productoId: raw.productoId!,
-      cantidad: raw.cantidad!,
-      precioUnitario: raw.precioUnitario!,
-      clienteId: raw.clienteId ?? undefined,
-      fecha: '',
-    }).subscribe(() => {
-      this.ventasSvc.list();
-      this.metricsSvc.refresh();
-      this.form.reset({
-        cantidad: 1,
-        precioUnitario: 0,
-        clienteId: null,
+    this.ventasSvc
+      .update({
+        id: raw.id!,
+        productoId: raw.productoId!,
+        cantidad: raw.cantidad!,
+        precioUnitario: raw.precioUnitario!,
+        clienteId: raw.clienteId ?? undefined,
+        fecha: '',
+      })
+      .subscribe(() => {
+        this.ventasSvc.list();
+        this.metricsSvc.refresh();
+        this.form.reset({
+          cantidad: 1,
+          precioUnitario: 0,
+          clienteId: null,
+        });
+        this.form.get('precioUnitario')?.disable();
+        this.editandoVenta = false;
+        this.mostrarFormulario = false;
       });
-      this.form.get('precioUnitario')?.disable();
-      this.editandoVenta = false;
-      this.mostrarFormulario = false;
-    });
   }
 
   toggleFormulario() {
