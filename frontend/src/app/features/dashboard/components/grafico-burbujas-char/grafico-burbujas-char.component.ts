@@ -39,7 +39,7 @@ export class GraficoBurbujasCharComponent {
 
     // Escalas
     const x = d3.scaleLinear()
-      .domain([80, 200])
+      .domain([90, 200])
       .range([margin.left, width - margin.right]);
 
     const y = d3.scaleLinear()
@@ -48,7 +48,7 @@ export class GraficoBurbujasCharComponent {
 
     const r = d3.scaleSqrt()
       .domain([0, d3.max(data, d => d.stock)!])
-      .range([5, 40]); // tamaño burbuja
+      .range([5, 42]); // tamaño burbuja
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -97,8 +97,6 @@ export class GraficoBurbujasCharComponent {
       .style('font-size', '12px')
       .text('Precio (€)');
 
-
-    
     svg.selectAll('circle')
     .data(data)
     .enter()
