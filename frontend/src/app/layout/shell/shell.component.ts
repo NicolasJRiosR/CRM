@@ -25,7 +25,7 @@ export class ShellComponent implements OnInit, OnDestroy {
     this.routerSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (this.idiomaDestino === 'en') {
-          setTimeout(() => this.translatePage(), 100);
+          setTimeout(() => this.translatePage(), 200); 
         }
       }
     });
@@ -36,19 +36,19 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    localStorage.removeItem('token'); 
+    localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
   toggleIdioma() {
     this.idiomaDestino = this.idiomaDestino === 'es' ? 'en' : 'es';
-    setTimeout(() => this.translatePage(), 100);
+    setTimeout(() => this.translatePage(), 200);
   }
 
   translatePage() {
     this.traduciendo = true;
 
-    // 1. Traducir nodos de texto visibles
+    
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     const nodos: Node[] = [];
 
@@ -58,8 +58,7 @@ export class ShellComponent implements OnInit, OnDestroy {
       if (
         nodo.nodeValue?.trim() &&
         parent &&
-        parent.offsetParent !== null &&
-        !['SCRIPT', 'STYLE'].includes(parent.tagName)
+        !['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'BUTTON'].includes(parent.tagName)
       ) {
         nodos.push(nodo);
       }
@@ -67,67 +66,40 @@ export class ShellComponent implements OnInit, OnDestroy {
 
     for (const nodo of nodos) {
       const original = nodo.nodeValue!;
-      const parent = nodo.parentElement as HTMLElement;
-      if (!parent.dataset["original"]) {
-        parent.dataset["original"] = original;
+      if (!nodo.parentElement?.dataset["original"]) {
+        nodo.parentElement!.dataset["original"] = original;
       }
 
       if (this.idiomaDestino === 'es') {
-        nodo.nodeValue = parent.dataset["original"]!;
+        nodo.nodeValue = nodo.parentElement!.dataset["original"]!;
         continue;
       }
 
       this.translation.translate(original, 'es', this.idiomaDestino).subscribe({
-        next: (res) => nodo.nodeValue = res.translatedText,
-        error: (err) => console.error('Error traduciendo texto', err)
+        next: (res) => (nodo.nodeValue = res.translatedText),
+        error: (err) => console.error('Error traduciendo', err),
       });
     }
 
-    // 2. Traducir atributos y texto visible
-    const elementos = document.querySelectorAll(
-      'input, button, textarea, a, span, div, h1, h2, h3, h4, h5, h6, label, legend, strong, p, section, header, footer, article, aside, main, [placeholder], [title], [alt]'
+  
+    const inputs = document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+      'input[placeholder], textarea[placeholder]'
     );
 
-    elementos.forEach(el => {
-      const htmlEl = el as HTMLElement;
-      if (!htmlEl.offsetParent) return;
-
-      const attrs = ['placeholder', 'value', 'title', 'alt'];
-      attrs.forEach(attr => {
-        const original = htmlEl.getAttribute(attr);
-        if (original && original.trim()) {
-          if (!htmlEl.dataset[`original_${attr}`]) {
-            htmlEl.dataset[`original_${attr}`] = original;
-          }
-
-          if (this.idiomaDestino === 'es') {
-            htmlEl.setAttribute(attr, htmlEl.dataset[`original_${attr}`]!);
-          } else {
-            this.translation.translate(original, 'es', this.idiomaDestino).subscribe({
-              next: (res) => htmlEl.setAttribute(attr, res.translatedText),
-              error: (err) => console.error(`Error traduciendo atributo ${attr}`, err)
-            });
-          }
-        }
-      });
-
-      const texto = (htmlEl.textContent || '').trim();
-      if (texto.length < 2 || /^[^\w\s]+$/.test(texto)) return;
-
-      if (!htmlEl.dataset["original_text"]) {
-        htmlEl.dataset["original_text"] = texto;
-      }
+    inputs.forEach((el) => {
+    
+      const original = el.dataset["originalPlaceholder"] || el.getAttribute('placeholder') || '';
+      el.dataset["originalPlaceholder"] = original;
 
       if (this.idiomaDestino === 'es') {
-        if (htmlEl.dataset["original_text"]) {
-          htmlEl.textContent = htmlEl.dataset["original_text"];
-        }
-      } else {
-        this.translation.translate(texto, 'es', this.idiomaDestino).subscribe({
-          next: (res) => htmlEl.textContent = res.translatedText,
-          error: (err) => console.error('Error traduciendo textContent', err)
-        });
+        el.setAttribute('placeholder', el.dataset["originalPlaceholder"]!);
+        return;
       }
+
+      this.translation.translate(original, 'es', this.idiomaDestino).subscribe({
+        next: (res) => el.setAttribute('placeholder', res.translatedText),
+        error: (err) => console.error('Error traduciendo placeholder', err),
+      });
     });
 
     this.traduciendo = false;

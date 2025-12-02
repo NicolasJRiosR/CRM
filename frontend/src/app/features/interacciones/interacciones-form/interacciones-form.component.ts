@@ -26,7 +26,7 @@ export class InteraccionesFormComponent {
   form = this.fb.group({
     clienteId: [0, [Validators.required, Validators.min(1)]],
     fechaHora: ['', Validators.required],
-    tipo: ['LLAMADA', Validators.required],
+    tipo: ['Llamada', Validators.required],
     descripcion: ['', [Validators.required, Validators.maxLength(500)]],
   });
 
@@ -38,7 +38,7 @@ export class InteraccionesFormComponent {
       const found = this.svc.interaccionesSig().find((i) => i.id === this.id);
       if (found) {
         this.current = found;
-        // Patch manual con tipos compatibles
+       
         this.form.patchValue({
           clienteId: found.clienteId,
           fechaHora: found.fechaHora,
@@ -52,11 +52,11 @@ export class InteraccionesFormComponent {
   save() {
     if (this.form.invalid) return;
 
-    // Construir objeto con tipos seguros
+    
     const value: Omit<Interaccion, 'id'> = {
       clienteId: Number(this.form.value.clienteId),
       fechaHora: String(this.form.value.fechaHora),
-      tipo: this.form.value.tipo as 'LLAMADA' | 'EMAIL' | 'REUNION',
+      tipo: this.form.value.tipo as 'Llamada' | 'Email' | 'Reunión',
       descripcion: String(this.form.value.descripcion),
     };
 

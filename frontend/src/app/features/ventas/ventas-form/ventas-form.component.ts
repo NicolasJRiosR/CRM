@@ -25,7 +25,10 @@ export class VentasFormComponent implements OnInit {
   id = Number(this.route.snapshot.paramMap.get('id'));
   current: Venta | null = null;
 
-  productosDisponibles = () => this.productosSvc.productosSig();
+ 
+  productosDisponibles = () =>
+    this.productosSvc.productosSig().filter(p => p.stock > 0);
+
   clientesSig = this.clientesSvc.clientesSig;
 
   form = this.fb.nonNullable.group({
@@ -47,11 +50,22 @@ export class VentasFormComponent implements OnInit {
       if (venta) this.cargarVenta(venta);
     }
 
+    
     this.form.get('productoId')?.valueChanges.subscribe((productoId) => {
       const p = this.productosDisponibles().find(
         (x) => x.id === Number(productoId),
       );
       this.form.get('precioUnitario')?.setValue(p?.precio ?? 0);
+
+      if (p) {
+        const cantidadCtrl = this.form.get('cantidad');
+        cantidadCtrl?.setValidators([
+          Validators.required,
+          Validators.min(1),
+          Validators.max(p.stock), 
+        ]);
+        cantidadCtrl?.updateValueAndValidity();
+      }
     });
   }
 
@@ -88,4 +102,10 @@ export class VentasFormComponent implements OnInit {
   cancel() {
     this.router.navigate(['/ventas']);
   }
+
+  get productoSeleccionado() {
+  const id = this.form.value.productoId;
+  return this.productosDisponibles().find(p => p.id === id);
+}
+
 }

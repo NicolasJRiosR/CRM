@@ -5,7 +5,7 @@ export interface Interaccion {
   id: number; 
   clienteId: number; 
   fechaHora: string;             
-  tipo: 'LLAMADA'|'EMAIL'|'REUNION'; 
+  tipo: 'Llamada'|'Email'|'Reunión'; 
   descripcion: string;           
 }
 
