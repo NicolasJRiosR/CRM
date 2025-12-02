@@ -21,6 +21,7 @@ type MetricKey =
   | 'interaccionesTotales'
   | 'sinstock'
   | 'tipoInteraccionMasComun'
+  | 'productosVendidos'
   | 'ProveedorMasCompras';
 
 
@@ -49,8 +50,9 @@ export class DashboardComponent {
     { key: 'stockCriticoAlerta', name: 'Stock crítico alerta' },
     { key: 'sinstock', name: 'Sin stock' },
     { key: 'ventasTotales', name: 'Ventas totales' },
-    { key: 'ingresosTotales', name: 'Ingresos totales' },
+    { key: 'productosVendidos', name: 'Productos Vendidos' },
     { key: 'productoMasVendido', name: 'Producto más vendido' },
+    { key: 'ingresosTotales', name: 'Ingresos totales' },
     { key: 'interaccionesTotales', name: 'Interacciones totales' },
     { key: 'tipoInteraccionMasComun', name: 'Tipo de interacción más común' },
     { key: 'ProveedorMasCompras', name: 'Proveedor con mas compras'},
@@ -88,10 +90,18 @@ export class DashboardComponent {
       next: clientes => {
         this.metricValues['clientesTotales'] = clientes.length;
 
-        const haceUnMes = new Date();
-        haceUnMes.setMonth(haceUnMes.getMonth() - 1);
-        this.metricValues['clientesNuevosMes'] =
-          clientes.filter(c => new Date(c.fechaRegistro) >= haceUnMes).length;
+        // Mes calendario actual (YYYY-MM)
+        const hoy = new Date();
+        hoy.setHours(12, 0, 0, 0);
+        const mesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
+
+        this.metricValues['clientesNuevosMes'] = clientes.filter(c => {
+          if (!c.fechaRegistro) return false;
+          const d = new Date(c.fechaRegistro);
+          d.setHours(12, 0, 0, 0);
+          const mesRegistro = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+          return mesRegistro === mesActual;
+        }).length;
 
         this.clientesSerie = this.buildNewClientsDailySeries(clientes);
 
@@ -154,8 +164,15 @@ export class DashboardComponent {
 
         
         this.metricValues['productosCatalogo'] = productos.length;
-        this.metricValues['stockCriticoAlerta'] = productos.filter(p => (p.stock ?? 0) < 10).length;
+        // Sin stock
         this.metricValues['sinstock'] = productos.filter(p => (p.stock ?? 0) === 0).length;
+
+        // Stock crítico
+        this.metricValues['stockCriticoAlerta'] = productos.filter(p => {
+          const s = p.stock ?? 0;
+          return s >= 1 && s <= 9;
+        }).length;
+
 
         this.counts = { disponible: 0, agotado: 0 };
         productos.forEach(p => {
@@ -167,32 +184,49 @@ export class DashboardComponent {
 
         
         const ventasTotales = ventas.length;
+
+        const productosVendidos = ventas.reduce(
+          (sum, v) => sum + (v.cantidad ?? 1),
+          0
+        );
+
         const ingresosTotales = ventas.reduce(
           (sum, v) => sum + (v.cantidad * v.precioUnitario),
           0
         );
 
+        this.metricValues['ventasTotales'] = ventasTotales;
+        this.metricValues['productosVendidos'] = productosVendidos; 
+        this.metricValues['ingresosTotales'] = ingresosTotales;
+
+
+        this.metricValues['ventasTotales'] = ventasTotales;
+        this.metricValues['productosVendidos'] = productosVendidos;
+        this.metricValues['ingresosTotales'] = ingresosTotales;
+
         const conteoPorProducto: Record<string, number> = {};
         ventas.forEach(v => {
           const idProd = String(v.productoId ?? '');
           if (!idProd) return;
-          conteoPorProducto[idProd] = (conteoPorProducto[idProd] || 0) + 1;
+          const unidades = v.cantidad ?? 1; 
+          conteoPorProducto[idProd] = (conteoPorProducto[idProd] || 0) + unidades;
         });
 
-       
         this.bubbleData = Object.entries(conteoPorProducto)
           .map(([id, vendidos]) => {
             const prod = productosCache[id];
             return {
               nombre: prod?.nombre ?? id,
               precio: prod?.precioUnitario ?? prod?.precio ?? 0,
-              vendidos,
+              vendidos, 
               stock: prod?.stock ?? 0
             };
           })
           .sort((a, b) => b.vendidos - a.vendidos)
           .slice(0, 10);
+
         this.bubbleData = [...this.bubbleData];
+
 
        
         const ordenados = Object.entries(conteoPorProducto).sort((a, b) => b[1] - a[1]);
@@ -214,23 +248,33 @@ export class DashboardComponent {
         this.metricValues['productoMasVendido'] = productoMasVendido;
 
 
-        
-        const ahora = new Date();
-        const mesActual = ahora.getMonth();
-        const añoActual = ahora.getFullYear();
+      
+      const hoy = new Date();
+      hoy.setHours(12, 0, 0, 0);
+      const mesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
 
-        const clientesActivos = new Set(
-          ventas
-            .filter(v => {
-              const fecha = new Date(v.fecha ?? v.fechaVenta ?? Date.now());
-              return fecha.getMonth() === mesActual && fecha.getFullYear() === añoActual;
-            })
-            .map(v => v.clienteId)
-        );
+      const clientesActivos = new Set<string>();
 
-        this.metricValues['clienteActivoMes'] = clientesActivos.size;
+      ventas.forEach(v => {
+        const fRaw = v.fecha ?? v.fechaVenta;
+        if (!fRaw) return;
 
-        
+        const f = new Date(fRaw);
+        f.setHours(12, 0, 0, 0); 
+        const mesVenta = `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, '0')}`;
+
+        const id = v.clienteId;
+        if (id === null || id === undefined) return;
+
+        const idKey = String(id); 
+
+        if (mesVenta === mesActual) {
+          clientesActivos.add(idKey);
+        }
+      });
+
+      this.metricValues['clienteActivoMes'] = clientesActivos.size;
+
       },
           error: err => console.error('Error productos/ventas:', err)
           
