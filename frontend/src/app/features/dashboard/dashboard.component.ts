@@ -3,11 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { MetricsService } from '../../shared/services/metrics.service';
 
+//importo los componentes graficos que forman parte del dashboard
 import { StockDisponibleCharComponent } from './components/stock-disponible-char/stock-disponible-char.component';
 import { GraficoBurbujasCharComponent } from './components/grafico-burbujas-char/grafico-burbujas-char.component';
 import { MetricsTableComponent } from './components/metrics-table/metrics-table.component';
 import { CrecimientoClientesCharComponent } from './components/crecimiento-clientes-char/crecimiento-clientes-char.component';
 
+//definicion de las claves de metricas que se van a usar en el dashboard
 type MetricKey =
   | 'clientesTotales'
   | 'clientesNuevosMes'
@@ -41,6 +43,7 @@ export class DashboardComponent {
 
   bubbleData: { nombre: string; precio: number; vendidos: number; stock: number }[] = [];
 
+  //Lista de metricas que se muestan en la tabla del dashboard
   metricOrder: { key: MetricKey; name: string }[] = [
     { key: 'clientesTotales', name: 'Clientes totales' },
     { key: 'clientesNuevosMes', name: 'Clientes nuevos este mes' },
@@ -57,26 +60,29 @@ export class DashboardComponent {
     { key: 'tipoInteraccionMasComun', name: 'Tipo de interacción más común' },
     { key: 'ProveedorMasCompras', name: 'Proveedor con mas compras'},
   ];
+
+  //valores calculados de cada metrica
   metricValues: Partial<Record<MetricKey, any>> = {};
 
-  
+  //series de datos para los graficos
   clientesSerie: { date: Date; value: number }[] = [];
   stockData: { nombre: string; stock: number }[] = [];
   interaccionesData: any[] = [];
   comprasSerie: { date: Date; value: number }[] = [];
   ventasSerie: { date: Date; value: number }[] = [];
 
-  
+  //cache de clientes para búsquedas rápidas
   private clientesCache: Record<string, any> = {};
 
   constructor(private http: HttpClient, private metricsSvc: MetricsService) {
-    this.metricsSvc.registerRefresh(() => {
+    this.metricsSvc.registerRefresh(() => {   //función de refresco de métricas
       console.log('[Dashboard] Recibido refresh desde MetricsService');
       this.loadMetrics();
     });
     this.loadMetrics();
   }
 
+  //getter que devuelve la lista de metricas con sus valores 
   get metrics() {
     return this.metricOrder.map(m => ({
       name: m.name,
@@ -84,13 +90,14 @@ export class DashboardComponent {
     }));
   }
 
+  //FUNCION PRINCIPAL PARA CARGAR TODAS LAS METRICAS DESDE LA API
   private loadMetrics() {
     
+    //-------BLOQUE CLIENTES---------
     this.http.get<any[]>('http://localhost:9080/api/clientes').subscribe({
       next: clientes => {
         this.metricValues['clientesTotales'] = clientes.length;
 
-        // Mes calendario actual (YYYY-MM)
         const hoy = new Date();
         hoy.setHours(12, 0, 0, 0);
         const mesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
@@ -114,7 +121,7 @@ export class DashboardComponent {
       error: err => console.error('Error clientes:', err)
     });
 
-    // PRODUCTOS + VENTAS juntos
+    //-------BLOQUE PRODUCTOS + VENTAS------------
     forkJoin({
       productos: this.http.get<any[]>('http://localhost:9080/api/productos'),
       ventas: this.http.get<any[]>('http://localhost:9080/api/ventas')
@@ -280,7 +287,7 @@ export class DashboardComponent {
           
         });
 
-    
+    //-----------BLOQUE INTERACCIONES----------
     this.http.get<any[]>('http://localhost:9080/api/interacciones').subscribe({
       next: interacciones => {
         const total = interacciones.length;
@@ -313,7 +320,7 @@ export class DashboardComponent {
       error: err => console.error('Error interacciones:', err)
     });
 
-    
+    //---------BLOQUE DE COMPRAS---------
     this.http.get<any[]>('http://localhost:9080/api/compras').subscribe({
       next: compras => {
         this.comprasSerie = compras.map(c => ({
@@ -343,22 +350,22 @@ export class DashboardComponent {
 
         this.metricValues['ProveedorMasCompras'] = proveedorMasCompras;
         
-        
-        this.http.get<any[]>('http://localhost:9080/api/ventas').subscribe({
-          next: ventas => {
-            this.ventasSerie = ventas.map(v => ({
-              date: new Date(v.fecha ?? v.fechaVenta ?? Date.now()),
-              value: v.total ?? v.monto ?? 1
-            }));
-          },
-          error: err => console.error('Error ventas (comparativa):', err)
-        });
-      },
-      error: err => console.error('Error compras:', err)
-    });
+      //---------BLOQUE DE VENTAS-------
+      this.http.get<any[]>('http://localhost:9080/api/ventas').subscribe({
+        next: ventas => {
+          this.ventasSerie = ventas.map(v => ({
+            date: new Date(v.fecha ?? v.fechaVenta ?? Date.now()),
+            value: v.total ?? v.monto ?? 1
+          }));
+        },
+        error: err => console.error('Error ventas (comparativa):', err)
+      });
+    },
+    error: err => console.error('Error compras:', err)
+  });
   }
 
-  
+  //FUNCIONES AUXILIARES PARA CONSTRUIR SERIES TEMPORALES DE CLIENTES
   private buildNewClientsDailySeries(clientes: any[]): { date: Date; value: number }[] {
     const today = new Date();
     const start = new Date();
