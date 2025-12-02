@@ -24,6 +24,8 @@ public class SecurityConfig {
             .requestMatchers("/api/auth/**").permitAll()
             // todo lo demás requiere token
             .anyRequest().authenticated()
+            
+
         )
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

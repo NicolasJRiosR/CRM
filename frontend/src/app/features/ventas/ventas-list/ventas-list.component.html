@@ -24,20 +24,21 @@
     />
 
     <div class="md:col-span-3 flex justify-between mt-2">
-      <button
-        type="button"
+      <a
+        href="javascript:void(0)"
         (click)="limpiar()"
-        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer"
       >
         Limpiar
-      </button>
-      <button
-        type="button"
+      </a>
+
+      <a
+        href="javascript:void(0)"
         (click)="nuevaVenta()"
-        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer"
       >
         + Nueva venta
-      </button>
+      </a>
     </div>
   </div>
 
@@ -59,7 +60,7 @@
     <tbody>
       @if (ventasFiltradas().length === 0) {
         <tr class="border-t dark:border-gray-700">
-          <td colspan="6" class="p-4 text- text-gray-500">
+          <td colspan="6" class="p-4 text-center text-gray-500">
             No se encontraron ventas
           </td>
         </tr>
@@ -74,13 +75,13 @@
             <td class="p-3">{{ v.precioUnitario }}</td>
             <td class="p-3">{{ v.fecha | date: "dd/MM/yyyy" }}</td>
             <td class="p-3">
-              <button
-                type="button"
+              <a
+                href="javascript:void(0)"
                 (click)="editarVenta(v)"
-                class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
+                class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800 cursor-pointer"
               >
                 Editar
-              </button>
+              </a>
             </td>
           </tr>
         }

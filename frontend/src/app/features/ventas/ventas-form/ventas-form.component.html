@@ -2,7 +2,11 @@
   class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto"
 >
   <h2 class="text-2xl font-bold mb-6 text-center">
-    {{ current ? "Editar venta" : "Nueva venta" }}
+    @if (current) {
+      Editar venta
+    } @else {
+      Nueva venta
+    }
   </h2>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
@@ -12,10 +16,19 @@
         formControlName="productoId"
         class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
       >
-        <option *ngFor="let p of productosDisponibles()" [ngValue]="p.id">
-          {{ p.nombre }} (stock: {{ p.stock }})
-        </option>
+        <option value="">Selecciona un producto</option>
+        @for (p of productosDisponibles(); track p.id) {
+          <option [value]="p.id">
+            {{ p.nombre }} (stock: {{ p.stock }})
+          </option>
+        }
       </select>
+
+      @if (form.get("productoId")?.hasError("required") && form.get("productoId")?.touched) {
+        <div class="text-red-600 text-sm mt-1">
+          Debes seleccionar un producto
+        </div>
+      }
     </div>
 
     <div>
@@ -26,6 +39,16 @@
         placeholder="Cantidad"
         class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
       />
+
+      @if (form.get("cantidad")?.hasError("required") && form.get("cantidad")?.touched) {
+        <div class="text-red-600 text-sm mt-1">La cantidad es obligatoria</div>
+      } @else if (form.get("cantidad")?.hasError("min") && form.get("cantidad")?.touched) {
+        <div class="text-red-600 text-sm mt-1">La cantidad mínima es 1</div>
+      } @else if (form.get("cantidad")?.hasError("max") && form.get("cantidad")?.touched) {
+        <div class="text-red-600 text-sm mt-1">
+          No puedes vender más de {{ productoSeleccionado?.stock }} unidades
+        </div>
+      }
     </div>
 
     <div>
@@ -35,6 +58,10 @@
         formControlName="precioUnitario"
         class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300 bg-gray-100 dark:bg-gray-600"
       />
+
+      @if (form.get("precioUnitario")?.hasError("min") && form.get("precioUnitario")?.touched) {
+        <div class="text-red-600 text-sm mt-1">El precio debe ser mayor que 0</div>
+      }
     </div>
 
     <div>
@@ -43,27 +70,34 @@
         formControlName="clienteId"
         class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
       >
-        <option *ngFor="let c of clientesSig()" [ngValue]="c.id">
-          {{ c.nombre }}
-        </option>
+        <option value="">Selecciona un cliente</option>
+        @for (c of clientesSig(); track c.id) {
+          <option [value]="c.id">{{ c.nombre }}</option>
+        }
       </select>
+
+      @if (form.get("clienteId")?.hasError("required") && form.get("clienteId")?.touched) {
+        <div class="text-red-600 text-sm mt-1">Debes seleccionar un cliente</div>
+      }
     </div>
 
+
     <div class="flex gap-3 justify-center pt-4">
-      <button
-        type="submit"
-        [disabled]="form.invalid"
-        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
+      <a
+        href="javascript:void(0)"
+        (click)="save()"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 cursor-pointer"
+        [class.opacity-50]="form.invalid"
       >
         Guardar
-      </button>
-      <button
-        type="button"
+      </a>
+      <a
+        href="javascript:void(0)"
         (click)="cancel()"
-        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 cursor-pointer"
       >
         Cancelar
-      </button>
+      </a>
     </div>
   </form>
 </div>
