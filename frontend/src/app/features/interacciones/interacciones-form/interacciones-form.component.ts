@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InteraccionesService, Interaccion } from '../interacciones.service';
 import { CustomerService } from '../../clientes/customer.service';
@@ -32,25 +32,43 @@ export class InteraccionesFormComponent {
 
   ngOnInit() {
     this.clientesSvc.list();
+
     if (this.id) {
       this.svc.list();
-      const found = this.svc.interaccionesSig().find(i => i.id === this.id);
+      const found = this.svc.interaccionesSig().find((i) => i.id === this.id);
       if (found) {
         this.current = found;
-        this.form.patchValue(found);
+        // Patch manual con tipos compatibles
+        this.form.patchValue({
+          clienteId: found.clienteId,
+          fechaHora: found.fechaHora,
+          tipo: found.tipo,
+          descripcion: found.descripcion,
+        });
       }
     }
   }
 
   save() {
     if (this.form.invalid) return;
-    const value = this.form.value as Omit<Interaccion, 'id'>;
+
+    // Construir objeto con tipos seguros
+    const value: Omit<Interaccion, 'id'> = {
+      clienteId: Number(this.form.value.clienteId),
+      fechaHora: String(this.form.value.fechaHora),
+      tipo: this.form.value.tipo as 'LLAMADA' | 'EMAIL' | 'REUNION',
+      descripcion: String(this.form.value.descripcion),
+    };
 
     if (this.current) {
-      const payload = { ...this.current, ...value };
-      this.svc.update(payload).subscribe(() => this.router.navigate(['/interacciones']));
+      const payload: Interaccion = { ...this.current, ...value };
+      this.svc
+        .update(payload)
+        .subscribe(() => this.router.navigate(['/interacciones']));
     } else {
-      this.svc.create(value).subscribe(() => this.router.navigate(['/interacciones']));
+      this.svc
+        .create(value)
+        .subscribe(() => this.router.navigate(['/interacciones']));
     }
   }
 }
