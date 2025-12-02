@@ -1,0 +1,75 @@
+<div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-xl mx-auto mt-6">
+  <h2 class="text-2xl font-bold mb-6 text-black dark:text-white text-center">
+    {{ editandoCompra ? "Modificación de compra" : "Nueva compra" }}
+  </h2>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="editandoCompra ? update() : add()"
+    class="space-y-4"
+  >
+    <div>
+      <label class="block text-sm font-medium mb-1">Producto</label>
+      <select
+        formControlName="productoId"
+        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+      >
+        <option value="" disabled>Seleccione un producto</option>
+        <option *ngFor="let p of productosSig()" [value]="p.id">
+          {{ p.nombre }} (stock: {{ p.stock }})
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Proveedor</label>
+      <select
+        formControlName="proveedorId"
+        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+      >
+        <option value="" disabled>Seleccione un proveedor</option>
+        <option *ngFor="let prov of proveedoresSig()" [value]="prov.id">
+          {{ prov.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Cantidad</label>
+      <input
+        type="number"
+        formControlName="cantidad"
+        placeholder="Cantidad"
+        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Precio unitario</label>
+      <input
+        type="number"
+        formControlName="precioUnitario"
+        placeholder="Precio unitario"
+        class="w-full border rounded px-3 py-2 bg-white dark:bg-gray-600 focus:ring"
+      />
+    </div>
+
+    <div class="flex justify-center gap-4 pt-4">
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
+      >
+        {{ editandoCompra ? "Modificar compra" : "Registrar compra" }}
+      </button>
+
+      <button
+        type="button"
+        (click)="toggleFormulario()"
+        class="bg-gray-200 dark:bg-gray-600 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

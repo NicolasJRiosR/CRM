@@ -1,0 +1,93 @@
+<div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Compras</h2>
+  </div>
+
+  <div
+    [formGroup]="filtroForm"
+    class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+  >
+    <input
+      type="text"
+      placeholder="Filtrar por producto..."
+      formControlName="producto"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+    />
+
+    <input
+      type="date"
+      formControlName="fecha"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+    />
+
+    <input
+      type="text"
+      placeholder="Filtrar por proveedor..."
+      formControlName="proveedor"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+    />
+
+    <div class="md:col-span-3 flex justify-between items-center mt-2">
+      <button
+        type="button"
+        (click)="limpiar()"
+        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+      >
+        Limpiar
+      </button>
+
+      <button
+        class="bg-brand-700 text-white px-4 py-2 rounded-xl hover:bg-brand-800 shadow-md active:scale-95"
+        (click)="router.navigate(['/compras/nuevo'])"
+      >
+        + Nueva compra
+      </button>
+    </div>
+  </div>
+
+  <table
+    class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
+  >
+    <thead
+      class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+    >
+      <tr>
+        <th class="p-3 font-semibold">ID</th>
+        <th class="p-3 font-semibold">Producto</th>
+        <th class="p-3 font-semibold">Cantidad</th>
+        <th class="p-3 font-semibold">Precio unitario</th>
+        <th class="p-3 font-semibold">Proveedor</th>
+        <th class="p-3 font-semibold">Fecha</th>
+        <th class="p-3 font-semibold">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngIf="comprasFiltradas().length === 0">
+        <td colspan="7" class="p-4 text-center text-gray-500">
+          No se encontraron compras con esos filtros
+        </td>
+      </tr>
+
+      <tr
+        *ngFor="let c of comprasFiltradas(); trackBy: trackByCompraId"
+        class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+      >
+        <td class="p-3">{{ c.id }}</td>
+        <td class="p-3">{{ getNombreProductoDirecto(c.productoId) }}</td>
+        <td class="p-3">{{ c.cantidad }}</td>
+        <td class="p-3">{{ c.precioUnitario }}</td>
+        <td class="p-3">{{ getNombreProveedor(c.proveedorId) }}</td>
+        <td class="p-3">{{ getFechaSlash(c.fecha) }}</td>
+        <td class="p-3">
+          <button
+            class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
+            (click)="router.navigate(['/compras', c.id])"
+          >
+            Editar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
