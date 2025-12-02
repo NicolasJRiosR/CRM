@@ -1,0 +1,69 @@
+<div
+  class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto"
+>
+  <h2 class="text-2xl font-bold mb-6 text-center">
+    {{ current ? "Editar venta" : "Nueva venta" }}
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+    <div>
+      <label class="block text-sm font-medium mb-1">Producto</label>
+      <select
+        formControlName="productoId"
+        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+      >
+        <option *ngFor="let p of productosDisponibles()" [ngValue]="p.id">
+          {{ p.nombre }} (stock: {{ p.stock }})
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Cantidad</label>
+      <input
+        type="number"
+        formControlName="cantidad"
+        placeholder="Cantidad"
+        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Precio unitario</label>
+      <input
+        type="number"
+        formControlName="precioUnitario"
+        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300 bg-gray-100 dark:bg-gray-600"
+      />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Cliente</label>
+      <select
+        formControlName="clienteId"
+        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+      >
+        <option *ngFor="let c of clientesSig()" [ngValue]="c.id">
+          {{ c.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <div class="flex gap-3 justify-center pt-4">
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
+      >
+        Guardar
+      </button>
+      <button
+        type="button"
+        (click)="cancel()"
+        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

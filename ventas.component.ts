@@ -1,16 +1,16 @@
-import { Component, inject, computed, effect, signal } from '@angular/core';
-import { VentasService, Venta } from './ventas.service';
-import { ProductosService } from '../productos/productos.service';
-import { CustomerService } from '../clientes/customer.service';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { MetricsService } from '../../shared/services/metrics.service';
+import { Component, inject, computed, effect, signal } from "@angular/core";
+import { VentasService, Venta } from "./ventas.service";
+import { ProductosService } from "../productos/productos.service";
+import { CustomerService } from "../clientes/customer.service";
+import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import { MetricsService } from "../../shared/services/metrics.service";
 
 @Component({
   standalone: true,
-  selector: 'app-ventas',
+  selector: "app-ventas",
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './ventas.component.html',
+  templateUrl: "./ventas.component.html",
 })
 export class VentasComponent {
   constructor(private metricsSvc: MetricsService) {}
@@ -25,7 +25,7 @@ export class VentasComponent {
   ventasSig = this.ventasSvc.ventasSig;
 
   productosDisponibles = computed(() =>
-    this.productosSig().filter((p) => p.stock > 0),
+    this.productosSig().filter((p) => p.stock > 0)
   );
 
   form = this.fb.group({
@@ -40,15 +40,15 @@ export class VentasComponent {
   });
 
   filtroForm = this.fb.group({
-    id: [''],
-    fecha: [''],
-    producto: [''],
+    id: [""],
+    fecha: [""],
+    producto: [""],
   });
 
   appliedFiltersSig = signal<{ id: string; fecha: string; producto: string }>({
-    id: '',
-    fecha: '',
-    producto: '',
+    id: "",
+    fecha: "",
+    producto: "",
   });
 
   productoMap: Record<number, string> = {};
@@ -59,7 +59,7 @@ export class VentasComponent {
     const productos = this.productosSig();
     this.productoMap = {};
     productos.forEach((p) => (this.productoMap[p.id] = p.nombre));
-    const pid = this.form.get('productoId')?.value;
+    const pid = this.form.get("productoId")?.value;
     if (pid != null) this.updatePrecioFromProducto(pid);
   });
 
@@ -68,42 +68,42 @@ export class VentasComponent {
     this.productosSvc.list();
     this.clientesSvc.list();
 
-    this.form.get('productoId')?.valueChanges.subscribe((productoId) => {
+    this.form.get("productoId")?.valueChanges.subscribe((productoId) => {
       const id =
-        typeof productoId === 'string' ? Number(productoId) : productoId;
+        typeof productoId === "string" ? Number(productoId) : productoId;
       const producto = this.productosSig().find((p) => p.id === id);
-      this.form.get('precioUnitario')?.setValue(producto?.precio ?? 0);
+      this.form.get("precioUnitario")?.setValue(producto?.precio ?? 0);
     });
 
-    this.form.get('productoId')?.valueChanges.subscribe((productoId) => {
+    this.form.get("productoId")?.valueChanges.subscribe((productoId) => {
       this.updatePrecioFromProducto(productoId);
     });
 
     this.filtroForm.valueChanges.subscribe((value) => {
       this.appliedFiltersSig.set({
-        id: value.id ?? '',
-        fecha: value.fecha ?? '',
-        producto: value.producto ?? '',
+        id: value.id ?? "",
+        fecha: value.fecha ?? "",
+        producto: value.producto ?? "",
       });
     });
   }
 
   private updatePrecioFromProducto(productoId: unknown) {
     if (productoId == null) {
-      this.form.get('precioUnitario')?.setValue(0);
+      this.form.get("precioUnitario")?.setValue(0);
       return;
     }
     const idNum =
-      typeof productoId === 'string'
+      typeof productoId === "string"
         ? Number(productoId)
         : (productoId as number);
     if (Number.isNaN(idNum)) {
-      this.form.get('precioUnitario')?.setValue(0);
+      this.form.get("precioUnitario")?.setValue(0);
       return;
     }
     const producto = this.productosSig().find((p) => p.id === idNum);
     const precio = producto?.precio ?? 0;
-    this.form.get('precioUnitario')?.setValue(precio);
+    this.form.get("precioUnitario")?.setValue(precio);
   }
 
   ventasFiltradas = computed(() => {
@@ -113,31 +113,34 @@ export class VentasComponent {
     const prodFiltro = filters.producto.trim().toLowerCase();
 
     return this.ventasSig().filter((v) => {
-      const matchId =
-        !idFiltro || v.id.toString().toLowerCase().includes(idFiltro);
-      const matchFecha = !fechaFiltro || v.fecha.startsWith(fechaFiltro);
+      if (idFiltro && !v.id.toString().toLowerCase().includes(idFiltro))
+        return false;
+
+      if (fechaFiltro && !v.fecha.startsWith(fechaFiltro)) return false;
+
       const nombreProducto = this.getNombreProductoDirecto(
-        v.productoId,
+        v.productoId
       ).toLowerCase();
-      const matchProducto = !prodFiltro || nombreProducto.includes(prodFiltro);
-      return matchId && matchFecha && matchProducto;
+      if (prodFiltro && !nombreProducto.includes(prodFiltro)) return false;
+
+      return true;
     });
   });
 
   limpiar() {
-    this.filtroForm.reset({ id: '', fecha: '', producto: '' });
-    this.appliedFiltersSig.set({ id: '', fecha: '', producto: '' });
+    this.filtroForm.reset({ id: "", fecha: "", producto: "" });
+    this.appliedFiltersSig.set({ id: "", fecha: "", producto: "" });
   }
 
   getNombreProductoDirecto(productoId: number): string {
     const producto = this.productosSig().find((p) => p.id === productoId);
-    return producto?.nombre ?? 'Desconocido';
+    return producto?.nombre ?? "Desconocido";
   }
 
   getFechaSlash(fecha: string): string {
     const f = new Date(fecha);
-    const dia = f.getDate().toString().padStart(2, '0');
-    const mes = (f.getMonth() + 1).toString().padStart(2, '0');
+    const dia = f.getDate().toString().padStart(2, "0");
+    const mes = (f.getMonth() + 1).toString().padStart(2, "0");
     const año = f.getFullYear();
     return `${dia}/${mes}/${año}`;
   }
@@ -161,7 +164,7 @@ export class VentasComponent {
           precioUnitario: 0,
           clienteId: null,
         });
-        this.form.get('precioUnitario')?.disable();
+        this.form.get("precioUnitario")?.disable();
         this.mostrarFormulario = false;
       });
   }
@@ -177,7 +180,7 @@ export class VentasComponent {
         cantidad: raw.cantidad!,
         precioUnitario: raw.precioUnitario!,
         clienteId: raw.clienteId ?? undefined,
-        fecha: '',
+        fecha: "",
       })
       .subscribe(() => {
         this.ventasSvc.list();
@@ -187,7 +190,7 @@ export class VentasComponent {
           precioUnitario: 0,
           clienteId: null,
         });
-        this.form.get('precioUnitario')?.disable();
+        this.form.get("precioUnitario")?.disable();
         this.editandoVenta = false;
         this.mostrarFormulario = false;
       });
@@ -202,7 +205,7 @@ export class VentasComponent {
         precioUnitario: 0,
         clienteId: null,
       });
-      this.form.get('precioUnitario')?.disable();
+      this.form.get("precioUnitario")?.disable();
     }
   }
 
