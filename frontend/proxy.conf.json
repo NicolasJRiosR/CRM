@@ -1,9 +1,18 @@
-
 {
   "/api": {
     "target": "http://localhost:9080",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
+  },
+  
+  
+  "/translate": {
+    "target": "http://localhost:5000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
+
+
 }
