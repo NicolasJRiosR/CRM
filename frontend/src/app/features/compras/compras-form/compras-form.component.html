@@ -2,48 +2,57 @@
   class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto"
 >
   <h2 class="text-2xl font-bold mb-6 text-center">
-    {{ id > 0 ? "Editar producto" : "Nuevo producto" }}
+    {{ current ? "Editar compra" : "Nueva compra" }}
   </h2>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+    <!-- Producto -->
     <div>
-      <label class="block text-sm font-medium mb-1">Nombre</label>
-      <input
-        formControlName="nombre"
-        placeholder="Ej. Producto X"
+      <label class="block text-sm font-medium mb-1">Producto</label>
+      <select
+        formControlName="productoId"
         class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
-      />
+      >
+        <option value="" disabled>Seleccione un producto</option>
+        <option *ngFor="let p of productosSig()" [value]="p.id">
+          {{ p.nombre }} (stock: {{ p.stock }})
+        </option>
+      </select>
     </div>
 
+    <!-- Cantidad -->
     <div>
-      <label class="block text-sm font-medium mb-1">Stock</label>
-      <input
-        type="number"
-        formControlName="stock"
-        placeholder="Ej. 10"
-        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
-      />
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium mb-1">Precio</label>
+      <label class="block text-sm font-medium mb-1">Cantidad</label>
       <input
         type="number"
-        formControlName="precio"
-        placeholder="Ej. 99.99"
+        formControlName="cantidad"
+        placeholder="Ej. 5"
         class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
       />
     </div>
 
+    <!-- Precio unitario -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Precio unitario</label>
+      <input
+        type="number"
+        formControlName="precioUnitario"
+        placeholder="Ej. 100"
+        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+      />
+    </div>
+
+    <!-- Proveedor -->
     <div>
       <label class="block text-sm font-medium mb-1">Proveedor</label>
       <select
         formControlName="proveedorId"
         class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
       >
-        @for (prov of proveedoresSig(); track prov.id) {
-          <option [value]="prov.id">{{ prov.nombre }}</option>
-        }
+        <option value="" disabled>Seleccione un proveedor</option>
+        <option *ngFor="let prov of proveedoresSig()" [value]="prov.id">
+          {{ prov.nombre }}
+        </option>
       </select>
     </div>
 

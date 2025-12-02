@@ -15,22 +15,24 @@ export class ProductosListComponent {
   router = inject(Router);
   fb = inject(FormBuilder);
 
-
   filtroForm = this.fb.group({
     id: [''],
     nombre: [''],
     proveedor: [''],
-    stockCategoria: [''], 
+    stockCategoria: [''],
   });
 
-  
-  appliedFiltersSig = signal<{ id: string; nombre: string; proveedor: string; stockCategoria: string }>({
+  appliedFiltersSig = signal<{
+    id: string;
+    nombre: string;
+    proveedor: string;
+    stockCategoria: string;
+  }>({
     id: '',
     nombre: '',
     proveedor: '',
     stockCategoria: '',
   });
-
 
   productosFiltrados = computed(() => {
     const filters = this.appliedFiltersSig();
@@ -40,16 +42,21 @@ export class ProductosListComponent {
     const stockCategoria = filters.stockCategoria.trim();
 
     return this.svc.productosSig().filter((p: Producto) => {
-      const matchId = !idFiltro || p.id.toString().toLowerCase().includes(idFiltro);
-      const matchNombre = !nombreFiltro || p.nombre.toLowerCase().includes(nombreFiltro);
-      const matchProveedor = !proveedorFiltro || (p.proveedorNombre ?? '').toLowerCase().includes(proveedorFiltro);
+      const matchId =
+        !idFiltro || p.id.toString().toLowerCase().includes(idFiltro);
+      const matchNombre =
+        !nombreFiltro || p.nombre.toLowerCase().includes(nombreFiltro);
+      const matchProveedor =
+        !proveedorFiltro ||
+        (p.proveedorNombre ?? '').toLowerCase().includes(proveedorFiltro);
 
-  
       let matchStock = true;
       if (stockCategoria) {
         if (stockCategoria === 'SIN_STOCK') matchStock = p.stock <= 0;
-        else if (stockCategoria === 'CRITICO') matchStock = p.stock >= 1 && p.stock <= 10;
-        else if (stockCategoria === 'BAJO') matchStock = p.stock > 10 && p.stock <= 50;
+        else if (stockCategoria === 'CRITICO')
+          matchStock = p.stock >= 1 && p.stock <= 10;
+        else if (stockCategoria === 'BAJO')
+          matchStock = p.stock > 10 && p.stock <= 50;
         else if (stockCategoria === 'DISPONIBLE') matchStock = p.stock > 50;
       }
 
@@ -60,19 +67,30 @@ export class ProductosListComponent {
   ngOnInit() {
     this.svc.list();
 
-   
-    this.filtroForm.valueChanges.subscribe(({ id, nombre, proveedor, stockCategoria }) => {
-      this.appliedFiltersSig.set({
-        id: (id ?? '').toString(),
-        nombre: nombre ?? '',
-        proveedor: proveedor ?? '',
-        stockCategoria: stockCategoria ?? '',
-      });
-    });
+    this.filtroForm.valueChanges.subscribe(
+      ({ id, nombre, proveedor, stockCategoria }) => {
+        this.appliedFiltersSig.set({
+          id: (id ?? '').toString(),
+          nombre: nombre ?? '',
+          proveedor: proveedor ?? '',
+          stockCategoria: stockCategoria ?? '',
+        });
+      },
+    );
   }
 
   limpiar() {
-    this.filtroForm.reset({ id: '', nombre: '', proveedor: '', stockCategoria: '' });
-    this.appliedFiltersSig.set({ id: '', nombre: '', proveedor: '', stockCategoria: '' });
+    this.filtroForm.reset({
+      id: '',
+      nombre: '',
+      proveedor: '',
+      stockCategoria: '',
+    });
+    this.appliedFiltersSig.set({
+      id: '',
+      nombre: '',
+      proveedor: '',
+      stockCategoria: '',
+    });
   }
 }

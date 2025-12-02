@@ -3,7 +3,6 @@
     <h2 class="text-2xl font-bold">Interacciones</h2>
   </div>
 
-  
   <div
     [formGroup]="filtroForm"
     class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
@@ -32,56 +31,54 @@
       <option value="REUNION">Reunión</option>
     </select>
 
-   
     <div class="md:col-span-3 flex justify-between items-center">
-      
       <div class="flex gap-3">
         <button
           type="button"
           (click)="limpiar()"
-          class="bg-gray-300 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-xl shadow-md active:scale-95"
+          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
         >
           Limpiar
         </button>
       </div>
 
-      
-      <a routerLink="/interacciones/nuevo"
-         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
+      <a
+        routerLink="/interacciones/nuevo"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
+      >
         + Nueva interacción
       </a>
     </div>
   </div>
 
-  
- <ul class="divide-y divide-gray-200 mb-6">
-  @if (interaccionesFiltradas().length === 0) {
-    <li class="py-3 text-center text-gray-500">
-      No se encontraron interacciones con esos filtros
-    </li>
-  } @else {
-    @for (i of interaccionesFiltradas(); track i.id) {
-      <li class="py-3 flex flex-col gap-2">
-        
-        <div class="font-semibold text-brand-700 flex flex-wrap gap-2 items-center">
-          <span>{{ i.tipo }}</span>
-          <span>· {{ i.fechaHora | date:'dd/MM/yyyy - HH:mm' }}</span>
-          <span>· {{ clienteNombre(i.clienteId) }}</span>
-        </div>
-
-        
-        <div class="text-sm text-gray-600">{{ i.descripcion }}</div>
-
-      
-        <div>
-          <a [routerLink]="['/interacciones', i.id]"
-             class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800">
-            Editar
-          </a>
-        </div>
+  <ul class="divide-y divide-gray-200 mb-6">
+    @if (interaccionesFiltradas().length === 0) {
+      <li class="py-3 text-center text-gray-500">
+        No se encontraron interacciones con esos filtros
       </li>
-    }
-  }
-</ul>
+    } @else {
+      @for (i of interaccionesFiltradas(); track i.id) {
+        <li class="py-3 flex flex-col gap-2">
+          <div
+            class="font-semibold text-brand-700 flex flex-wrap gap-2 items-center"
+          >
+            <span>{{ i.tipo }}</span>
+            <span>· {{ i.fechaHora | date: "dd/MM/yyyy - HH:mm" }}</span>
+            <span>· {{ clienteNombre(i.clienteId) }}</span>
+          </div>
 
+          <div class="text-sm text-gray-600">{{ i.descripcion }}</div>
+
+          <div>
+            <a
+              [routerLink]="['/interacciones', i.id]"
+              class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
+            >
+              Editar
+            </a>
+          </div>
+        </li>
+      }
+    }
+  </ul>
 </div>
