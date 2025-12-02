@@ -16,6 +16,7 @@
         formControlName="clienteId"
         class="w-full border rounded px-3 py-2 focus:ring"
       >
+        <option value="">Selecciona un cliente</option>
         @for (c of clientesSig(); track c.id) {
           <option [value]="c.id">{{ c.nombre }}</option>
         }
