@@ -68,11 +68,10 @@ export class DashboardComponent {
   clientesSerie: { date: Date; value: number }[] = [];
   stockData: { nombre: string; stock: number }[] = [];
   interaccionesData: any[] = [];
-  comprasSerie: { date: Date; value: number }[] = [];
-  ventasSerie: { date: Date; value: number }[] = [];
-
-  //cache de clientes para búsquedas rápidas
+  
+  //cache de clientes y proveedores para búsquedas rápidas
   private clientesCache: Record<string, any> = {};
+  private proveedoresCache: Record<string, { nombre: string }> = {};
 
   constructor(private http: HttpClient, private metricsSvc: MetricsService) {
     this.metricsSvc.registerRefresh(() => {   //función de refresco de métricas
@@ -96,12 +95,14 @@ export class DashboardComponent {
     //-------BLOQUE CLIENTES---------
     this.http.get<any[]>('http://localhost:9080/api/clientes').subscribe({
       next: clientes => {
+        //Métrica de clientes totales en nuestro sistema
         this.metricValues['clientesTotales'] = clientes.length;
 
         const hoy = new Date();
         hoy.setHours(12, 0, 0, 0);
         const mesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
 
+        //Metrica de clientes nuevos este mes
         this.metricValues['clientesNuevosMes'] = clientes.filter(c => {
           if (!c.fechaRegistro) return false;
           const d = new Date(c.fechaRegistro);
@@ -109,10 +110,11 @@ export class DashboardComponent {
           const mesRegistro = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
           return mesRegistro === mesActual;
         }).length;
-
+        
+        //para el grafico de clientes nuevos por dia
         this.clientesSerie = this.buildNewClientsDailySeries(clientes);
 
-        
+        //cache de clientes, lo guardamos para poder identificar clientes en otras metricas
         this.clientesCache = clientes.reduce((acc, c) => {
           acc[String(c.id ?? c.clienteId)] = c;
           return acc;
@@ -123,17 +125,18 @@ export class DashboardComponent {
 
     //-------BLOQUE PRODUCTOS + VENTAS------------
     forkJoin({
+      //hacemos dos peticiones, productos y ventas
       productos: this.http.get<any[]>('http://localhost:9080/api/productos'),
       ventas: this.http.get<any[]>('http://localhost:9080/api/ventas')
     }).subscribe({
       next: ({ productos, ventas }) => {
+        //cache de productos, que se guarda cada producto por su id para poder consultarlo luego
         const productosCache = productos.reduce((acc, p) => {
           acc[String(p.id ?? p.productoId)] = p;
           return acc;
         }, {} as Record<string, any>);
         
-      
-        
+        //para acumular estadisticas por cliente, las ventas que han hecho y el gasto que han tenido, se uso luego para calcular la metrica de clientes con ams ventas
         const statsPorCliente: Record<string, { ventas: number; gasto: number }> = {};
 
         ventas.forEach(v => {
@@ -146,6 +149,7 @@ export class DashboardComponent {
           statsPorCliente[idCliente].gasto += (v.cantidad * v.precioUnitario);
         });
 
+        //se ordenan los clientes segun el numero de ventas y gastos en caso de empate, se utiliza para la metrica de cliente con mas ventas también
         const ordenadosClientes = Object.entries(statsPorCliente).sort((a, b) => {
           if (b[1].ventas !== a[1].ventas) {
             return b[1].ventas - a[1].ventas;
@@ -153,6 +157,8 @@ export class DashboardComponent {
           return b[1].gasto - a[1].gasto;
         });
 
+        //Metrica de cliente con mas ventas
+        //Se guarda el cliente con mayor numero de ventas y si hay un empate se desempada con el gasto
         let clienteMasVentas: string;
         if (ordenadosClientes.length === 0) {
           clienteMasVentas = 'N/A';
@@ -169,18 +175,19 @@ export class DashboardComponent {
 
         this.metricValues['clienteMasVentas'] = clienteMasVentas;
 
-        
+        //metrica de el numero total de productos registrados en el catologo        
         this.metricValues['productosCatalogo'] = productos.length;
-        // Sin stock
+
+        //Metrica de productos sin stock
         this.metricValues['sinstock'] = productos.filter(p => (p.stock ?? 0) === 0).length;
 
-        // Stock crítico
+        //Metrica de Stock critico alerta, es decir productos en bajo stock (1 y 9 unidades)
         this.metricValues['stockCriticoAlerta'] = productos.filter(p => {
           const s = p.stock ?? 0;
           return s >= 1 && s <= 9;
         }).length;
 
-
+        //Datos para el grafico de stock disponible
         this.counts = { disponible: 0, agotado: 0 };
         productos.forEach(p => {
           if (p.stock > 0) this.counts['disponible']++;
@@ -189,28 +196,26 @@ export class DashboardComponent {
 
         this.stockData = productos.map(p => ({ nombre: p.nombre, stock: p.stock ?? 0 }));
 
-        
+        //Metrica ventas totales registradas
         const ventasTotales = ventas.length;
+        this.metricValues['ventasTotales'] = ventasTotales;
 
+        //Metrica de la cantidad total de unidades que hemos vendido
         const productosVendidos = ventas.reduce(
           (sum, v) => sum + (v.cantidad ?? 1),
           0
         );
+        this.metricValues['productosVendidos'] = productosVendidos;
 
+        //Metrica de ingresos totales
         const ingresosTotales = ventas.reduce(
           (sum, v) => sum + (v.cantidad * v.precioUnitario),
           0
         );
-
-        this.metricValues['ventasTotales'] = ventasTotales;
-        this.metricValues['productosVendidos'] = productosVendidos; 
         this.metricValues['ingresosTotales'] = ingresosTotales;
+    
 
-
-        this.metricValues['ventasTotales'] = ventasTotales;
-        this.metricValues['productosVendidos'] = productosVendidos;
-        this.metricValues['ingresosTotales'] = ingresosTotales;
-
+        //Datos para el grafico de burbujas (productos mas vendidos, en el caso del grafico el top 10)
         const conteoPorProducto: Record<string, number> = {};
         ventas.forEach(v => {
           const idProd = String(v.productoId ?? '');
@@ -234,10 +239,8 @@ export class DashboardComponent {
 
         this.bubbleData = [...this.bubbleData];
 
-
-       
+        //Metrica de producto mas vendido
         const ordenados = Object.entries(conteoPorProducto).sort((a, b) => b[1] - a[1]);
-
         let productoMasVendido: string;
 
         if (ordenados.length === 0) {
@@ -249,59 +252,61 @@ export class DashboardComponent {
           productoMasVendido =
             productosCache[topId]?.nombre ?? topId ?? 'N/A';
         }
-
-        this.metricValues['ventasTotales'] = ventasTotales;
-        this.metricValues['ingresosTotales'] = ingresosTotales;
         this.metricValues['productoMasVendido'] = productoMasVendido;
 
 
-      
-      const hoy = new Date();
-      hoy.setHours(12, 0, 0, 0);
-      const mesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
+        //Metrica de clientes activos este mes, es decir clientes que hayan hecho alguna compra este mes
+        const hoy = new Date();
+        hoy.setHours(12, 0, 0, 0);
+        const mesActual = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
 
-      const clientesActivos = new Set<string>();
+        const clientesActivos = new Set<string>();
 
-      ventas.forEach(v => {
-        const fRaw = v.fecha ?? v.fechaVenta;
-        if (!fRaw) return;
+        ventas.forEach(v => {
+          const fRaw = v.fecha ?? v.fechaVenta;
+          if (!fRaw) return;
 
-        const f = new Date(fRaw);
-        f.setHours(12, 0, 0, 0); 
-        const mesVenta = `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, '0')}`;
+          const f = new Date(fRaw);
+          f.setHours(12, 0, 0, 0); 
+          const mesVenta = `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, '0')}`;
 
-        const id = v.clienteId;
-        if (id === null || id === undefined) return;
+          const id = v.clienteId;
+          if (id === null || id === undefined) return;
 
-        const idKey = String(id); 
+          const idKey = String(id); 
 
-        if (mesVenta === mesActual) {
-          clientesActivos.add(idKey);
-        }
-      });
-
-      this.metricValues['clienteActivoMes'] = clientesActivos.size;
-
-      },
-          error: err => console.error('Error productos/ventas:', err)
-          
+          if (mesVenta === mesActual) {
+            clientesActivos.add(idKey);
+          }
         });
+
+        this.metricValues['clienteActivoMes'] = clientesActivos.size;
+
+  },
+      error: err => console.error('Error productos/ventas:', err)
+  });
 
     //-----------BLOQUE INTERACCIONES----------
     this.http.get<any[]>('http://localhost:9080/api/interacciones').subscribe({
       next: interacciones => {
+        //Metrica de interacciones totales
         const total = interacciones.length;
-
+        
+        //Conteo de tipos de interacciones
         const conteoTipos: Record<string, number> = {};
         interacciones.forEach(i => {
           const tipo = String(i.tipo ?? 'desconocido');
           conteoTipos[tipo] = (conteoTipos[tipo] || 0) + 1;
         });
-
+        
+        //Ordenamos los tipos de interacciones por frecuencia
         const ordenados = Object.entries(conteoTipos).sort((a, b) => b[1] - a[1]);
         const maxCount = ordenados[0]?.[1] ?? 0;
+
+        //seleccionamos los tipos que empatan en el maximo
         const topTipos = ordenados.filter(([_, count]) => count === maxCount).map(([tipo]) => tipo);
 
+        //Metrica tipo de interaccion mas comun, si hay un empate se enseñan los dos
         let tipoMasComun: string;
         if (total === 0) {
           tipoMasComun = '—';
@@ -315,20 +320,27 @@ export class DashboardComponent {
 
         this.metricValues['interaccionesTotales'] = total;
         this.metricValues['tipoInteraccionMasComun'] = tipoMasComun;
-        this.interaccionesData = interacciones;
       },
       error: err => console.error('Error interacciones:', err)
+    });
+    
+    //---------BLOQUE DE PROVEEDORES---------
+    //Este bloque lo tenemos para guardar los nombres de los proveedores y luego no tener problemas para sacarlos en la metrica
+    this.http.get<any[]>('http://localhost:9080/api/proveedores').subscribe({
+      next: proveedores => {
+        proveedores.forEach(p => {
+          const id = String(p.id ?? p.proveedorId ?? '');
+          if (!id) return;
+          this.proveedoresCache[id] = { nombre: p.nombre ?? 'Sin nombre' };
+        });
+      },
+      error: err => console.error('Error proveedores:', err)
     });
 
     //---------BLOQUE DE COMPRAS---------
     this.http.get<any[]>('http://localhost:9080/api/compras').subscribe({
       next: compras => {
-        this.comprasSerie = compras.map(c => ({
-          date: new Date(c.fecha ?? c.fechaCompra ?? Date.now()),
-          value: c.total ?? c.monto ?? 1
-        }));
-        
-        
+        // Conteo de compras por proveedor → cuántas veces se ha comprado a cada proveedor
         const conteoPorProveedor: Record<string, number> = {};
         compras.forEach(c => {
           const idProv = String(c.proveedorId ?? c.idProveedor ?? '');
@@ -336,36 +348,31 @@ export class DashboardComponent {
           conteoPorProveedor[idProv] = (conteoPorProveedor[idProv] || 0) + 1;
         });
 
+        // Ordenamos los proveedores por número de compras (descendente)
         const ordenados = Object.entries(conteoPorProveedor).sort((a, b) => b[1] - a[1]);
 
+        // Métrica: proveedor con más compras → si hay empate se pone "No procede"
         let proveedorMasCompras: string;
         if (ordenados.length === 0) {
           proveedorMasCompras = 'N/A';
         } else if (ordenados.length > 1 && ordenados[0][1] === ordenados[1][1]) {
-          proveedorMasCompras = 'No procede'; //si hay empate
+          proveedorMasCompras = 'No procede'; // si hay empate
         } else {
           const topId = ordenados[0][0];
-          proveedorMasCompras = topId;
+          // Aquí usamos el nombre del proveedor si está en el cache, si no mostramos el ID
+          proveedorMasCompras = this.proveedoresCache[topId]?.nombre ?? topId ?? 'N/A';
         }
 
         this.metricValues['ProveedorMasCompras'] = proveedorMasCompras;
-        
-      //---------BLOQUE DE VENTAS-------
-      this.http.get<any[]>('http://localhost:9080/api/ventas').subscribe({
-        next: ventas => {
-          this.ventasSerie = ventas.map(v => ({
-            date: new Date(v.fecha ?? v.fechaVenta ?? Date.now()),
-            value: v.total ?? v.monto ?? 1
-          }));
-        },
-        error: err => console.error('Error ventas (comparativa):', err)
-      });
-    },
-    error: err => console.error('Error compras:', err)
-  });
+      },
+      error: err => console.error('Error compras:', err)
+    });
   }
 
   //FUNCIONES AUXILIARES PARA CONSTRUIR SERIES TEMPORALES DE CLIENTES
+
+  /*Esta función cuenta cuántos clientes nuevos hay cada día en el último mes
+    y devuelve una lista con la fecha y el numero de clientes de ese día*/
   private buildNewClientsDailySeries(clientes: any[]): { date: Date; value: number }[] {
     const today = new Date();
     const start = new Date();
@@ -373,17 +380,20 @@ export class DashboardComponent {
 
     const counts: Record<string, number> = {};
     clientes.forEach(c => {
-      if (!c.fechaRegistro) return;
-      const key = this.toDay(c.fechaRegistro);
-      counts[key] = (counts[key] || 0) + 1;
+      if (!c.fechaRegistro) return;  
+      const key = this.toDay(c.fechaRegistro);  //pasamos la fecha a formato YYYY-MM-DD con la funcion de toDay
+      counts[key] = (counts[key] || 0) + 1;   //sumamos 1 cliente en ese dia
     });
 
+    //creamos la lista de dias desde ahce un mes hasta hoy, tambien pongo cuantos clientes hubo cada dia y 0 si no hubo ninguno
     return this.daysRange(start, today).map(d => {
       const key = this.toDay(d);
       return { date: d, value: counts[key] || 0 };
     });
   }
 
+  /*Esta función crea un array con todos los días entre dos fechas
+    Ejemplo: si le das 1 de noviembre y 3 de noviembre, devuelve [1 nov, 2 nov, 3 nov]*/
   private daysRange(start: Date, end: Date): Date[] {
     const days: Date[] = [];
     const d = new Date(start);
@@ -392,15 +402,16 @@ export class DashboardComponent {
     last.setHours(0, 0, 0, 0);
 
     while (d <= last) {
-      days.push(new Date(d));
-      d.setDate(d.getDate() + 1);
+      days.push(new Date(d));      //añadimos dia
+      d.setDate(d.getDate() + 1); //pasamos al siguiente dia
     }
     return days;
   }
 
+  // Esta funcion convierte una fecha a texto con formato YYYY-MM-DD
   private toDay(date: Date | string): string {
     const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d.toISOString().slice(0, 10);
+    d.setHours(0, 0, 0, 0);   //quitamos horas y minutos
+    return d.toISOString().slice(0, 10); //cogemos solo la parte de la fecha
   }
 }
