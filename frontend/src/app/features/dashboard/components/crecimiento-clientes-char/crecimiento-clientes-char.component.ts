@@ -52,8 +52,8 @@ export class CrecimientoClientesCharComponent implements OnChanges {
   ) {
     d3.select(el).selectAll('*').remove();
 
-    const w = 470;
-    const h = 290;
+    const w = 410;
+    const h = 240;
     const m = { t: 8, r: 8, b: 40, l: 40 };
     const maxY = Math.max(d3.max(data, (d) => d.value) ?? 0, 10);
 

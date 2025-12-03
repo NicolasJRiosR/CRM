@@ -1,6 +1,6 @@
 <!-- Resumen de métricas -->
 <div
-  class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-[1000px] mx-auto"
+  class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-[1000px] w-full mx-auto"
 >
   <h3
     class="text-lg font-semibold mb-6 text-gray-800 dark:text-white text-center"
@@ -13,29 +13,31 @@
   </div>
 </div>
 
-<!-- Gráficos en dos columnas, responsive -->
-<div class="max-w-[1000px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-  <!-- Crecimiento de clientes -->
-  <div
-    class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 w-full aspect-[5/3] relative"
-  >
+<!-- Gráficos en dos columnas -->
+<div
+  class="max-w-[1000px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"
+>
+  <!-- Crecimiento de clientes (VERSIÓN ANTERIOR – altura fija) -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px] w-full">
     <app-crecimiento-clientes-char
       [serie]="clientesSerie"
     ></app-crecimiento-clientes-char>
   </div>
-  <!-- Stock disponible más pequeño en escritorio pero proporcional -->
-  <!-- Stock disponible -->
-  <div
-    class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 w-full aspect-[5/3] relative"
-  >
+
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px] w-full">
     <app-stock-disponible-char [counts]="counts"></app-stock-disponible-char>
   </div>
 </div>
 
-<div
-  class="bg-white w-full max-w-[1000px] mx-auto dark:bg-gray-800 mt-6 rounded-lg shadow p-4 aspect-[5/3] relative"
->
-  <app-grafico-burbujas-char
-    [products]="bubbleData"
-  ></app-grafico-burbujas-char>
+<!--Burbujas -->
+<div class="p-4">
+  <div class="overflow-x-auto">
+    <div
+      class="bg-white w-[1000px] min-w-[1000px] mx-auto dark:bg-gray-800 mt-6 rounded-lg shadow p-4 h-[500px] sm:h-[400px] md:h-[500px] lg:h-[500px]"
+    >
+      <app-grafico-burbujas-char
+        [products]="bubbleData"
+      ></app-grafico-burbujas-char>
+    </div>
+  </div>
 </div>
