@@ -1,5 +1,10 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, RouterLink, RouterOutlet, NavigationEnd } from '@angular/router';
+import {
+  Router,
+  RouterLink,
+  RouterOutlet,
+  NavigationEnd,
+} from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -10,7 +15,7 @@ import { TranslationService } from '../../core/services/translation.service';
   standalone: true,
   imports: [RouterLink, RouterOutlet, CommonModule],
   templateUrl: './shell.component.html',
-  styleUrls: ['./shell.component.css']
+  styleUrls: ['./shell.component.css'],
 })
 export class ShellComponent implements OnInit, OnDestroy {
   auth = inject(AuthService);
@@ -22,10 +27,10 @@ export class ShellComponent implements OnInit, OnDestroy {
   private routerSub?: Subscription;
 
   ngOnInit() {
-    this.routerSub = this.router.events.subscribe(event => {
+    this.routerSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         if (this.idiomaDestino === 'en') {
-          setTimeout(() => this.translatePage(), 200); 
+          setTimeout(() => this.translatePage(), 200);
         }
       }
     });
@@ -48,8 +53,10 @@ export class ShellComponent implements OnInit, OnDestroy {
   translatePage() {
     this.traduciendo = true;
 
-    
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+    );
     const nodos: Node[] = [];
 
     while (walker.nextNode()) {
@@ -58,7 +65,9 @@ export class ShellComponent implements OnInit, OnDestroy {
       if (
         nodo.nodeValue?.trim() &&
         parent &&
-        !['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'BUTTON'].includes(parent.tagName)
+        !['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'BUTTON'].includes(
+          parent.tagName,
+        )
       ) {
         nodos.push(nodo);
       }
@@ -66,12 +75,12 @@ export class ShellComponent implements OnInit, OnDestroy {
 
     for (const nodo of nodos) {
       const original = nodo.nodeValue!;
-      if (!nodo.parentElement?.dataset["original"]) {
-        nodo.parentElement!.dataset["original"] = original;
+      if (!nodo.parentElement?.dataset['original']) {
+        nodo.parentElement!.dataset['original'] = original;
       }
 
       if (this.idiomaDestino === 'es') {
-        nodo.nodeValue = nodo.parentElement!.dataset["original"]!;
+        nodo.nodeValue = nodo.parentElement!.dataset['original']!;
         continue;
       }
 
@@ -81,18 +90,19 @@ export class ShellComponent implements OnInit, OnDestroy {
       });
     }
 
-  
-    const inputs = document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
-      'input[placeholder], textarea[placeholder]'
-    );
+    const inputs = document.querySelectorAll<
+      HTMLInputElement | HTMLTextAreaElement
+    >('input[placeholder], textarea[placeholder]');
 
     inputs.forEach((el) => {
-    
-      const original = el.dataset["originalPlaceholder"] || el.getAttribute('placeholder') || '';
-      el.dataset["originalPlaceholder"] = original;
+      const original =
+        el.dataset['originalPlaceholder'] ||
+        el.getAttribute('placeholder') ||
+        '';
+      el.dataset['originalPlaceholder'] = original;
 
       if (this.idiomaDestino === 'es') {
-        el.setAttribute('placeholder', el.dataset["originalPlaceholder"]!);
+        el.setAttribute('placeholder', el.dataset['originalPlaceholder']!);
         return;
       }
 

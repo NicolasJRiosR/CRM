@@ -12,23 +12,21 @@
   animation: slideIn 1s ease-out forwards;
 }
 
-/* Movimiento del logo después del barrido */
 @keyframes float {
   0%,
   100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-40px);
   }
 }
 
 .float {
-  animation: float 3s ease-in-out infinite;
-  animation-delay: 1s; /* empieza después del barrido */
+  animation: float 2.5s ease-in-out infinite;
+  animation-delay: 1s;
 }
 
-/* Aparición del formulario */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -44,7 +42,6 @@
   animation: fadeIn 0.8s ease-out forwards;
 }
 
-/* Hover botón */
 button {
   transition:
     transform 0.3s ease,

@@ -1,12 +1,14 @@
-<div class="fixed inset-0 flex bg-white overflow-hidden">
-  <!-- Formulario a la izquierda -->
-  <div class="w-1/2 flex items-center justify-center h-full">
+<div class="fixed inset-0 flex flex-col md:flex-row bg-white overflow-hidden">
+  <!-- Formulario a la izquierda en desktop -->
+  <div
+    class="w-full md:w-1/2 flex items-center justify-center h-full order-2 md:order-1"
+  >
     <div class="bg-gray-100 rounded p-6 max-w-md w-full shadow-sm fade-in">
-      <h1 class="text-2xl font-semibold mb-6 text-gray-800">Entrar</h1>
+      <h1 class="text-2xl font-semibold mb-6 text-gray-800">Entrar / Login</h1>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700"
-            >Usuario</label
+            >Usuario / User</label
           >
           <input
             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -15,7 +17,7 @@
         </div>
         <div>
           <label class="block mb-1 text-sm font-medium text-gray-700"
-            >Contraseña</label
+            >Contraseña / Password</label
           >
           <input
             type="password"
@@ -27,7 +29,7 @@
           class="bg-[#090c7a] text-white px-4 py-2 rounded hover:bg-blue-800"
           [disabled]="form.invalid"
         >
-          Entrar
+          Login
         </button>
       </form>
 
@@ -35,14 +37,14 @@
     </div>
   </div>
 
-  <!-- Medio círculo azul con barrido desde la derecha -->
+  <!-- Lado azul con logo a la derecha en desktop -->
   <div
-    class="w-1/2 flex items-center justify-center bg-[#090c7a] rounded-l-full h-full overflow-hidden slide-in"
+    class="w-full md:w-1/2 flex items-center justify-center bg-[#090c7a] md:rounded-l-full h-64 md:h-full overflow-hidden order-1 md:order-2 slide-in"
   >
     <img
       src="logoCRM.png"
       alt="Logo"
-      class="w-3/4 max-w-md object-contain max-h-[90vh] float"
+      class="w-3/4 max-w-md object-contain md:max-h-[90vh]"
     />
   </div>
 </div>
