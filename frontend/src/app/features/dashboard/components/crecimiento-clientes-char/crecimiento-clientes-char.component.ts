@@ -114,7 +114,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
 
     g.append('g').attr('transform', `translate(${m.l}, 0)`).call(yAxis);
 
-    // ✅ Texto explicativo debajo
     svg
       .append('text')
       .attr('x', w / 2)
@@ -137,9 +136,8 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .attr('stroke-width', 2)
       .attr('d', line);
 
-    // ✅ Tooltip
     const tooltip = d3
-      .select(el)
+      .select('body') // ⚠️ Importante: body, no el SVG
       .append('div')
       .style('position', 'absolute')
       .style('background', '#fff')
@@ -162,16 +160,11 @@ export class CrecimientoClientesCharComponent implements OnChanges {
         tooltip
           .style('opacity', 1)
           .html(
-            `
-            <strong>${d3.timeFormat('%d %b')(d.date)}</strong><br/>
-            Clientes añadidos: ${d.value}
-          `,
+            `<strong>${d3.timeFormat('%d %b')(d.date)}</strong><br/>Clientes añadidos: ${d.value}`,
           )
           .style('left', event.pageX + 10 + 'px')
           .style('top', event.pageY - 28 + 'px');
       })
-      .on('mouseout', () => {
-        tooltip.style('opacity', 0);
-      });
+      .on('mouseout', () => tooltip.style('opacity', 0));
   }
 }
