@@ -1,6 +1,35 @@
-<div class="overflow-x-auto flex justify-center mb-6">
-  <table class="table-fixed w-[800px] text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-lg">
-    <thead class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 uppercase">
+<!-- Tarjetas: visibles solo en móvil y tablets pequeñas -->
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-screen-xl mx-auto mb-6 md:hidden"
+>
+  @if (metrics.length > 0) {
+    @for (metric of metrics; track metric.name) {
+      <div
+        class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center justify-center text-center hover:shadow-lg transition-shadow duration-200"
+      >
+        <span class="text-gray-500 dark:text-gray-400 text-sm mb-2">
+          {{ metric.name }}
+        </span>
+        <span class="text-gray-800 dark:text-white font-bold text-xl">
+          {{ metric.value }}
+        </span>
+      </div>
+    }
+  } @else {
+    <div class="col-span-full text-center text-gray-500 dark:text-gray-400">
+      No hay métricas disponibles
+    </div>
+  }
+</div>
+
+<!-- Tabla: visible solo en escritorio, centrada y con ancho fijo -->
+<div class="overflow-x-auto flex justify-center mb-6 hidden md:flex">
+  <table
+    class="table-fixed w-[800px] text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-lg"
+  >
+    <thead
+      class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 uppercase"
+    >
       <tr>
         <th class="px-3 py-2 text-center">Métrica</th>
         <th class="px-3 py-2 text-center">Valor actual</th>
@@ -9,14 +38,23 @@
     <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
       @if (metrics.length > 0) {
         @for (metric of metrics; track metric.name) {
-          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
-            <td class="px-3 py-2 whitespace-nowrap text-center">{{ metric.name }}</td>
-            <td class="px-3 py-2 font-semibold text-center">{{ metric.value }}</td>
+          <tr
+            class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+          >
+            <td class="px-3 py-2 whitespace-nowrap text-center">
+              {{ metric.name }}
+            </td>
+            <td class="px-3 py-2 font-semibold text-center">
+              {{ metric.value }}
+            </td>
           </tr>
         }
       } @else {
         <tr>
-          <td colspan="2" class="px-3 py-2 text-center text-gray-500 dark:text-gray-400">
+          <td
+            colspan="2"
+            class="px-3 py-2 text-center text-gray-500 dark:text-gray-400"
+          >
             No hay métricas disponibles
           </td>
         </tr>

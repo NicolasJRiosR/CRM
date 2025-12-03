@@ -1,88 +1,154 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  ViewChild,
+  OnChanges,
+  AfterViewInit,
+  HostListener,
+} from '@angular/core';
 import * as d3 from 'd3';
 
 @Component({
-  selector: 'app-stock-disponible-char',
   standalone: true,
-  imports: [],
+  selector: 'app-stock-disponible-char',
   templateUrl: './stock-disponible-char.component.html',
-  styleUrl: './stock-disponible-char.component.css'
+  styleUrls: ['./stock-disponible-char.component.css'],
 })
-export class StockDisponibleCharComponent {
-  @Input() counts: Record<'disponible' | 'agotado', number> = { disponible: 0, agotado: 0 };
+export class StockDisponibleCharComponent implements OnChanges, AfterViewInit {
+  @Input() counts: Record<'disponible' | 'agotado', number> = {
+    disponible: 0,
+    agotado: 0,
+  };
   @ViewChild('donut', { static: true }) donut!: ElementRef;
 
-  ngOnChanges() {
-    if (!this.counts) return;
-    this.renderStockDonut(this.donut.nativeElement, this.counts);
+  private data: { estado: 'disponible' | 'agotado'; value: number }[] = [];
+  private svg: d3.Selection<SVGSVGElement, unknown, null, undefined> | null =
+    null;
+
+  ngAfterViewInit() {
+    this.updateData();
+    this.renderChart();
   }
 
-  // gráfico de donut para stock disponibilidad
-    private renderStockDonut(element: HTMLElement, counts: Record<string, number>) {
-  d3.select(element).selectAll('*').remove();
+  ngOnChanges() {
+    this.updateData();
+    this.renderChart();
+  }
 
-  const data: { estado: 'disponible' | 'agotado'; value: number }[] = [
-    { estado: 'disponible', value: counts['disponible'] ?? 0 },
-    { estado: 'agotado', value: counts['agotado'] ?? 0 },
-  ];
+  @HostListener('window:resize')
+  onResize() {
+    this.renderChart();
+  }
 
-  const width = element.clientWidth || 200;
-  const height = element.clientHeight || 200;
-  const radius = Math.min(width, height) / 2 - 55; 
+  private updateData() {
+    if (!this.counts) return;
+    this.data = [
+      { estado: 'disponible', value: this.counts['disponible'] ?? 0 },
+      { estado: 'agotado', value: this.counts['agotado'] ?? 0 },
+    ];
+  }
 
-  const svg = d3.select(element)
-    .append('svg')
-    .attr('width', width)
-    .attr('height', height);
+  private renderChart() {
+    const element = this.donut.nativeElement as HTMLElement;
 
-  const color = d3.scaleOrdinal<'disponible' | 'agotado', string>()
-    .domain(['disponible', 'agotado'])
-    .range(['#238bd1ff', '#F44336']);
+    // Limpiar gráfico previo
+    d3.select(element).selectAll('*').remove();
 
-  // Leyenda arriba derecha
-  const legend = svg.append('g')
-    .attr('transform', `translate(${width - 120}, 5)`); 
+    const width = element.clientWidth;
+    const height = element.clientHeight || 300; // fallback si height=0
+    if (width === 0 || height === 0) return;
 
-  const legendItems = legend.selectAll('.legend-item')
-    .data(data)
-    .enter()
-    .append('g')
-    .attr('class', 'legend-item')
-    .attr('transform', (d, i) => `translate(0, ${i * 26})`);
+    const radius = Math.min(width, height) / 2 - 40;
 
-  legendItems.append('rect')
-    .attr('width', 13)
-    .attr('height', 13)
-    .attr('fill', d => color(d.estado));
+    this.svg = d3
+      .select(element)
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height);
 
-  legendItems.append('text')
-    .attr('x', 20)
-    .attr('y', 12)
-    .text(d => `${d.estado} (${d.value})`)
-    .style('font-size', '14px')
-    .style('font-weight', '600')
-    .style('fill', '#333');
+    const color = d3
+      .scaleOrdinal<'disponible' | 'agotado', string>()
+      .domain(['disponible', 'agotado'])
+      .range(['#238bd1ff', '#F44336']);
 
-  
-const chartGroup = svg.append('g')
-  .attr('transform', `translate(${width / 2 - 10}, ${height / 2 - 20})`);
+    // Leyenda
+    const isMobile = width <= 768;
+    const marginRight = 20;
+    const legendX = width - (isMobile ? 90 : 120) - marginRight;
 
+    const legend = this.svg
+      .append('g')
+      .attr('transform', `translate(${legendX}, 10)`);
 
-  const pie = d3.pie<{ estado: 'disponible' | 'agotado'; value: number }>()
-    .value(d => d.value);
+    const legendItems = legend
+      .selectAll<
+        SVGGElement,
+        { estado: 'disponible' | 'agotado'; value: number }
+      >('.legend-item')
+      .data(this.data)
+      .enter()
+      .append('g')
+      .attr('class', 'legend-item')
+      .attr('transform', (d, i) => `translate(0, ${i * 22})`);
 
-  const arc = d3.arc<d3.PieArcDatum<{ estado: 'disponible' | 'agotado'; value: number }>>()
-    .innerRadius(radius * 0.5)
-    .outerRadius(radius);
+    legendItems
+      .append('rect')
+      .attr('width', 12)
+      .attr('height', 12)
+      .attr('fill', (d) => color(d.estado));
 
-  chartGroup.selectAll('path')
-    .data(pie(data))
-    .enter()
-    .append('path')
-    .attr('d', arc)
-    .attr('fill', d => color(d.data.estado))
-    .attr('stroke', '#fff')
-    .attr('stroke-width', 1);
-}
+    legendItems
+      .append('text')
+      .attr('x', 18)
+      .attr('dy', '0.9em') // mejor alineación vertical
+      .text((d) => `${d.estado} (${d.value})`)
+      .style('font-size', isMobile ? '12px' : '14px')
+      .style('font-weight', '600')
+      .style('fill', '#333');
 
+    // Grupo del gráfico centrado
+    const chartGroup = this.svg
+      .append('g')
+      .attr('transform', `translate(${width / 2}, ${height / 2})`);
+
+    const pie = d3
+      .pie<{ estado: 'disponible' | 'agotado'; value: number }>()
+      .value((d) => d.value)
+      .sort(null);
+
+    const arc = d3
+      .arc<
+        d3.PieArcDatum<{ estado: 'disponible' | 'agotado'; value: number }>
+      >()
+      .innerRadius(radius * 0.5)
+      .outerRadius(radius);
+
+    const arcs = chartGroup
+      .selectAll<
+        SVGPathElement,
+        d3.PieArcDatum<{ estado: 'disponible' | 'agotado'; value: number }>
+      >('path')
+      .data(pie(this.data))
+      .enter()
+      .append('path')
+      .attr('d', arc)
+      .attr('fill', (d) => color(d.data.estado))
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 1);
+
+    // Texto dentro del donut
+    chartGroup
+      .selectAll('text')
+      .data(pie(this.data))
+      .enter()
+      .append('text')
+      .attr('transform', (d) => `translate(${arc.centroid(d)})`)
+      .attr('text-anchor', 'middle')
+      .attr('dy', '0.35em')
+      .text((d) => d.data.value)
+      .style('fill', '#fff')
+      .style('font-size', '14px')
+      .style('font-weight', 'bold');
+  }
 }
