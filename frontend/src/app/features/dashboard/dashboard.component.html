@@ -1,10 +1,12 @@
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-[1000px] mx-auto">
-  
-  <h3 class="text-lg font-semibold mb-6 text-gray-800 dark:text-white text-center">
+<div
+  class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-[1000px] mx-auto"
+>
+  <h3
+    class="text-lg font-semibold mb-6 text-gray-800 dark:text-white text-center"
+  >
     Resumen de métricas
   </h3>
 
-  
   <div>
     <app-metrics-table [metrics]="metrics"></app-metrics-table>
   </div>
@@ -14,7 +16,9 @@
 <div class="max-w-[1000px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
   <!-- Crecimiento de clientes -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px]">
-    <app-crecimiento-clientes-char [serie]="clientesSerie"></app-crecimiento-clientes-char>
+    <app-crecimiento-clientes-char
+      [serie]="clientesSerie"
+    ></app-crecimiento-clientes-char>
   </div>
 
   <!-- Stock disponible -->
@@ -23,7 +27,11 @@
   </div>
 </div>
 
-  <!--Burbujas -->
-  <div class="bg-white w-[1000px] mx-auto dark:bg-gray-800 mt-6 rounded-lg shadow p-4 h-[500px]">
-    <app-grafico-burbujas-char [products]="bubbleData"></app-grafico-burbujas-char>
-  </div>
+<!--Burbujas -->
+<div
+  class="bg-white w-[1000px] mx-auto dark:bg-gray-800 mt-6 rounded-lg shadow p-4 h-[500px]"
+>
+  <app-grafico-burbujas-char
+    [products]="bubbleData"
+  ></app-grafico-burbujas-char>
+</div>

@@ -1,33 +1,39 @@
-<div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">
+<div
+  class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+>
   <h2 class="text-2xl font-bold mb-6">Listado de ventas</h2>
 
+  <!-- FILTROS -->
   <div
     [formGroup]="filtroForm"
-    class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
   >
     <input
       type="text"
       placeholder="Filtrar por ID..."
       formControlName="id"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
     <input
       type="date"
       formControlName="fecha"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
     <input
       type="text"
       placeholder="Filtrar por producto..."
       formControlName="producto"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
 
-    <div class="md:col-span-3 flex justify-between mt-2">
+    <!-- Botones -->
+    <div
+      class="sm:col-span-2 md:col-span-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-2 sm:mt-0"
+    >
       <a
         href="javascript:void(0)"
         (click)="limpiar()"
-        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer"
+        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer w-full sm:w-auto text-center"
       >
         Limpiar
       </a>
@@ -35,57 +41,67 @@
       <a
         href="javascript:void(0)"
         (click)="nuevaVenta()"
-        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer"
+        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer w-full sm:w-auto text-center"
       >
         + Nueva venta
       </a>
     </div>
   </div>
 
-  <table
-    class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
-  >
-    <thead
-      class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+  <!-- TABLA RESPONSIVE -->
+  <div class="overflow-x-auto">
+    <table
+      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg text-center min-w-[600px]"
     >
-      <tr>
-        <th class="p-3 font-semibold">ID</th>
-        <th class="p-3 font-semibold">Producto</th>
-        <th class="p-3 font-semibold">Cantidad</th>
-        <th class="p-3 font-semibold">Precio</th>
-        <th class="p-3 font-semibold">Fecha</th>
-        <th class="p-3 font-semibold">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if (ventasFiltradas().length === 0) {
-        <tr class="border-t dark:border-gray-700">
-          <td colspan="6" class="p-4 text-center text-gray-500">
-            No se encontraron ventas
-          </td>
+      <thead
+        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+      >
+        <tr>
+          <th class="p-3 font-semibold">ID</th>
+          <th class="p-3 font-semibold">Producto</th>
+          <th class="p-3 font-semibold">Cantidad</th>
+          <th class="p-3 font-semibold">Precio</th>
+          <th class="p-3 font-semibold">Fecha</th>
+          <th class="p-3 font-semibold">Acciones</th>
         </tr>
-      } @else {
-        @for (v of ventasFiltradas(); track v.id) {
-          <tr
-            class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
-          >
-            <td class="p-3">{{ v.id }}</td>
-            <td class="p-3">{{ getNombreProductoDirecto(v.productoId) }}</td>
-            <td class="p-3">{{ v.cantidad }}</td>
-            <td class="p-3">{{ v.precioUnitario }}</td>
-            <td class="p-3">{{ v.fecha | date: "dd/MM/yyyy" }}</td>
-            <td class="p-3">
-              <a
-                href="javascript:void(0)"
-                (click)="editarVenta(v)"
-                class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800 cursor-pointer"
-              >
-                Editar
-              </a>
+      </thead>
+      <tbody>
+        @if (ventasFiltradas().length === 0) {
+          <tr class="border-t dark:border-gray-700">
+            <td colspan="6" class="p-4 text-center text-gray-500">
+              No se encontraron ventas
             </td>
           </tr>
+        } @else {
+          @for (v of ventasFiltradas(); track v.id) {
+            <tr
+              class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+            >
+              <td class="p-3">{{ v.id }}</td>
+
+              <td class="p-3 min-w-[160px] truncate text-left pl-2">
+                {{ getNombreProductoDirecto(v.productoId) }}
+              </td>
+
+              <td class="p-3">{{ v.cantidad }}</td>
+              <td class="p-3">{{ v.precioUnitario }}</td>
+              <td class="p-3 whitespace-nowrap">
+                {{ v.fecha | date: "dd/MM/yyyy" }}
+              </td>
+
+              <td class="p-3">
+                <a
+                  href="javascript:void(0)"
+                  (click)="editarVenta(v)"
+                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800 inline-block whitespace-nowrap"
+                >
+                  Editar
+                </a>
+              </td>
+            </tr>
+          }
         }
-      }
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>

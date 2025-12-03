@@ -1,61 +1,61 @@
-<div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-2xl font-bold">Listado de Proveedores</h2>
+<div
+  class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+>
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4"
+  >
+    <h2 class="text-2xl font-bold mb-2 sm:mb-0">Listado de Proveedores</h2>
   </div>
-
 
   <div
     [formGroup]="filtroForm"
-    class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
   >
     <input
       type="text"
       placeholder="Filtrar por ID..."
       formControlName="id"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
 
     <input
       type="text"
       placeholder="Filtrar por nombre..."
       formControlName="nombre"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
 
     <input
       type="text"
       placeholder="Filtrar por contacto..."
       formControlName="contacto"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
 
-
-    <div class="md:col-span-3 flex justify-between items-center">
-    
-      <div class="flex gap-3">
+    <div
+      class="sm:col-span-2 md:col-span-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-2 sm:mt-0"
+    >
+      <div class="flex gap-3 flex-wrap">
         <button
           type="button"
           (click)="limpiar()"
-          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95"
+          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 w-full sm:w-auto"
         >
           Limpiar
         </button>
       </div>
 
-    
       <a
         routerLink="/proveedores/nuevo"
-        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 text-center w-full sm:w-auto"
       >
         + Nuevo proveedor
       </a>
     </div>
   </div>
-
-
-  <div>
+  <div class="overflow-x-auto">
     <table
-      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
+      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg text-center min-w-[600px]"
     >
       <thead
         class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
@@ -84,13 +84,13 @@
               <td class="p-3">{{ p.id }}</td>
 
               <td class="p-3">
-                <div class="inline-block min-w-[160px] pl-2">
+                <div class="inline-block min-w-[160px] pl-2 truncate">
                   {{ p.nombre }}
                 </div>
               </td>
 
               <td class="p-3">
-                <div class="inline-block min-w-[160px] pl-2">
+                <div class="inline-block min-w-[160px] pl-2 truncate">
                   {{ p.contacto }}
                 </div>
               </td>
@@ -100,7 +100,7 @@
               <td class="p-3">
                 <a
                   [routerLink]="['/proveedores', p.id]"
-                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
+                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800 inline-block"
                 >
                   Editar
                 </a>

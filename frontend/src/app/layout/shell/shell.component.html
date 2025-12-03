@@ -1,12 +1,19 @@
 <header class="bg-[#090c7a] shadow">
   <div
-    class="container mx-auto max-w-7xl px-4 flex items-center justify-between py-4"
+    class="container mx-auto max-w-7xl px-4 flex items-center justify-between py-4 flex-wrap md:flex-nowrap"
   >
     <a routerLink="/" class="font-bold text-white text-lg"
       >Hall of T-Shirts CRM</a
     >
 
-    <nav class="flex gap-4 items-center text-white">
+    <button
+      class="md:hidden text-white text-2xl"
+      onclick="document.getElementById('mobileMenu').classList.toggle('hidden')"
+    >
+      ☰
+    </button>
+
+    <nav class="hidden md:flex gap-4 items-center text-white">
       <a routerLink="/dashboard" class="hover:text-gray-300">Dashboard</a>
       <a routerLink="/clientes" class="hover:text-gray-300">Clientes</a>
       <a routerLink="/interacciones" class="hover:text-gray-300"
@@ -21,15 +28,43 @@
         {{ idiomaDestino === "es" ? "English" : "Español" }}
       </button>
     </nav>
-
     @if (auth.userSig(); as u) {
-      <div class="flex items-center gap-3">
+      <div class="hidden md:flex items-center gap-3">
         <span class="text-sm text-white">Hola, {{ u.username }}</span>
         <button class="logout-btn px-3 py-1 rounded" (click)="logout()">
           Logout ➜
         </button>
       </div>
     }
+    <div id="mobileMenu" class="hidden w-full md:hidden mt-4">
+      <nav class="flex flex-col gap-2 text-white">
+        <a routerLink="/dashboard" class="hover:text-gray-300">Dashboard</a>
+        <a routerLink="/clientes" class="hover:text-gray-300">Clientes</a>
+        <a routerLink="/interacciones" class="hover:text-gray-300"
+          >Interacciones</a
+        >
+        <a routerLink="/productos" class="hover:text-gray-300">Productos</a>
+        <a routerLink="/proveedores" class="hover:text-gray-300">Proveedores</a>
+        <a routerLink="/ventas" class="hover:text-gray-300">Ventas</a>
+        <a routerLink="/compras" class="hover:text-gray-300">Compras</a>
+
+        <button
+          (click)="toggleIdioma()"
+          class="idioma-btn px-3 py-1 rounded w-fit"
+        >
+          {{ idiomaDestino === "es" ? "English" : "Español" }}
+        </button>
+      </nav>
+
+      @if (auth.userSig(); as u) {
+        <div class="flex flex-col gap-2 mt-4">
+          <span class="text-sm text-white">Hola, {{ u.username }}</span>
+          <button class="logout-btn px-3 py-1 rounded w-fit" (click)="logout()">
+            Logout ➜
+          </button>
+        </div>
+      }
+    </div>
   </div>
 </header>
 

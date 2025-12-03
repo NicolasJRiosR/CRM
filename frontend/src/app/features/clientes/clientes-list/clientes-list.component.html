@@ -1,108 +1,116 @@
-<div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-2xl font-bold">Listado de Clientes</h2>
+<div
+  class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+>
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4"
+  >
+    <h2 class="text-2xl font-bold mb-2 sm:mb-0">Listado de Clientes</h2>
   </div>
 
-  
   <div
     [formGroup]="filtroForm"
-    class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
   >
     <input
       type="text"
       placeholder="Filtrar por ID..."
       formControlName="id"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
 
     <input
       type="text"
       placeholder="Filtrar por nombre..."
       formControlName="nombre"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
 
     <input
       type="text"
       placeholder="Filtrar por email..."
       formControlName="email"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600"
+      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
 
-   
-    <div class="md:col-span-3 flex justify-between items-center">
-     
-      <div class="flex gap-3">
-        <a
-          href="javascript:void(0)"
-          (click)="limpiar()"
-          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer"
-        >
-          Limpiar
-        </a>
+    <div
+      class="sm:col-span-2 md:col-span-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-2 sm:mt-0"
+    >
+      <a
+        href="javascript:void(0)"
+        (click)="limpiar()"
+        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer w-full sm:w-auto text-center"
+      >
+        Limpiar
+      </a>
 
-      </div>
-
-      
-      <a routerLink="/clientes/nuevo"
-         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
+      <a
+        routerLink="/clientes/nuevo"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 w-full sm:w-auto text-center"
+      >
         + Nuevo cliente
       </a>
     </div>
   </div>
 
- 
-<div>
-  <table
-    class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center"
-  >
-    <thead
-      class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+  <div class="overflow-x-auto">
+    <table
+      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg text-center min-w-[600px]"
     >
-      <tr>
-        <th class="p-3 font-semibold">ID</th>
-        <th class="p-3 font-semibold">Nombre</th>
-        <th class="p-3 font-semibold">Email</th>
-        <th class="p-3 font-semibold">Teléfono</th>
-        <th class="p-3 font-semibold">Fecha registro</th>
-        <th class="p-3 font-semibold">Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      @if (clientesFiltrados().length === 0) {
-        <tr class="border-t dark:border-gray-700">
-          <td colspan="6" class="p-4 text-center text-gray-500">
-            No se encontraron clientes con esos filtros
-          </td>
+      <thead
+        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+      >
+        <tr>
+          <th class="p-3 font-semibold">ID</th>
+          <th class="p-3 font-semibold">Nombre</th>
+          <th class="p-3 font-semibold">Email</th>
+          <th class="p-3 font-semibold">Teléfono</th>
+          <th class="p-3 font-semibold">Fecha registro</th>
+          <th class="p-3 font-semibold">Acciones</th>
         </tr>
-      } @else {
-        @for (c of clientesFiltrados(); track c.id) {
-          <tr
-            class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
-          >
-            <td class="p-3">{{c.id}}</td>
-            <td class="p-3">
-              <div class="inline-block min-w-[160px] pl-2">
-                {{c.nombre}}
-              </div>
-            </td>
-            <td class="p-3">
-              <div class="inline-block min-w-[220px] pl-2">
-                {{c.email}}
-              </div>
-            </td>
-            <td class="p-3">{{ formatTelefono(c.telefono ?? '') }}</td>
-            <td class="p-3">{{c.fechaRegistro | date:'dd/MM/yyyy'}}</td>
-            <td class="p-3">
-              <a [routerLink]="['/clientes', c.id]" 
-                 class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800">
-                Editar
-              </a>
+      </thead>
+
+      <tbody>
+        @if (clientesFiltrados().length === 0) {
+          <tr class="border-t dark:border-gray-700">
+            <td colspan="6" class="p-4 text-center text-gray-500">
+              No se encontraron clientes con esos filtros
             </td>
           </tr>
+        } @else {
+          @for (c of clientesFiltrados(); track c.id) {
+            <tr
+              class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+            >
+              <td class="p-3">{{ c.id }}</td>
+
+              <td class="p-3">
+                <div class="inline-block min-w-[160px] pl-2 truncate text-left">
+                  {{ c.nombre }}
+                </div>
+              </td>
+
+              <td class="p-3">
+                <div class="inline-block min-w-[180px] pl-2 truncate text-left">
+                  {{ c.email }}
+                </div>
+              </td>
+
+              <td class="p-3">{{ formatTelefono(c.telefono ?? "") }}</td>
+
+              <td class="p-3">{{ c.fechaRegistro | date: "dd/MM/yyyy" }}</td>
+
+              <td class="p-3">
+                <a
+                  [routerLink]="['/clientes', c.id]"
+                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800 inline-block"
+                >
+                  Editar
+                </a>
+              </td>
+            </tr>
+          }
         }
-      }
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </div>
