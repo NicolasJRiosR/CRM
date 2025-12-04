@@ -35,14 +35,15 @@
     <div
       class="sm:col-span-2 md:col-span-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-2 sm:mt-0"
     >
-      <div class="flex gap-3 flex-wrap">
-        <button
-          type="button"
-          (click)="limpiar()"
-          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 w-full sm:w-auto"
+       <div class="flex gap-3 flex-wrap">
+
+        <a
+          href="#"
+          (click)="limpiar(); $event.preventDefault()"
+          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 w-full sm:w-auto text-center"
         >
           Limpiar
-        </button>
+        </a>
       </div>
 
       <a

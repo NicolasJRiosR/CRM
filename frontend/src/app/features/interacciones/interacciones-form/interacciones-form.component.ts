@@ -4,11 +4,11 @@ import { InteraccionesService, Interaccion } from '../interacciones.service';
 import { CustomerService } from '../../clientes/customer.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { RouterModule } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-interacciones-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './interacciones-form.component.html',
 })
 export class InteraccionesFormComponent {

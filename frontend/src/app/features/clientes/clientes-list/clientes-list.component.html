@@ -36,11 +36,11 @@
       class="sm:col-span-2 md:col-span-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-2 sm:mt-0"
     >
       <a
-        href="javascript:void(0)"
-        (click)="limpiar()"
-        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer w-full sm:w-auto text-center"
-      >
-        Limpiar
+      href="#"
+      (click)="limpiar(); $event.preventDefault()"
+      class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 cursor-pointer w-full sm:w-auto text-center"
+    >
+      Limpiar
       </a>
 
       <a
