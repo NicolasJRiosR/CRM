@@ -1,12 +1,9 @@
-<div
-  class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto"
->
+<div class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto">
   <h2 class="text-2xl font-bold mb-6 text-center">
     {{ isEdit ? "Editar Proveedor" : "Nuevo Proveedor" }}
   </h2>
 
   <form (ngSubmit)="save()" class="space-y-4">
-  
     <div>
       <label class="block text-sm font-medium mb-1">Nombre</label>
       <input
@@ -18,7 +15,6 @@
       />
     </div>
 
-    
     <div>
       <label class="block text-sm font-medium mb-1">Contacto</label>
       <input
@@ -29,37 +25,37 @@
       />
     </div>
 
-   
     <div>
       <label class="block text-sm font-medium mb-1">Teléfono</label>
       <input
         [value]="proveedor().telefono"
         (input)="update('telefono', $any($event.target).value)"
         placeholder="Ej. 600123456"
+        required
         class="w-full border rounded px-3 py-2 focus:ring"
       />
     </div>
 
-
     <div class="flex gap-3 justify-center pt-4">
-      <button
-        type="submit"
-        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 active:scale-95"
+     
+      <a
+        href="#"
+        (click)="save(); $event.preventDefault()"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 active:scale-95 text-center"
       >
         {{ isEdit ? "Actualizar" : "Guardar" }}
-      </button>
+      </a>
 
-      <button
-        type="button"
-        (click)="router.navigate(['/proveedores'])"
-        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+     
+      <a
+        routerLink="/proveedores"
+        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 text-center"
       >
         Cancelar
-      </button>
+      </a>
     </div>
   </form>
 
-  
   @if (guardado()) {
     <p class="text-green-600 mt-4 text-center">
       Proveedor {{ isEdit ? "actualizado" : "guardado" }} correctamente.

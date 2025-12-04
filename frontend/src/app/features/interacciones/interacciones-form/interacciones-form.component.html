@@ -69,20 +69,24 @@
     </div>
 
     <div class="flex gap-3 justify-center pt-4">
-      <button
-        type="submit"
-        [disabled]="form.invalid"
-        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"
+     
+      <a
+        href="#"
+        (click)="form.valid && save(); $event.preventDefault()"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 text-center"
+        [class.opacity-50]="form.invalid"
+        [class.pointer-events-none]="form.invalid"
       >
         Guardar
-      </button>
-      <button
-        type="button"
-        (click)="router.navigate(['/interacciones'])"
-        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
-      >
-        Cancelar
-      </button>
+      </a>
+
+      
+       <a
+    [routerLink]="['/interacciones']"
+    class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 text-center"
+  >
+    Cancelar
+  </a>
     </div>
   </form>
 </div>

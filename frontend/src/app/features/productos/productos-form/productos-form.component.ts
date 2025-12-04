@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductosService, Producto } from '../productos.service';
 import { ProveedoresService } from '../../proveedor/ProveedoresService';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 type ProductoFormValue = {
@@ -15,7 +15,7 @@ type ProductoFormValue = {
 @Component({
   standalone: true,
   selector: 'app-productos-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './productos-form.component.html',
 })
 export class ProductosFormComponent {

@@ -1,47 +1,57 @@
 <div class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto">
   <h2 class="text-2xl font-bold mb-6 text-center">
-    @if(id){Editar cliente} @else{Nuevo cliente}
+    @if (id) { Editar cliente } @else { Nuevo cliente }
   </h2>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+ 
     <div>
-      <label class="block text-sm font-medium mb-1">Nombre completo</label>
-      <input formControlName="nombre" placeholder="Ej. Juan Pérez"
+      <label for="nombre" class="block text-sm font-medium mb-1">Nombre completo</label>
+      <input id="nombre" formControlName="nombre" placeholder="Ej. Juan Pérez"
              class="w-full border rounded px-3 py-2 focus:ring"/>
+      @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+        <div class="text-red-600 text-sm mt-1" aria-live="assertive">
+          El nombre es obligatorio
+        </div>
+      }
     </div>
 
+    
     <div>
-      <label class="block text-sm font-medium mb-1">Correo electrónico</label>
-      <input formControlName="email" type="email" placeholder="Ej. juan@email.com"
-            class="w-full border rounded px-3 py-2 focus:ring"/>
+      <label for="email" class="block text-sm font-medium mb-1">Correo electrónico</label>
+      <input id="email" formControlName="email" type="email" placeholder="Ej. juan@email.com"
+             class="w-full border rounded px-3 py-2 focus:ring"/>
       @if (form.get('email')?.invalid && form.get('email')?.touched) {
-        <div class="text-red-600 text-sm mt-1">
+        <div class="text-red-600 text-sm mt-1" aria-live="assertive">
           Introduce un correo electrónico válido
         </div>
       }
     </div>
 
+ 
     <div>
-      <label class="block text-sm font-medium mb-1">Teléfono</label>
-      <input formControlName="telefono" placeholder="Ej. 600123456"
-            class="w-full border rounded px-3 py-2 focus:ring"/>
+      <label for="telefono" class="block text-sm font-medium mb-1">Teléfono</label>
+      <input id="telefono" formControlName="telefono" placeholder="Ej. 600123456"
+             class="w-full border rounded px-3 py-2 focus:ring"/>
       @if (form.get('telefono')?.invalid && form.get('telefono')?.touched) {
-        <div class="text-red-600 text-sm mt-1">
+        <div class="text-red-600 text-sm mt-1" aria-live="assertive">
           Introduce un teléfono válido
         </div>
       }
     </div>
 
-
+ 
     <div class="flex gap-3 justify-center pt-4">
-      <button type="submit" [disabled]="form.invalid"
-              class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800">
+      <a href="#" (click)="form.valid && save()"
+         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 text-center"
+         [class.opacity-50]="form.invalid"
+         [class.pointer-events-none]="form.invalid">
         Guardar
-      </button>
-      <button type="button" (click)="router.navigate(['/clientes'])"
-              class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+      </a>
+      <a [routerLink]="['/clientes']"
+         class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 text-center">
         Cancelar
-      </button>
+      </a>
     </div>
   </form>
 </div>

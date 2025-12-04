@@ -40,20 +40,23 @@
       class="md:col-span-4 flex flex-col sm:flex-row justify-between items-center mt-2 gap-3"
     >
       <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-        <button
-          type="button"
-          (click)="limpiar()"
-          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 w-full sm:w-auto"
-        >
-          Limpiar
-        </button>
+
+        <a
+        href="#"
+        (click)="limpiar(); $event.preventDefault()"
+        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 w-full sm:w-auto text-center"
+      >
+        Limpiar
+      </a>
       </div>
-      <button
-        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 w-full sm:w-auto"
-        (click)="router.navigate(['/productos/nuevo'])"
+
+    
+      <a
+        routerLink="/productos/nuevo"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 w-full sm:w-auto text-center"
       >
         + Nuevo producto
-      </button>
+      </a>
     </div>
   </div>
 
@@ -119,12 +122,13 @@
               <td class="p-3">{{ p.precio }}</td>
               <td class="p-3">{{ p.proveedorNombre }}</td>
               <td class="p-3">
-                <button
-                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"
-                  (click)="router.navigate(['/productos', p.id])"
+                
+                <a
+                  [routerLink]="['/productos', p.id]"
+                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800 inline-block"
                 >
                   Editar
-                </button>
+                </a>
               </td>
             </tr>
           }

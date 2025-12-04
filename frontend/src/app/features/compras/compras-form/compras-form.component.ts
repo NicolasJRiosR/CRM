@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { ComprasService, Compra } from '../compras.service';
 import { ProductosService } from '../../productos/productos.service';
 import { ProveedoresService } from '../../proveedor/ProveedoresService';
@@ -16,10 +16,10 @@ type CompraFormValue = {
 @Component({
   standalone: true,
   selector: 'app-compras-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './compras-form.component.html',
 })
-export class ComprasFormComponent {
+export class ComprasFormComponent implements OnInit {
   fb = inject(FormBuilder);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -27,11 +27,15 @@ export class ComprasFormComponent {
   productosSvc = inject(ProductosService);
   proveedoresSvc = inject(ProveedoresService);
 
-  compraId = Number(this.route.snapshot.paramMap.get('id'));
-  current: Compra | null = null;
+ 
+  current = signal<Compra | null>(null);
 
+  
   productosSig = this.productosSvc.productosSig;
   proveedoresSig = this.proveedoresSvc.proveedoresSig;
+
+ 
+  compraId = Number(this.route.snapshot.paramMap.get('id'));
 
   form = this.fb.nonNullable.group({
     productoId: [0, Validators.required],
@@ -41,16 +45,17 @@ export class ComprasFormComponent {
   });
 
   ngOnInit() {
+  
     this.productosSvc.list();
     this.proveedoresSvc.list();
 
     if (this.compraId > 0) {
-      // Buscamos la compra en comprasSig() para prellenar
       const compra = this.comprasSvc
         .comprasSig()
         .find((c) => c.id === this.compraId);
+
       if (compra) {
-        this.current = compra;
+        this.current.set(compra);
         this.form.patchValue({
           productoId: compra.productoId,
           cantidad: compra.cantidad,
@@ -58,7 +63,7 @@ export class ComprasFormComponent {
           proveedorId: compra.proveedorId ?? 0,
         });
       } else {
-        this.router.navigate(['/compras']); // Si no existe, volver a lista
+        this.router.navigate(['/compras']); 
       }
     }
   }
@@ -68,9 +73,9 @@ export class ComprasFormComponent {
 
     const value: CompraFormValue = this.form.getRawValue();
 
-    if (this.current) {
+    if (this.current()) {
       const payload: Compra = {
-        ...this.current,
+        ...this.current()!,
         productoId: value.productoId,
         cantidad: value.cantidad,
         precioUnitario: value.precioUnitario,

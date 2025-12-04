@@ -3,11 +3,12 @@ import { ProductosService, Producto } from '../productos.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-productos-list',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './productos-list.component.html',
 })
 export class ProductosListComponent {

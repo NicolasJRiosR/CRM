@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
@@ -10,7 +10,7 @@ import { ProveedoresService } from '../../proveedor/ProveedoresService';
 @Component({
   standalone: true,
   selector: 'app-compras-list',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './compras-list.component.html',
 })
 export class ComprasListComponent {

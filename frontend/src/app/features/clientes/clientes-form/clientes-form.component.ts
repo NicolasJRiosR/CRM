@@ -1,13 +1,13 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CustomerService, Cliente } from '../customer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { RouterModule } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-clientes-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './clientes-form.component.html',
 })
 export class ClientesFormComponent {
@@ -16,30 +16,28 @@ export class ClientesFormComponent {
   router = inject(Router);
   svc = inject(CustomerService);
 
+
+  current = signal<Cliente | null>(null);
+
   id = Number(this.route.snapshot.paramMap.get('id'));
-  current: Cliente | null = null;
 
   form = this.fb.group({
     nombre: ['', Validators.required],
-
-   
     email: ['', [
       Validators.required,
-      Validators.pattern(/^[\w.-]+@[\w.-]+\.(com|es|net|org)$/i)
+      Validators.pattern(/^[\w.-]+@[\w.-]+\.[a-z]{2,}$/i)
     ]],
-
     telefono: ['', [
       Validators.required,
-      Validators.pattern(/^(?:\s*\d\s*){9}$/) 
+      Validators.pattern(/^\d{9}$/)
     ]],
   });
 
-
   ngOnInit() {
     if (this.id) {
-      this.svc.find(this.id).subscribe(found => { 
-        this.current = found; 
-        this.form.patchValue(found); 
+      this.svc.find(this.id).subscribe(found => {
+        this.current.set(found);
+        this.form.patchValue(found);
       });
     }
   }
@@ -47,11 +45,11 @@ export class ClientesFormComponent {
   save() {
     if (this.form.invalid) return;
     const value = this.form.value as Omit<Cliente, 'id'>;
-    if (this.current) {
-      const payload = { ...this.current, ...value };
-      this.svc.update(payload).subscribe(() => this.router.navigate(['/clientes']));
-    } else {
-      this.svc.create(value).subscribe(() => this.router.navigate(['/clientes']));
-    }
+
+    const action = this.current()
+      ? this.svc.update({ ...this.current()!, ...value })
+      : this.svc.create(value);
+
+    action.subscribe(() => this.router.navigate(['/clientes']));
   }
 }
