@@ -1,5 +1,4 @@
 package com.NacorMirenNico.crm.web;
-
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 @RestControllerAdvice
 public class ErrorHandler {
 
@@ -49,14 +47,11 @@ public class ErrorHandler {
             .collect(Collectors.toList());
         return build(HttpStatus.BAD_REQUEST, "Validación fallida", req, v);
     }
-
     // 400: error de lógica interna (ej. stock insuficiente)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiError> badRequest(IllegalArgumentException ex, org.springframework.web.context.request.WebRequest req) {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage(), req, List.of());
-    }
-
-   
+    }  
     private ResponseEntity<ApiError> build(HttpStatus status, String msg, org.springframework.web.context.request.WebRequest req, List<Violation> v) {
         ApiError body = new ApiError(
             OffsetDateTime.now(),

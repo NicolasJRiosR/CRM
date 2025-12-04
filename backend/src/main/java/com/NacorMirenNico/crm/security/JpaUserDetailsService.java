@@ -1,5 +1,4 @@
 package com.NacorMirenNico.crm.security;
-
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,10 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.NacorMirenNico.crm.user.UserEntity;
 import com.NacorMirenNico.crm.user.UserRepository;
-
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
-
     private final UserRepository repo;
 
     public JpaUserDetailsService(UserRepository repo) {

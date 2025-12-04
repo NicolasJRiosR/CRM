@@ -78,12 +78,6 @@ public ResponseEntity<InteraccionDTO> update(
     return ResponseEntity.ok(toDTO(saved));
 }
 
-
-
-
-
-
-
     private InteraccionDTO toDTO(Interaccion i) {
         return new InteraccionDTO(
             i.getId(),
