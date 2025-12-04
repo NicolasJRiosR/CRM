@@ -42,7 +42,6 @@ CREATE TABLE proveedor (
     contacto VARCHAR(100),
     telefono VARCHAR(20)
 );
-
 -- Productos
 CREATE TABLE producto (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -52,7 +51,6 @@ CREATE TABLE producto (
     proveedor_id INT,
     FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)
 );
-
 -- Compras
 CREATE TABLE compra (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,9 +60,7 @@ CREATE TABLE compra (
     cantidad INT NOT NULL,
     precio_unitario DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (producto_id) REFERENCES producto(id),
-    FOREIGN KEY (proveedor_id) REFERENCES proveedor(id)
-);
-
+    FOREIGN KEY (proveedor_id) REFERENCES proveedor(id));
 -- Ventas
 CREATE TABLE venta (
     id INT AUTO_INCREMENT PRIMARY KEY,

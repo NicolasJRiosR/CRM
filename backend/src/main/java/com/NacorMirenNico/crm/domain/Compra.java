@@ -1,5 +1,4 @@
 package com.NacorMirenNico.crm.domain;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -15,7 +14,6 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 @Entity
 @Table(name = "compra")
 @Getter @Setter @NoArgsConstructor
