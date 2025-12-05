@@ -1,19 +1,22 @@
-<header class="bg-[#090c7a] shadow">
+<header class="bg-[#090c7a] shadow text-[104%]">
   <div
-    class="container mx-auto max-w-7xl px-4 flex items-center justify-between py-4 flex-wrap md:flex-nowrap"
+    class="container mx-auto max-w-7xl px-4 flex items-center justify-between py-4 flex-wrap lg:flex-nowrap"
   >
-    <a routerLink="/" class="font-bold text-white text-lg"
-      >Hall of T-Shirts CRM</a
-    >
+    <!-- Logo -->
+    <a routerLink="/" class="font-bold text-white text-lg">
+      Hall of T-Shirts CRM
+    </a>
 
+    <!-- Botón Hamburguesa (visible hasta 1023px) -->
     <button
-      class="md:hidden text-white text-2xl"
+      class="lg:hidden text-white text-2xl"
       onclick="document.getElementById('mobileMenu').classList.toggle('hidden')"
     >
       ☰
     </button>
 
-    <nav class="hidden md:flex gap-4 items-center text-white">
+    <!-- Menú Desktop (pantallas ≥1024px) -->
+    <nav class="hidden lg:flex gap-4 items-center text-white">
       <a routerLink="/dashboard" class="hover:text-gray-300">Dashboard</a>
       <a routerLink="/clientes" class="hover:text-gray-300">Clientes</a>
       <a routerLink="/interacciones" class="hover:text-gray-300"
@@ -28,18 +31,22 @@
         {{ idiomaDestino === "es" ? "English" : "Español" }}
       </button>
     </nav>
+
+    <!-- Usuario Desktop -->
     @if (auth.userSig(); as u) {
-      <div class="hidden md:flex items-center gap-3">
+      <div class="hidden lg:flex items-center gap-3">
         <span class="text-sm text-white">Hola, {{ u.username }}</span>
         <button class="logout-btn px-3 py-1 rounded" (click)="logout()">
           Logout ➜
         </button>
       </div>
     }
-    <div id="mobileMenu" class="hidden w-full md:hidden mt-4">
+
+    <!-- Menú Móvil (visible hasta 1023px) -->
+    <div id="mobileMenu" class="hidden w-full lg:hidden mt-4">
       <nav class="flex flex-col gap-2 text-white">
         <a routerLink="/dashboard" class="hover:text-gray-300">Dashboard</a>
-        <a routerLink="/clientes" class="hover:text-gray-300">CLIENTES</a>
+        <a routerLink="/clientes" class="hover:text-gray-300">Clientes</a>
         <a routerLink="/interacciones" class="hover:text-gray-300"
           >Interacciones</a
         >
@@ -56,6 +63,7 @@
         </button>
       </nav>
 
+      <!-- Usuario Móvil -->
       @if (auth.userSig(); as u) {
         <div class="flex flex-col gap-2 mt-4">
           <span class="text-sm text-white">Hola, {{ u.username }}</span>
@@ -68,6 +76,6 @@
   </div>
 </header>
 
-<main class="container mx-auto max-w-7xl px-4 py-6">
+<main class="container mx-auto max-w-7xl px-4 py-6 text-[104%]">
   <router-outlet />
 </main>

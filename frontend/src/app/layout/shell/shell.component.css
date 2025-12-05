@@ -1,18 +1,17 @@
 .idioma-btn {
-  
   color: #ffffff;
   transition: background-color 0.3s ease;
 }
 .idioma-btn:hover {
-   background-color: rgba(237, 237, 237, 0.6);
-   color: #000000;
+  background-color: rgba(237, 237, 237, 0.6);
+  color: #000000;
 }
 
 .logout-btn {
-  background-color: #dc2626; 
+  background-color: #dc2626;
   color: #fff;
 }
 
 .logout-btn:hover {
-  background-color: #dc2626; 
+  background-color: #dc2626;
 }

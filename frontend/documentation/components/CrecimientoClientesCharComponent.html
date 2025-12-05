@@ -1,0 +1,1060 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>front documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">front documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  CrecimientoClientesCharComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/features/dashboard/components/crecimiento-clientes-char/crecimiento-clientes-char.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnChanges</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-crecimiento-clientes-char</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./crecimiento-clientes-char.component.css</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./crecimiento-clientes-char.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#line" >line</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#isMobile" >isMobile</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnChanges" >ngOnChanges</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#onResize" >onResize</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#renderDesktopChart" >renderDesktopChart</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#renderMobileChart" >renderMobileChart</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#serie" >serie</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>HostListeners</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#window:resize" >window:resize</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+        </tbody>
+    </table>
+</section>
+
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="serie"></a>
+                        <b>serie</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>literal type[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/features/dashboard/components/crecimiento-clientes-char/crecimiento-clientes-char.component.ts:19</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+    <section data-compodoc="block-methods">
+    <h3>HostListeners</h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="window:resize"></a>
+                    <span class="name">
+                        <span ><b>window:resize</b></span>
+                        <a href="#window:resize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>window:resize()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="40"
+                                    class="link-to-prism">src/app/features/dashboard/components/crecimiento-clientes-char/crecimiento-clientes-char.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isMobile"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>isMobile</b></span>
+                        <a href="#isMobile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>isMobile()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="44"
+                                    class="link-to-prism">src/app/features/dashboard/components/crecimiento-clientes-char/crecimiento-clientes-char.component.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnChanges"></a>
+                    <span class="name">
+                        <span ><b>ngOnChanges</b></span>
+                        <a href="#ngOnChanges"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnChanges()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="22"
+                                    class="link-to-prism">src/app/features/dashboard/components/crecimiento-clientes-char/crecimiento-clientes-char.component.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onResize"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>onResize</b></span>
+                        <a href="#onResize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>onResize()</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Decorators : </b>
+                    <br />
+                    <code>@HostListener(&#x27;window:resize&#x27;)<br /></code>
+                </td>
+            </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="40"
+                                    class="link-to-prism">src/app/features/dashboard/components/crecimiento-clientes-char/crecimiento-clientes-char.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="renderDesktopChart"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>renderDesktopChart</b></span>
+                        <a href="#renderDesktopChart"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>renderDesktopChart(el: HTMLElement, data: literal type[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="49"
+                                    class="link-to-prism">src/app/features/dashboard/components/crecimiento-clientes-char/crecimiento-clientes-char.component.ts:49</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>el</td>
+                                            <td>
+                                                        <code>HTMLElement</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                        <code>literal type[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="renderMobileChart"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>renderMobileChart</b></span>
+                        <a href="#renderMobileChart"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>renderMobileChart(el: HTMLElement, data: literal type[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="140"
+                                    class="link-to-prism">src/app/features/dashboard/components/crecimiento-clientes-char/crecimiento-clientes-char.component.ts:140</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>el</td>
+                                            <td>
+                                                        <code>HTMLElement</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                        <code>literal type[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="line"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>line</b></span>
+                        <a href="#line"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ElementRef</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;line&#x27;, {static: true})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/features/dashboard/components/crecimiento-clientes-char/crecimiento-clientes-char.component.ts:20</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
+  Component,
+  Input,
+  ElementRef,
+  ViewChild,
+  OnChanges,
+  HostListener,
+} from &#x27;@angular/core&#x27;;
+import * as d3 from &#x27;d3&#x27;;
+
+@Component({
+  selector: &#x27;app-crecimiento-clientes-char&#x27;,
+  standalone: true,
+  imports: [],
+  templateUrl: &#x27;./crecimiento-clientes-char.component.html&#x27;,
+  styleUrls: [&#x27;./crecimiento-clientes-char.component.css&#x27;],
+})
+export class CrecimientoClientesCharComponent implements OnChanges {
+  @Input() serie: { date: Date; value: number }[] &#x3D; [];
+  @ViewChild(&#x27;line&#x27;, { static: true }) line!: ElementRef;
+
+  ngOnChanges() {
+    if (!this.serie?.length) return;
+
+    const data &#x3D; this.serie
+      .map((d) &#x3D;&gt; ({
+        date: d.date instanceof Date ? d.date : new Date(d.date),
+        value: Number(d.value) || 0,
+      }))
+      .sort((a, b) &#x3D;&gt; a.date.getTime() - b.date.getTime());
+
+    if (this.isMobile()) {
+      this.renderMobileChart(this.line.nativeElement, data);
+    } else {
+      this.renderDesktopChart(this.line.nativeElement, data);
+    }
+  }
+
+  @HostListener(&#x27;window:resize&#x27;)
+  onResize() {
+    this.ngOnChanges(); // re-renderiza según el tamaño actual
+  }
+
+  private isMobile(): boolean {
+    return window.innerWidth &lt; 768;
+  }
+
+  // ---------------- Desktop ----------------
+  private renderDesktopChart(
+    el: HTMLElement,
+    data: { date: Date; value: number }[],
+  ) {
+    d3.select(el).selectAll(&#x27;*&#x27;).remove();
+
+    const w &#x3D; 470;
+    const h &#x3D; 290;
+    const m &#x3D; { t: 8, r: 8, b: 40, l: 40 };
+    const maxY &#x3D; Math.max(d3.max(data, (d) &#x3D;&gt; d.value) ?? 0, 10);
+
+    const svg &#x3D; d3.select(el).append(&#x27;svg&#x27;).attr(&#x27;width&#x27;, w).attr(&#x27;height&#x27;, h);
+
+    const g &#x3D; svg.append(&#x27;g&#x27;).attr(&#x27;transform&#x27;, &#x27;translate(-21, 0)&#x27;);
+
+    const x &#x3D; d3
+      .scaleTime()
+      .domain(d3.extent(data, (d) &#x3D;&gt; d.date) as [Date, Date])
+      .range([m.l, w - m.r]);
+
+    const y &#x3D; d3
+      .scaleLinear()
+      .domain([0, maxY])
+      .range([h - m.b, m.t]);
+
+    g.append(&#x27;g&#x27;)
+      .attr(&#x27;transform&#x27;, &#x60;translate(${m.l}, 0)&#x60;)
+      .call(
+        d3
+          .axisLeft&lt;number&gt;(y)
+          .tickValues(d3.range(2, maxY + 2, 2))
+          .tickFormat(d3.format(&#x27;d&#x27;)),
+      );
+
+    // Texto explicativo
+    svg
+      .append(&#x27;text&#x27;)
+      .attr(&#x27;x&#x27;, w / 2)
+      .attr(&#x27;y&#x27;, h - 5)
+      .attr(&#x27;text-anchor&#x27;, &#x27;middle&#x27;)
+      .style(&#x27;font-size&#x27;, &#x27;12px&#x27;)
+      .style(&#x27;fill&#x27;, &#x27;#555&#x27;)
+      .text(&#x27;Cada punto representa los nuevos clientes añadidos ese día&#x27;);
+
+    const line &#x3D; d3
+      .line&lt;{ date: Date; value: number }&gt;()
+      .x((d) &#x3D;&gt; x(d.date))
+      .y((d) &#x3D;&gt; y(d.value))
+      .curve(d3.curveMonotoneX);
+
+    g.append(&#x27;path&#x27;)
+      .datum(data)
+      .attr(&#x27;fill&#x27;, &#x27;none&#x27;)
+      .attr(&#x27;stroke&#x27;, &#x27;#3056d3&#x27;)
+      .attr(&#x27;stroke-width&#x27;, 2)
+      .attr(&#x27;d&#x27;, line);
+
+    // Tooltip
+    const tooltip &#x3D; d3
+      .select(&#x27;body&#x27;)
+      .append(&#x27;div&#x27;)
+      .style(&#x27;position&#x27;, &#x27;absolute&#x27;)
+      .style(&#x27;background&#x27;, &#x27;#fff&#x27;)
+      .style(&#x27;border&#x27;, &#x27;1px solid #ccc&#x27;)
+      .style(&#x27;padding&#x27;, &#x27;6px&#x27;)
+      .style(&#x27;border-radius&#x27;, &#x27;4px&#x27;)
+      .style(&#x27;font-size&#x27;, &#x27;12px&#x27;)
+      .style(&#x27;pointer-events&#x27;, &#x27;none&#x27;)
+      .style(&#x27;opacity&#x27;, 0);
+
+    g.selectAll(&#x27;circle&#x27;)
+      .data(data)
+      .enter()
+      .append(&#x27;circle&#x27;)
+      .attr(&#x27;cx&#x27;, (d) &#x3D;&gt; x(d.date))
+      .attr(&#x27;cy&#x27;, (d) &#x3D;&gt; y(d.value))
+      .attr(&#x27;r&#x27;, 3)
+      .attr(&#x27;fill&#x27;, &#x27;#1e3aa8&#x27;)
+      .on(&#x27;mouseover&#x27;, function (event, d) {
+        tooltip
+          .style(&#x27;opacity&#x27;, 1)
+          .html(
+            &#x60;&lt;strong&gt;${d3.timeFormat(&#x27;%d %b&#x27;)(d.date)}&lt;/strong&gt;&lt;br/&gt;Clientes añadidos: ${d.value}&#x60;,
+          )
+          .style(&#x27;left&#x27;, event.pageX + 10 + &#x27;px&#x27;)
+          .style(&#x27;top&#x27;, event.pageY - 28 + &#x27;px&#x27;);
+      })
+      .on(&#x27;mouseout&#x27;, () &#x3D;&gt; tooltip.style(&#x27;opacity&#x27;, 0));
+  }
+
+  // ---------------- Mobile ----------------
+  private renderMobileChart(
+    el: HTMLElement,
+    data: { date: Date; value: number }[],
+  ) {
+    d3.select(el).selectAll(&#x27;*&#x27;).remove();
+
+    const w &#x3D; el.offsetWidth; // ancho del contenedor móvil
+    const h &#x3D; w * 0.6; // altura proporcional
+    const m &#x3D; { t: 8, r: 8, b: 30, l: 30 };
+    const maxY &#x3D; Math.max(d3.max(data, (d) &#x3D;&gt; d.value) ?? 0, 10);
+
+    const svg &#x3D; d3.select(el).append(&#x27;svg&#x27;).attr(&#x27;width&#x27;, w).attr(&#x27;height&#x27;, h);
+
+    const g &#x3D; svg.append(&#x27;g&#x27;);
+
+    const x &#x3D; d3
+      .scaleTime()
+      .domain(d3.extent(data, (d) &#x3D;&gt; d.date) as [Date, Date])
+      .range([m.l, w - m.r]);
+
+    const y &#x3D; d3
+      .scaleLinear()
+      .domain([0, maxY])
+      .range([h - m.b, m.t]);
+
+    g.append(&#x27;g&#x27;)
+      .attr(&#x27;transform&#x27;, &#x60;translate(${m.l},0)&#x60;)
+      .call(d3.axisLeft(y).ticks(5));
+
+    // Texto explicativo
+    svg
+      .append(&#x27;text&#x27;)
+      .attr(&#x27;x&#x27;, w / 2)
+      .attr(&#x27;y&#x27;, h - 5)
+      .attr(&#x27;text-anchor&#x27;, &#x27;middle&#x27;)
+      .style(&#x27;font-size&#x27;, &#x27;10px&#x27;)
+      .style(&#x27;fill&#x27;, &#x27;#555&#x27;)
+      .text(&#x27;Cada punto representa los nuevos clientes añadidos ese día&#x27;);
+
+    const line &#x3D; d3
+      .line&lt;{ date: Date; value: number }&gt;()
+      .x((d) &#x3D;&gt; x(d.date))
+      .y((d) &#x3D;&gt; y(d.value))
+      .curve(d3.curveMonotoneX);
+
+    g.append(&#x27;path&#x27;)
+      .datum(data)
+      .attr(&#x27;fill&#x27;, &#x27;none&#x27;)
+      .attr(&#x27;stroke&#x27;, &#x27;#3056d3&#x27;)
+      .attr(&#x27;stroke-width&#x27;, 2)
+      .attr(&#x27;d&#x27;, line);
+
+    // Tooltip
+    const tooltip &#x3D; d3
+      .select(&#x27;body&#x27;)
+      .append(&#x27;div&#x27;)
+      .style(&#x27;position&#x27;, &#x27;absolute&#x27;)
+      .style(&#x27;background&#x27;, &#x27;#fff&#x27;)
+      .style(&#x27;border&#x27;, &#x27;1px solid #ccc&#x27;)
+      .style(&#x27;padding&#x27;, &#x27;6px&#x27;)
+      .style(&#x27;border-radius&#x27;, &#x27;4px&#x27;)
+      .style(&#x27;font-size&#x27;, &#x27;10px&#x27;)
+      .style(&#x27;pointer-events&#x27;, &#x27;none&#x27;)
+      .style(&#x27;opacity&#x27;, 0);
+
+    g.selectAll(&#x27;circle&#x27;)
+      .data(data)
+      .enter()
+      .append(&#x27;circle&#x27;)
+      .attr(&#x27;cx&#x27;, (d) &#x3D;&gt; x(d.date))
+      .attr(&#x27;cy&#x27;, (d) &#x3D;&gt; y(d.value))
+      .attr(&#x27;r&#x27;, 3)
+      .attr(&#x27;fill&#x27;, &#x27;#1e3aa8&#x27;)
+      .on(&#x27;mouseover&#x27;, function (event, d) {
+        tooltip
+          .style(&#x27;opacity&#x27;, 1)
+          .html(
+            &#x60;&lt;strong&gt;${d3.timeFormat(&#x27;%d %b&#x27;)(d.date)}&lt;/strong&gt;&lt;br/&gt;Clientes añadidos: ${d.value}&#x60;,
+          )
+          .style(&#x27;left&#x27;, event.pageX + 10 + &#x27;px&#x27;)
+          .style(&#x27;top&#x27;, event.pageY - 28 + &#x27;px&#x27;);
+      })
+      .on(&#x27;mouseout&#x27;, () &#x3D;&gt; tooltip.style(&#x27;opacity&#x27;, 0));
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;max-w-4xl mx-auto px-4&quot;&gt;
+  &lt;!-- Encabezado --&gt;
+  &lt;h3
+    class&#x3D;&quot;text-lg font-semibold mb-6 text-gray-800 dark:text-white text-center&quot;
+  &gt;
+    Crecimiento de nuevos clientes cada día
+  &lt;/h3&gt;
+
+  &lt;!-- Contenedor del gráfico con proporción --&gt;
+  &lt;div class&#x3D;&quot;w-full aspect-[5/3] relative&quot; style&#x3D;&quot;padding-bottom: 10%&quot;&gt;
+    &lt;div #line class&#x3D;&quot;absolute top-0 left-0 w-full h-full&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./crecimiento-clientes-char.component.css</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss"></code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="max-w-4xl mx-auto px-4">  <!-- Encabezado -->  <h3    class="text-lg font-semibold mb-6 text-gray-800 dark:text-white text-center"  >    Crecimiento de nuevos clientes cada día  </h3>  <!-- Contenedor del gráfico con proporción -->  <div class="w-full aspect-[5/3] relative" style="padding-bottom: 10%">    <div #line class="absolute top-0 left-0 w-full h-full"></div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ClientesFormComponent', 'selector': 'app-clientes-form'},{'name': 'ClientesListComponent', 'selector': 'app-clientes-list'},{'name': 'ComprasFormComponent', 'selector': 'app-compras-form'},{'name': 'ComprasListComponent', 'selector': 'app-compras-list'},{'name': 'CrecimientoClientesCharComponent', 'selector': 'app-crecimiento-clientes-char'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'GraficoBurbujasCharComponent', 'selector': 'app-grafico-burbujas-char'},{'name': 'InteraccionesFormComponent', 'selector': 'app-interacciones-form'},{'name': 'InteraccionesListComponent', 'selector': 'app-interacciones-list'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MetricsTableComponent', 'selector': 'app-metrics-table'},{'name': 'ProductosFormComponent', 'selector': 'app-productos-form'},{'name': 'ProductosListComponent', 'selector': 'app-productos-list'},{'name': 'ProveedorFormComponent', 'selector': 'app-proveedor-form'},{'name': 'ProveedorListComponent', 'selector': 'app-proveedor-list'},{'name': 'ShellComponent', 'selector': 'app-shell'},{'name': 'StockDisponibleCharComponent', 'selector': 'app-stock-disponible-char'},{'name': 'VentasFormComponent', 'selector': 'app-ventas-form'},{'name': 'VentasListComponent', 'selector': 'app-ventas-list'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'CrecimientoClientesCharComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'CrecimientoClientesCharComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

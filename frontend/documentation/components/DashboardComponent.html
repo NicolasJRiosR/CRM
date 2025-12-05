@@ -1,0 +1,1586 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>front documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">front documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  DashboardComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/features/dashboard/dashboard.component.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-dashboard</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="../components/MetricsTableComponent.html" target="_self" >MetricsTableComponent</a></code>
+                                <code><a href="../components/CrecimientoClientesCharComponent.html" target="_self" >CrecimientoClientesCharComponent</a></code>
+                                <code><a href="../components/StockDisponibleCharComponent.html" target="_self" >StockDisponibleCharComponent</a></code>
+                                <code><a href="../components/GraficoBurbujasCharComponent.html" target="_self" >GraficoBurbujasCharComponent</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./dashboard.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#bubbleData" >bubbleData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#clientesCache" >clientesCache</a>
+                            </li>
+                            <li>
+                                <a href="#clientesSerie" >clientesSerie</a>
+                            </li>
+                            <li>
+                                <a href="#counts" >counts</a>
+                            </li>
+                            <li>
+                                <a href="#interaccionesData" >interaccionesData</a>
+                            </li>
+                            <li>
+                                <a href="#metricOrder" >metricOrder</a>
+                            </li>
+                            <li>
+                                <a href="#metricValues" >metricValues</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#proveedoresCache" >proveedoresCache</a>
+                            </li>
+                            <li>
+                                <a href="#stockData" >stockData</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#buildNewClientsDailySeries" >buildNewClientsDailySeries</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#daysRange" >daysRange</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#loadMetrics" >loadMetrics</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#toDay" >toDay</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#metrics" >metrics</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: HttpClient, metricsSvc: <a href="../injectables/MetricsService.html" target="_self">MetricsService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="78" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:78</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                    <code>HttpClient</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>metricsSvc</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/MetricsService.html" target="_self" >MetricsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildNewClientsDailySeries"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>buildNewClientsDailySeries</b></span>
+                        <a href="#buildNewClientsDailySeries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>buildNewClientsDailySeries(clientes: any[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="416"
+                                    class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:416</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>clientes</td>
+                                            <td>
+                                                        <code>any[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>literal type[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="daysRange"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>daysRange</b></span>
+                        <a href="#daysRange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>daysRange(start: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>, end: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank">Date</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="439"
+                                    class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:439</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>start</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>end</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" >Date</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Date[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadMetrics"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>loadMetrics</b></span>
+                        <a href="#loadMetrics"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>loadMetrics()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="101"
+                                    class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:101</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toDay"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>toDay</b></span>
+                        <a href="#toDay"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>toDay(date: Date | string)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="454"
+                                    class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:454</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>date</td>
+                                            <td>
+                                                        <code>Date | string</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="bubbleData"></a>
+                    <span class="name">
+                        <span ><b>bubbleData</b></span>
+                        <a href="#bubbleData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>literal type[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clientesCache"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>clientesCache</b></span>
+                        <a href="#clientesCache"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Record&lt;string | any&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="clientesSerie"></a>
+                    <span class="name">
+                        <span ><b>clientesSerie</b></span>
+                        <a href="#clientesSerie"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>literal type[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="72" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:72</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="counts"></a>
+                    <span class="name">
+                        <span ><b>counts</b></span>
+                        <a href="#counts"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{ disponible: 0, agotado: 0 }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="interaccionesData"></a>
+                    <span class="name">
+                        <span ><b>interaccionesData</b></span>
+                        <a href="#interaccionesData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>any[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:74</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="metricOrder"></a>
+                    <span class="name">
+                        <span ><b>metricOrder</b></span>
+                        <a href="#metricOrder"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>literal type[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+    { key: &#x27;clientesTotales&#x27;, name: &#x27;Clientes totales&#x27; },
+    { key: &#x27;clientesNuevosMes&#x27;, name: &#x27;Clientes nuevos este mes&#x27; },
+    { key: &#x27;clienteActivoMes&#x27;, name: &#x27;Clientes activos este mes&#x27; },
+    { key: &#x27;clienteMasVentas&#x27;, name: &#x27;Cliente con más ventas&#x27; },
+    { key: &#x27;productosCatalogo&#x27;, name: &#x27;Productos en catálogo&#x27; },
+    { key: &#x27;stockCriticoAlerta&#x27;, name: &#x27;Stock crítico alerta&#x27; },
+    { key: &#x27;sinstock&#x27;, name: &#x27;Sin stock&#x27; },
+    { key: &#x27;ventasTotales&#x27;, name: &#x27;Ventas totales&#x27; },
+    { key: &#x27;productosVendidos&#x27;, name: &#x27;Productos Vendidos&#x27; },
+    { key: &#x27;productoMasVendido&#x27;, name: &#x27;Producto más vendido&#x27; },
+    { key: &#x27;ingresosTotales&#x27;, name: &#x27;Ingresos totales&#x27; },
+    { key: &#x27;interaccionesTotales&#x27;, name: &#x27;Interacciones totales&#x27; },
+    { key: &#x27;tipoInteraccionMasComun&#x27;, name: &#x27;Tipo de interacción más común&#x27; },
+    { key: &#x27;ProveedorMasCompras&#x27;, name: &#x27;Proveedor con mas compras&#x27; },
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="metricValues"></a>
+                    <span class="name">
+                        <span ><b>metricValues</b></span>
+                        <a href="#metricValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/typealiases.html#MetricKey" target="_self" >Partial&lt;Record&lt;MetricKey, any&gt;&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:69</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="proveedoresCache"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>proveedoresCache</b></span>
+                        <a href="#proveedoresCache"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Record&lt;string | literal type&gt;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="78" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:78</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="stockData"></a>
+                    <span class="name">
+                        <span ><b>stockData</b></span>
+                        <a href="#stockData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>literal type[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:73</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="metrics"></a>
+                        <span class="name"><b>metrics</b><a href="#metrics"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>metrics()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="93" class="link-to-prism">src/app/features/dashboard/dashboard.component.ts:93</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { forkJoin } from &#x27;rxjs&#x27;;
+import { MetricsService } from &#x27;../../shared/services/metrics.service&#x27;;
+
+//importo los componentes graficos que forman parte del dashboard
+import { StockDisponibleCharComponent } from &#x27;./components/stock-disponible-char/stock-disponible-char.component&#x27;;
+import { GraficoBurbujasCharComponent } from &#x27;./components/grafico-burbujas-char/grafico-burbujas-char.component&#x27;;
+import { MetricsTableComponent } from &#x27;./components/metrics-table/metrics-table.component&#x27;;
+import { CrecimientoClientesCharComponent } from &#x27;./components/crecimiento-clientes-char/crecimiento-clientes-char.component&#x27;;
+
+//definicion de las claves de metricas que se van a usar en el dashboard
+type MetricKey &#x3D;
+  | &#x27;clientesTotales&#x27;
+  | &#x27;clientesNuevosMes&#x27;
+  | &#x27;clienteActivoMes&#x27;
+  | &#x27;clienteMasVentas&#x27;
+  | &#x27;productosCatalogo&#x27;
+  | &#x27;stockCriticoAlerta&#x27;
+  | &#x27;ventasTotales&#x27;
+  | &#x27;ingresosTotales&#x27;
+  | &#x27;productoMasVendido&#x27;
+  | &#x27;interaccionesTotales&#x27;
+  | &#x27;sinstock&#x27;
+  | &#x27;tipoInteraccionMasComun&#x27;
+  | &#x27;productosVendidos&#x27;
+  | &#x27;ProveedorMasCompras&#x27;;
+
+@Component({
+  standalone: true,
+  selector: &#x27;app-dashboard&#x27;,
+  imports: [
+    MetricsTableComponent,
+    CrecimientoClientesCharComponent,
+    StockDisponibleCharComponent,
+    GraficoBurbujasCharComponent,
+  ],
+  templateUrl: &#x27;./dashboard.component.html&#x27;,
+})
+export class DashboardComponent {
+  counts &#x3D; { disponible: 0, agotado: 0 };
+
+  bubbleData: {
+    nombre: string;
+    precio: number;
+    vendidos: number;
+    stock: number;
+  }[] &#x3D; [];
+
+  //Lista de metricas que se muestan en la tabla del dashboard
+  metricOrder: { key: MetricKey; name: string }[] &#x3D; [
+    { key: &#x27;clientesTotales&#x27;, name: &#x27;Clientes totales&#x27; },
+    { key: &#x27;clientesNuevosMes&#x27;, name: &#x27;Clientes nuevos este mes&#x27; },
+    { key: &#x27;clienteActivoMes&#x27;, name: &#x27;Clientes activos este mes&#x27; },
+    { key: &#x27;clienteMasVentas&#x27;, name: &#x27;Cliente con más ventas&#x27; },
+    { key: &#x27;productosCatalogo&#x27;, name: &#x27;Productos en catálogo&#x27; },
+    { key: &#x27;stockCriticoAlerta&#x27;, name: &#x27;Stock crítico alerta&#x27; },
+    { key: &#x27;sinstock&#x27;, name: &#x27;Sin stock&#x27; },
+    { key: &#x27;ventasTotales&#x27;, name: &#x27;Ventas totales&#x27; },
+    { key: &#x27;productosVendidos&#x27;, name: &#x27;Productos Vendidos&#x27; },
+    { key: &#x27;productoMasVendido&#x27;, name: &#x27;Producto más vendido&#x27; },
+    { key: &#x27;ingresosTotales&#x27;, name: &#x27;Ingresos totales&#x27; },
+    { key: &#x27;interaccionesTotales&#x27;, name: &#x27;Interacciones totales&#x27; },
+    { key: &#x27;tipoInteraccionMasComun&#x27;, name: &#x27;Tipo de interacción más común&#x27; },
+    { key: &#x27;ProveedorMasCompras&#x27;, name: &#x27;Proveedor con mas compras&#x27; },
+  ];
+
+  //valores calculados de cada metrica
+  metricValues: Partial&lt;Record&lt;MetricKey, any&gt;&gt; &#x3D; {};
+
+  //series de datos para los graficos
+  clientesSerie: { date: Date; value: number }[] &#x3D; [];
+  stockData: { nombre: string; stock: number }[] &#x3D; [];
+  interaccionesData: any[] &#x3D; [];
+
+  //cache de clientes y proveedores para búsquedas rápidas
+  private clientesCache: Record&lt;string, any&gt; &#x3D; {};
+  private proveedoresCache: Record&lt;string, { nombre: string }&gt; &#x3D; {};
+
+  constructor(
+    private http: HttpClient,
+    private metricsSvc: MetricsService,
+  ) {
+    this.metricsSvc.registerRefresh(() &#x3D;&gt; {
+      //función de refresco de métricas
+      console.log(&#x27;[Dashboard] Recibido refresh desde MetricsService&#x27;);
+      this.loadMetrics();
+    });
+    this.loadMetrics();
+  }
+
+  //getter que devuelve la lista de metricas con sus valores
+  get metrics() {
+    return this.metricOrder.map((m) &#x3D;&gt; ({
+      name: m.name,
+      value: this.metricValues[m.key] ?? &#x27;—&#x27;,
+    }));
+  }
+
+  //FUNCION PRINCIPAL PARA CARGAR TODAS LAS METRICAS DESDE LA API
+  private loadMetrics() {
+    //-------BLOQUE CLIENTES---------
+    this.http.get&lt;any[]&gt;(&#x27;http://localhost:9080/api/clientes&#x27;).subscribe({
+      next: (clientes) &#x3D;&gt; {
+        //Métrica de clientes totales en nuestro sistema
+        this.metricValues[&#x27;clientesTotales&#x27;] &#x3D; clientes.length;
+
+        const hoy &#x3D; new Date();
+        hoy.setHours(12, 0, 0, 0);
+        const mesActual &#x3D; &#x60;${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, &#x27;0&#x27;)}&#x60;;
+
+        //Metrica de clientes nuevos este mes
+        this.metricValues[&#x27;clientesNuevosMes&#x27;] &#x3D; clientes.filter((c) &#x3D;&gt; {
+          if (!c.fechaRegistro) return false;
+          const d &#x3D; new Date(c.fechaRegistro);
+          d.setHours(12, 0, 0, 0);
+          const mesRegistro &#x3D; &#x60;${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, &#x27;0&#x27;)}&#x60;;
+          return mesRegistro &#x3D;&#x3D;&#x3D; mesActual;
+        }).length;
+
+        //para el grafico de clientes nuevos por dia
+        this.clientesSerie &#x3D; this.buildNewClientsDailySeries(clientes);
+
+        //cache de clientes, lo guardamos para poder identificar clientes en otras metricas
+        this.clientesCache &#x3D; clientes.reduce(
+          (acc, c) &#x3D;&gt; {
+            acc[String(c.id ?? c.clienteId)] &#x3D; c;
+            return acc;
+          },
+          {} as Record&lt;string, any&gt;,
+        );
+      },
+      error: (err) &#x3D;&gt; console.error(&#x27;Error clientes:&#x27;, err),
+    });
+
+    //-------BLOQUE PRODUCTOS + VENTAS------------
+    forkJoin({
+      //hacemos dos peticiones, productos y ventas
+      productos: this.http.get&lt;any[]&gt;(&#x27;http://localhost:9080/api/productos&#x27;),
+      ventas: this.http.get&lt;any[]&gt;(&#x27;http://localhost:9080/api/ventas&#x27;),
+    }).subscribe({
+      next: ({ productos, ventas }) &#x3D;&gt; {
+        //cache de productos, que se guarda cada producto por su id para poder consultarlo luego
+        const productosCache &#x3D; productos.reduce(
+          (acc, p) &#x3D;&gt; {
+            acc[String(p.id ?? p.productoId)] &#x3D; p;
+            return acc;
+          },
+          {} as Record&lt;string, any&gt;,
+        );
+
+        //para acumular estadisticas por cliente, las ventas que han hecho y el gasto que han tenido, se uso luego para calcular la metrica de clientes con ams ventas
+        const statsPorCliente: Record&lt;
+          string,
+          { ventas: number; gasto: number }
+        &gt; &#x3D; {};
+
+        ventas.forEach((v) &#x3D;&gt; {
+          const idCliente &#x3D; String(v.clienteId ?? &#x27;&#x27;);
+          if (!idCliente) return;
+          if (!statsPorCliente[idCliente]) {
+            statsPorCliente[idCliente] &#x3D; { ventas: 0, gasto: 0 };
+          }
+          statsPorCliente[idCliente].ventas +&#x3D; 1;
+          statsPorCliente[idCliente].gasto +&#x3D; v.cantidad * v.precioUnitario;
+        });
+
+        //se ordenan los clientes segun el numero de ventas y gastos en caso de empate, se utiliza para la metrica de cliente con mas ventas también
+        const ordenadosClientes &#x3D; Object.entries(statsPorCliente).sort(
+          (a, b) &#x3D;&gt; {
+            if (b[1].ventas !&#x3D;&#x3D; a[1].ventas) {
+              return b[1].ventas - a[1].ventas;
+            }
+            return b[1].gasto - a[1].gasto;
+          },
+        );
+
+        //Metrica de cliente con mas ventas
+        //Se guarda el cliente con mayor numero de ventas y si hay un empate se desempada con el gasto
+        let clienteMasVentas: string;
+        if (ordenadosClientes.length &#x3D;&#x3D;&#x3D; 0) {
+          clienteMasVentas &#x3D; &#x27;N/A&#x27;;
+        } else {
+          const top &#x3D; ordenadosClientes[0][1];
+          const second &#x3D; ordenadosClientes[1]?.[1];
+          if (
+            second &amp;&amp;
+            top.ventas &#x3D;&#x3D;&#x3D; second.ventas &amp;&amp;
+            top.gasto &#x3D;&#x3D;&#x3D; second.gasto
+          ) {
+            clienteMasVentas &#x3D; &#x27;No procede&#x27;;
+          } else {
+            const topClienteId &#x3D; ordenadosClientes[0][0];
+            clienteMasVentas &#x3D;
+              this.clientesCache[topClienteId]?.nombre ?? topClienteId ?? &#x27;N/A&#x27;;
+          }
+        }
+
+        this.metricValues[&#x27;clienteMasVentas&#x27;] &#x3D; clienteMasVentas;
+
+        //metrica de el numero total de productos registrados en el catologo
+        this.metricValues[&#x27;productosCatalogo&#x27;] &#x3D; productos.length;
+
+        //Metrica de productos sin stock
+        this.metricValues[&#x27;sinstock&#x27;] &#x3D; productos.filter(
+          (p) &#x3D;&gt; (p.stock ?? 0) &#x3D;&#x3D;&#x3D; 0,
+        ).length;
+
+        //Metrica de Stock critico alerta, es decir productos en bajo stock (1 y 9 unidades)
+        this.metricValues[&#x27;stockCriticoAlerta&#x27;] &#x3D; productos.filter((p) &#x3D;&gt; {
+          const s &#x3D; p.stock ?? 0;
+          return s &gt;&#x3D; 1 &amp;&amp; s &lt;&#x3D; 9;
+        }).length;
+
+        //Datos para el grafico de stock disponible
+        this.counts &#x3D; { disponible: 0, agotado: 0 };
+        productos.forEach((p) &#x3D;&gt; {
+          if (p.stock &gt; 0) this.counts[&#x27;disponible&#x27;]++;
+          else this.counts[&#x27;agotado&#x27;]++;
+        });
+
+        this.stockData &#x3D; productos.map((p) &#x3D;&gt; ({
+          nombre: p.nombre,
+          stock: p.stock ?? 0,
+        }));
+
+        //Metrica ventas totales registradas
+        const ventasTotales &#x3D; ventas.length;
+        this.metricValues[&#x27;ventasTotales&#x27;] &#x3D; ventasTotales;
+
+        //Metrica de la cantidad total de unidades que hemos vendido
+        const productosVendidos &#x3D; ventas.reduce(
+          (sum, v) &#x3D;&gt; sum + (v.cantidad ?? 1),
+          0,
+        );
+        this.metricValues[&#x27;productosVendidos&#x27;] &#x3D; productosVendidos;
+
+        //Metrica de ingresos totales
+        const ingresosTotales &#x3D; ventas.reduce(
+          (sum, v) &#x3D;&gt; sum + v.cantidad * v.precioUnitario,
+          0,
+        );
+        this.metricValues[&#x27;ingresosTotales&#x27;] &#x3D; ingresosTotales;
+
+        //Datos para el grafico de burbujas (productos mas vendidos, en el caso del grafico el top 10)
+        const conteoPorProducto: Record&lt;string, number&gt; &#x3D; {};
+        ventas.forEach((v) &#x3D;&gt; {
+          const idProd &#x3D; String(v.productoId ?? &#x27;&#x27;);
+          if (!idProd) return;
+          const unidades &#x3D; v.cantidad ?? 1;
+          conteoPorProducto[idProd] &#x3D;
+            (conteoPorProducto[idProd] || 0) + unidades;
+        });
+
+        this.bubbleData &#x3D; Object.entries(conteoPorProducto)
+          .map(([id, vendidos]) &#x3D;&gt; {
+            const prod &#x3D; productosCache[id];
+            return {
+              nombre: prod?.nombre ?? id,
+              precio: prod?.precioUnitario ?? prod?.precio ?? 0,
+              vendidos,
+              stock: prod?.stock ?? 0,
+            };
+          })
+          .sort((a, b) &#x3D;&gt; b.vendidos - a.vendidos)
+          .slice(0, 10);
+
+        this.bubbleData &#x3D; [...this.bubbleData];
+
+        //Metrica de producto mas vendido
+        const ordenados &#x3D; Object.entries(conteoPorProducto).sort(
+          (a, b) &#x3D;&gt; b[1] - a[1],
+        );
+        let productoMasVendido: string;
+
+        if (ordenados.length &#x3D;&#x3D;&#x3D; 0) {
+          productoMasVendido &#x3D; &#x27;N/A&#x27;;
+        } else if (
+          ordenados.length &gt; 1 &amp;&amp;
+          ordenados[0][1] &#x3D;&#x3D;&#x3D; ordenados[1][1]
+        ) {
+          productoMasVendido &#x3D; &#x27;No procede&#x27;;
+        } else {
+          const topId &#x3D; ordenados[0][0];
+          productoMasVendido &#x3D; productosCache[topId]?.nombre ?? topId ?? &#x27;N/A&#x27;;
+        }
+        this.metricValues[&#x27;productoMasVendido&#x27;] &#x3D; productoMasVendido;
+
+        //Metrica de clientes activos este mes, es decir clientes que hayan hecho alguna compra este mes
+        const hoy &#x3D; new Date();
+        hoy.setHours(12, 0, 0, 0);
+        const mesActual &#x3D; &#x60;${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, &#x27;0&#x27;)}&#x60;;
+
+        const clientesActivos &#x3D; new Set&lt;string&gt;();
+
+        ventas.forEach((v) &#x3D;&gt; {
+          const fRaw &#x3D; v.fecha ?? v.fechaVenta;
+          if (!fRaw) return;
+
+          const f &#x3D; new Date(fRaw);
+          f.setHours(12, 0, 0, 0);
+          const mesVenta &#x3D; &#x60;${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, &#x27;0&#x27;)}&#x60;;
+
+          const id &#x3D; v.clienteId;
+          if (id &#x3D;&#x3D;&#x3D; null || id &#x3D;&#x3D;&#x3D; undefined) return;
+
+          const idKey &#x3D; String(id);
+
+          if (mesVenta &#x3D;&#x3D;&#x3D; mesActual) {
+            clientesActivos.add(idKey);
+          }
+        });
+
+        this.metricValues[&#x27;clienteActivoMes&#x27;] &#x3D; clientesActivos.size;
+      },
+      error: (err) &#x3D;&gt; console.error(&#x27;Error productos/ventas:&#x27;, err),
+    });
+
+    //-----------BLOQUE INTERACCIONES----------
+    this.http.get&lt;any[]&gt;(&#x27;http://localhost:9080/api/interacciones&#x27;).subscribe({
+      next: (interacciones) &#x3D;&gt; {
+        //Metrica de interacciones totales
+        const total &#x3D; interacciones.length;
+
+        //Conteo de tipos de interacciones
+        const conteoTipos: Record&lt;string, number&gt; &#x3D; {};
+        interacciones.forEach((i) &#x3D;&gt; {
+          const tipo &#x3D; String(i.tipo ?? &#x27;desconocido&#x27;);
+          conteoTipos[tipo] &#x3D; (conteoTipos[tipo] || 0) + 1;
+        });
+
+        //Ordenamos los tipos de interacciones por frecuencia
+        const ordenados &#x3D; Object.entries(conteoTipos).sort(
+          (a, b) &#x3D;&gt; b[1] - a[1],
+        );
+        const maxCount &#x3D; ordenados[0]?.[1] ?? 0;
+
+        //seleccionamos los tipos que empatan en el maximo
+        const topTipos &#x3D; ordenados
+          .filter(([_, count]) &#x3D;&gt; count &#x3D;&#x3D;&#x3D; maxCount)
+          .map(([tipo]) &#x3D;&gt; tipo);
+
+        //Metrica tipo de interaccion mas comun, si hay un empate se enseñan los dos
+        let tipoMasComun: string;
+        if (total &#x3D;&#x3D;&#x3D; 0) {
+          tipoMasComun &#x3D; &#x27;—&#x27;;
+        } else if (topTipos.length &#x3D;&#x3D;&#x3D; 1) {
+          tipoMasComun &#x3D; topTipos[0];
+        } else if (topTipos.length &#x3D;&#x3D;&#x3D; 2) {
+          tipoMasComun &#x3D; &#x60;${topTipos[0]}/${topTipos[1]}&#x60;;
+        } else {
+          tipoMasComun &#x3D; &#x27;Sin predominio&#x27;;
+        }
+
+        this.metricValues[&#x27;interaccionesTotales&#x27;] &#x3D; total;
+        this.metricValues[&#x27;tipoInteraccionMasComun&#x27;] &#x3D; tipoMasComun;
+      },
+      error: (err) &#x3D;&gt; console.error(&#x27;Error interacciones:&#x27;, err),
+    });
+
+    //---------BLOQUE DE PROVEEDORES---------
+    //Este bloque lo tenemos para guardar los nombres de los proveedores y luego no tener problemas para sacarlos en la metrica
+    this.http.get&lt;any[]&gt;(&#x27;http://localhost:9080/api/proveedores&#x27;).subscribe({
+      next: (proveedores) &#x3D;&gt; {
+        proveedores.forEach((p) &#x3D;&gt; {
+          const id &#x3D; String(p.id ?? p.proveedorId ?? &#x27;&#x27;);
+          if (!id) return;
+          this.proveedoresCache[id] &#x3D; { nombre: p.nombre ?? &#x27;Sin nombre&#x27; };
+        });
+      },
+      error: (err) &#x3D;&gt; console.error(&#x27;Error proveedores:&#x27;, err),
+    });
+
+    //---------BLOQUE DE COMPRAS---------
+    this.http.get&lt;any[]&gt;(&#x27;http://localhost:9080/api/compras&#x27;).subscribe({
+      next: (compras) &#x3D;&gt; {
+        // Conteo de compras por proveedor → cuántas veces se ha comprado a cada proveedor
+        const conteoPorProveedor: Record&lt;string, number&gt; &#x3D; {};
+        compras.forEach((c) &#x3D;&gt; {
+          const idProv &#x3D; String(c.proveedorId ?? c.idProveedor ?? &#x27;&#x27;);
+          if (!idProv) return;
+          conteoPorProveedor[idProv] &#x3D; (conteoPorProveedor[idProv] || 0) + 1;
+        });
+
+        // Ordenamos los proveedores por número de compras (descendente)
+        const ordenados &#x3D; Object.entries(conteoPorProveedor).sort(
+          (a, b) &#x3D;&gt; b[1] - a[1],
+        );
+
+        // Métrica: proveedor con más compras → si hay empate se pone &quot;No procede&quot;
+        let proveedorMasCompras: string;
+        if (ordenados.length &#x3D;&#x3D;&#x3D; 0) {
+          proveedorMasCompras &#x3D; &#x27;N/A&#x27;;
+        } else if (
+          ordenados.length &gt; 1 &amp;&amp;
+          ordenados[0][1] &#x3D;&#x3D;&#x3D; ordenados[1][1]
+        ) {
+          proveedorMasCompras &#x3D; &#x27;No procede&#x27;; // si hay empate
+        } else {
+          const topId &#x3D; ordenados[0][0];
+          // Aquí usamos el nombre del proveedor si está en el cache, si no mostramos el ID
+          proveedorMasCompras &#x3D;
+            this.proveedoresCache[topId]?.nombre ?? topId ?? &#x27;N/A&#x27;;
+        }
+
+        this.metricValues[&#x27;ProveedorMasCompras&#x27;] &#x3D; proveedorMasCompras;
+      },
+      error: (err) &#x3D;&gt; console.error(&#x27;Error compras:&#x27;, err),
+    });
+  }
+
+  //FUNCIONES AUXILIARES PARA CONSTRUIR SERIES TEMPORALES DE CLIENTES
+
+  /*Esta función cuenta cuántos clientes nuevos hay cada día en el último mes
+    y devuelve una lista con la fecha y el numero de clientes de ese día*/
+  private buildNewClientsDailySeries(
+    clientes: any[],
+  ): { date: Date; value: number }[] {
+    const today &#x3D; new Date();
+    const start &#x3D; new Date();
+    start.setMonth(today.getMonth() - 1);
+
+    const counts: Record&lt;string, number&gt; &#x3D; {};
+    clientes.forEach((c) &#x3D;&gt; {
+      if (!c.fechaRegistro) return;
+      const key &#x3D; this.toDay(c.fechaRegistro); //pasamos la fecha a formato YYYY-MM-DD con la funcion de toDay
+      counts[key] &#x3D; (counts[key] || 0) + 1; //sumamos 1 cliente en ese dia
+    });
+
+    //creamos la lista de dias desde ahce un mes hasta hoy, tambien pongo cuantos clientes hubo cada dia y 0 si no hubo ninguno
+    return this.daysRange(start, today).map((d) &#x3D;&gt; {
+      const key &#x3D; this.toDay(d);
+      return { date: d, value: counts[key] || 0 };
+    });
+  }
+
+  /*Esta función crea un array con todos los días entre dos fechas
+    Ejemplo: si le das 1 de noviembre y 3 de noviembre, devuelve [1 nov, 2 nov, 3 nov]*/
+  private daysRange(start: Date, end: Date): Date[] {
+    const days: Date[] &#x3D; [];
+    const d &#x3D; new Date(start);
+    d.setHours(0, 0, 0, 0);
+    const last &#x3D; new Date(end);
+    last.setHours(0, 0, 0, 0);
+
+    while (d &lt;&#x3D; last) {
+      days.push(new Date(d)); //añadimos dia
+      d.setDate(d.getDate() + 1); //pasamos al siguiente dia
+    }
+    return days;
+  }
+
+  // Esta funcion convierte una fecha a texto con formato YYYY-MM-DD
+  private toDay(date: Date | string): string {
+    const d &#x3D; new Date(date);
+    d.setHours(0, 0, 0, 0); //quitamos horas y minutos
+    return d.toISOString().slice(0, 10); //cogemos solo la parte de la fecha
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;!-- Resumen de métricas --&gt;
+&lt;div
+  class&#x3D;&quot;bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-[1000px] w-full mx-auto&quot;
+&gt;
+  &lt;h3
+    class&#x3D;&quot;text-lg font-semibold mb-6 text-gray-800 dark:text-white text-center&quot;
+  &gt;
+    Resumen de métricas
+  &lt;/h3&gt;
+
+  &lt;div&gt;
+    &lt;app-metrics-table [metrics]&#x3D;&quot;metrics&quot;&gt;&lt;/app-metrics-table&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Gráficos en dos columnas --&gt;
+&lt;div
+  class&#x3D;&quot;max-w-[1000px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mt-6&quot;
+&gt;
+  &lt;!-- Crecimiento de clientes (VERSIÓN ANTERIOR – altura fija) --&gt;
+  &lt;div class&#x3D;&quot;bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px] w-full&quot;&gt;
+    &lt;app-crecimiento-clientes-char
+      [serie]&#x3D;&quot;clientesSerie&quot;
+    &gt;&lt;/app-crecimiento-clientes-char&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px] w-full&quot;&gt;
+    &lt;app-stock-disponible-char [counts]&#x3D;&quot;counts&quot;&gt;&lt;/app-stock-disponible-char&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!--Burbujas --&gt;
+&lt;div class&#x3D;&quot;p-4&quot;&gt;
+  &lt;div class&#x3D;&quot;overflow-x-auto&quot;&gt;
+    &lt;div
+      class&#x3D;&quot;bg-white w-[1000px] min-w-[1000px] mx-auto dark:bg-gray-800 mt-6 rounded-lg shadow p-4 h-[500px] sm:h-[400px] md:h-[500px] lg:h-[500px]&quot;
+    &gt;
+      &lt;app-grafico-burbujas-char
+        [products]&#x3D;&quot;bubbleData&quot;
+      &gt;&lt;/app-grafico-burbujas-char&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!-- Resumen de métricas --><div  class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-[1000px] w-full mx-auto">  <h3    class="text-lg font-semibold mb-6 text-gray-800 dark:text-white text-center"  >    Resumen de métricas  </h3>  <div>    <app-metrics-table [metrics]="metrics"></app-metrics-table>  </div></div><!-- Gráficos en dos columnas --><div  class="max-w-[1000px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">  <!-- Crecimiento de clientes (VERSIÓN ANTERIOR – altura fija) -->  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px] w-full">    <app-crecimiento-clientes-char      [serie]="clientesSerie"    ></app-crecimiento-clientes-char>  </div>  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px] w-full">    <app-stock-disponible-char [counts]="counts"></app-stock-disponible-char>  </div></div><!--Burbujas --><div class="p-4">  <div class="overflow-x-auto">    <div      class="bg-white w-[1000px] min-w-[1000px] mx-auto dark:bg-gray-800 mt-6 rounded-lg shadow p-4 h-[500px] sm:h-[400px] md:h-[500px] lg:h-[500px]"    >      <app-grafico-burbujas-char        [products]="bubbleData"      ></app-grafico-burbujas-char>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ClientesFormComponent', 'selector': 'app-clientes-form'},{'name': 'ClientesListComponent', 'selector': 'app-clientes-list'},{'name': 'ComprasFormComponent', 'selector': 'app-compras-form'},{'name': 'ComprasListComponent', 'selector': 'app-compras-list'},{'name': 'CrecimientoClientesCharComponent', 'selector': 'app-crecimiento-clientes-char'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'GraficoBurbujasCharComponent', 'selector': 'app-grafico-burbujas-char'},{'name': 'InteraccionesFormComponent', 'selector': 'app-interacciones-form'},{'name': 'InteraccionesListComponent', 'selector': 'app-interacciones-list'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MetricsTableComponent', 'selector': 'app-metrics-table'},{'name': 'ProductosFormComponent', 'selector': 'app-productos-form'},{'name': 'ProductosListComponent', 'selector': 'app-productos-list'},{'name': 'ProveedorFormComponent', 'selector': 'app-proveedor-form'},{'name': 'ProveedorListComponent', 'selector': 'app-proveedor-list'},{'name': 'ShellComponent', 'selector': 'app-shell'},{'name': 'StockDisponibleCharComponent', 'selector': 'app-stock-disponible-char'},{'name': 'VentasFormComponent', 'selector': 'app-ventas-form'},{'name': 'VentasListComponent', 'selector': 'app-ventas-list'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'DashboardComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'DashboardComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,1058 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>front documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">front documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  ComprasFormComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/features/compras/compras-form/compras-form.component.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-compras-form</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>ReactiveFormsModule</code>
+                            <code>CommonModule</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./compras-form.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#compraId" >compraId</a>
+                            </li>
+                            <li>
+                                <a href="#comprasSvc" >comprasSvc</a>
+                            </li>
+                            <li>
+                                <a href="#current" >current</a>
+                            </li>
+                            <li>
+                                <a href="#fb" >fb</a>
+                            </li>
+                            <li>
+                                <a href="#form" >form</a>
+                            </li>
+                            <li>
+                                <a href="#productosSig" >productosSig</a>
+                            </li>
+                            <li>
+                                <a href="#productosSvc" >productosSvc</a>
+                            </li>
+                            <li>
+                                <a href="#proveedoresSig" >proveedoresSig</a>
+                            </li>
+                            <li>
+                                <a href="#proveedoresSvc" >proveedoresSvc</a>
+                            </li>
+                            <li>
+                                <a href="#route" >route</a>
+                            </li>
+                            <li>
+                                <a href="#router" >router</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cancel" >cancel</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#save" >save</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cancel"></a>
+                    <span class="name">
+                        <span ><b>cancel</b></span>
+                        <a href="#cancel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cancel()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="98"
+                                    class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:98</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="43"
+                                    class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="save"></a>
+                    <span class="name">
+                        <span ><b>save</b></span>
+                        <a href="#save"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>save()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="66"
+                                    class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:66</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="compraId"></a>
+                    <span class="name">
+                        <span ><b>compraId</b></span>
+                        <a href="#compraId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>Number(this.route.snapshot.paramMap.get(&#x27;id&#x27;))</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="comprasSvc"></a>
+                    <span class="name">
+                        <span ><b>comprasSvc</b></span>
+                        <a href="#comprasSvc"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(ComprasService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="current"></a>
+                    <span class="name">
+                        <span ><b>current</b></span>
+                        <a href="#current"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Compra.html" target="_self" >Compra | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fb"></a>
+                    <span class="name">
+                        <span ><b>fb</b></span>
+                        <a href="#fb"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(FormBuilder)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="form"></a>
+                    <span class="name">
+                        <span ><b>form</b></span>
+                        <a href="#form"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this.fb.nonNullable.group({
+    productoId: [0, Validators.required],
+    cantidad: [1, [Validators.required, Validators.min(1)]],
+    precioUnitario: [0, [Validators.required, Validators.min(0.01)]],
+    proveedorId: [0, Validators.required],
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="productosSig"></a>
+                    <span class="name">
+                        <span ><b>productosSig</b></span>
+                        <a href="#productosSig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this.productosSvc.productosSig</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="productosSvc"></a>
+                    <span class="name">
+                        <span ><b>productosSvc</b></span>
+                        <a href="#productosSvc"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(ProductosService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="proveedoresSig"></a>
+                    <span class="name">
+                        <span ><b>proveedoresSig</b></span>
+                        <a href="#proveedoresSig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this.proveedoresSvc.proveedoresSig</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="proveedoresSvc"></a>
+                    <span class="name">
+                        <span ><b>proveedoresSvc</b></span>
+                        <a href="#proveedoresSvc"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(ProveedoresService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="route"></a>
+                    <span class="name">
+                        <span ><b>route</b></span>
+                        <a href="#route"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(ActivatedRoute)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="router"></a>
+                    <span class="name">
+                        <span ><b>router</b></span>
+                        <a href="#router"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(Router)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/features/compras/compras-form/compras-form.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, inject } from &#x27;@angular/core&#x27;;
+import { FormBuilder, ReactiveFormsModule, Validators } from &#x27;@angular/forms&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { Router, ActivatedRoute } from &#x27;@angular/router&#x27;;
+import { ComprasService, Compra } from &#x27;../compras.service&#x27;;
+import { ProductosService } from &#x27;../../productos/productos.service&#x27;;
+import { ProveedoresService } from &#x27;../../proveedor/ProveedoresService&#x27;;
+
+type CompraFormValue &#x3D; {
+  productoId: number;
+  cantidad: number;
+  precioUnitario: number;
+  proveedorId?: number;
+};
+
+@Component({
+  standalone: true,
+  selector: &#x27;app-compras-form&#x27;,
+  imports: [ReactiveFormsModule, CommonModule],
+  templateUrl: &#x27;./compras-form.component.html&#x27;,
+})
+export class ComprasFormComponent {
+  fb &#x3D; inject(FormBuilder);
+  route &#x3D; inject(ActivatedRoute);
+  router &#x3D; inject(Router);
+  comprasSvc &#x3D; inject(ComprasService);
+  productosSvc &#x3D; inject(ProductosService);
+  proveedoresSvc &#x3D; inject(ProveedoresService);
+
+  compraId &#x3D; Number(this.route.snapshot.paramMap.get(&#x27;id&#x27;));
+  current: Compra | null &#x3D; null;
+
+  productosSig &#x3D; this.productosSvc.productosSig;
+  proveedoresSig &#x3D; this.proveedoresSvc.proveedoresSig;
+
+  form &#x3D; this.fb.nonNullable.group({
+    productoId: [0, Validators.required],
+    cantidad: [1, [Validators.required, Validators.min(1)]],
+    precioUnitario: [0, [Validators.required, Validators.min(0.01)]],
+    proveedorId: [0, Validators.required],
+  });
+
+  ngOnInit() {
+    this.productosSvc.list();
+    this.proveedoresSvc.list();
+
+    if (this.compraId &gt; 0) {
+      // Buscamos la compra en comprasSig() para prellenar
+      const compra &#x3D; this.comprasSvc
+        .comprasSig()
+        .find((c) &#x3D;&gt; c.id &#x3D;&#x3D;&#x3D; this.compraId);
+      if (compra) {
+        this.current &#x3D; compra;
+        this.form.patchValue({
+          productoId: compra.productoId,
+          cantidad: compra.cantidad,
+          precioUnitario: compra.precioUnitario,
+          proveedorId: compra.proveedorId ?? 0,
+        });
+      } else {
+        this.router.navigate([&#x27;/compras&#x27;]); // Si no existe, volver a lista
+      }
+    }
+  }
+
+  save() {
+    if (this.form.invalid) return;
+
+    const value: CompraFormValue &#x3D; this.form.getRawValue();
+
+    if (this.current) {
+      const payload: Compra &#x3D; {
+        ...this.current,
+        productoId: value.productoId,
+        cantidad: value.cantidad,
+        precioUnitario: value.precioUnitario,
+        proveedorId: value.proveedorId,
+        fecha: new Date().toISOString(),
+      };
+      this.comprasSvc.update(payload).subscribe(() &#x3D;&gt; {
+        this.comprasSvc.list();
+        this.router.navigate([&#x27;/compras&#x27;]);
+      });
+    } else {
+      const newCompra: Omit&lt;Compra, &#x27;id&#x27; | &#x27;fecha&#x27;&gt; &#x3D; {
+        productoId: value.productoId,
+        cantidad: value.cantidad,
+        precioUnitario: value.precioUnitario,
+        proveedorId: value.proveedorId,
+      };
+      this.comprasSvc.create(newCompra).subscribe(() &#x3D;&gt; {
+        this.comprasSvc.list();
+        this.router.navigate([&#x27;/compras&#x27;]);
+      });
+    }
+  }
+
+  cancel() {
+    this.router.navigate([&#x27;/compras&#x27;]);
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div
+  class&#x3D;&quot;bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto&quot;
+&gt;
+  &lt;h2 class&#x3D;&quot;text-2xl font-bold mb-6 text-center&quot;&gt;
+    {{ current ? &quot;Editar compra&quot; : &quot;Nueva compra&quot; }}
+  &lt;/h2&gt;
+
+  &lt;form [formGroup]&#x3D;&quot;form&quot; (ngSubmit)&#x3D;&quot;save()&quot; class&#x3D;&quot;space-y-4&quot;&gt;
+    &lt;!-- Producto --&gt;
+    &lt;div&gt;
+      &lt;label class&#x3D;&quot;block text-sm font-medium mb-1&quot;&gt;Producto&lt;/label&gt;
+      &lt;select
+        formControlName&#x3D;&quot;productoId&quot;
+        class&#x3D;&quot;w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300&quot;
+      &gt;
+        &lt;option value&#x3D;&quot;&quot; disabled&gt;Seleccione un producto&lt;/option&gt;
+        &lt;option *ngFor&#x3D;&quot;let p of productosSig()&quot; [value]&#x3D;&quot;p.id&quot;&gt;
+          {{ p.nombre }} (stock: {{ p.stock }})
+        &lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Cantidad --&gt;
+    &lt;div&gt;
+      &lt;label class&#x3D;&quot;block text-sm font-medium mb-1&quot;&gt;Cantidad&lt;/label&gt;
+      &lt;input
+        type&#x3D;&quot;number&quot;
+        formControlName&#x3D;&quot;cantidad&quot;
+        placeholder&#x3D;&quot;Ej. 5&quot;
+        class&#x3D;&quot;w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300&quot;
+      /&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Precio unitario --&gt;
+    &lt;div&gt;
+      &lt;label class&#x3D;&quot;block text-sm font-medium mb-1&quot;&gt;Precio unitario&lt;/label&gt;
+      &lt;input
+        type&#x3D;&quot;number&quot;
+        formControlName&#x3D;&quot;precioUnitario&quot;
+        placeholder&#x3D;&quot;Ej. 100&quot;
+        class&#x3D;&quot;w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300&quot;
+      /&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Proveedor --&gt;
+    &lt;div&gt;
+      &lt;label class&#x3D;&quot;block text-sm font-medium mb-1&quot;&gt;Proveedor&lt;/label&gt;
+      &lt;select
+        formControlName&#x3D;&quot;proveedorId&quot;
+        class&#x3D;&quot;w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300&quot;
+      &gt;
+        &lt;option value&#x3D;&quot;&quot; disabled&gt;Seleccione un proveedor&lt;/option&gt;
+        &lt;option *ngFor&#x3D;&quot;let prov of proveedoresSig()&quot; [value]&#x3D;&quot;prov.id&quot;&gt;
+          {{ prov.nombre }}
+        &lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;flex gap-3 justify-center pt-4&quot;&gt;
+      &lt;button
+        type&#x3D;&quot;submit&quot;
+        [disabled]&#x3D;&quot;form.invalid&quot;
+        class&#x3D;&quot;bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800&quot;
+      &gt;
+        Guardar
+      &lt;/button&gt;
+      &lt;button
+        type&#x3D;&quot;button&quot;
+        (click)&#x3D;&quot;cancel()&quot;
+        class&#x3D;&quot;bg-gray-200 px-4 py-2 rounded hover:bg-gray-300&quot;
+      &gt;
+        Cancelar
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div  class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto">  <h2 class="text-2xl font-bold mb-6 text-center">    {{ current ? "Editar compra" : "Nueva compra" }}  </h2>  <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">    <!-- Producto -->    <div>      <label class="block text-sm font-medium mb-1">Producto</label>      <select        formControlName="productoId"        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"      >        <option value="" disabled>Seleccione un producto</option>        <option *ngFor="let p of productosSig()" [value]="p.id">          {{ p.nombre }} (stock: {{ p.stock }})        </option>      </select>    </div>    <!-- Cantidad -->    <div>      <label class="block text-sm font-medium mb-1">Cantidad</label>      <input        type="number"        formControlName="cantidad"        placeholder="Ej. 5"        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"      />    </div>    <!-- Precio unitario -->    <div>      <label class="block text-sm font-medium mb-1">Precio unitario</label>      <input        type="number"        formControlName="precioUnitario"        placeholder="Ej. 100"        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"      />    </div>    <!-- Proveedor -->    <div>      <label class="block text-sm font-medium mb-1">Proveedor</label>      <select        formControlName="proveedorId"        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"      >        <option value="" disabled>Seleccione un proveedor</option>        <option *ngFor="let prov of proveedoresSig()" [value]="prov.id">          {{ prov.nombre }}        </option>      </select>    </div>    <div class="flex gap-3 justify-center pt-4">      <button        type="submit"        [disabled]="form.invalid"        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800"      >        Guardar      </button>      <button        type="button"        (click)="cancel()"        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"      >        Cancelar      </button>    </div>  </form></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ClientesFormComponent', 'selector': 'app-clientes-form'},{'name': 'ClientesListComponent', 'selector': 'app-clientes-list'},{'name': 'ComprasFormComponent', 'selector': 'app-compras-form'},{'name': 'ComprasListComponent', 'selector': 'app-compras-list'},{'name': 'CrecimientoClientesCharComponent', 'selector': 'app-crecimiento-clientes-char'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'GraficoBurbujasCharComponent', 'selector': 'app-grafico-burbujas-char'},{'name': 'InteraccionesFormComponent', 'selector': 'app-interacciones-form'},{'name': 'InteraccionesListComponent', 'selector': 'app-interacciones-list'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MetricsTableComponent', 'selector': 'app-metrics-table'},{'name': 'ProductosFormComponent', 'selector': 'app-productos-form'},{'name': 'ProductosListComponent', 'selector': 'app-productos-list'},{'name': 'ProveedorFormComponent', 'selector': 'app-proveedor-form'},{'name': 'ProveedorListComponent', 'selector': 'app-proveedor-list'},{'name': 'ShellComponent', 'selector': 'app-shell'},{'name': 'StockDisponibleCharComponent', 'selector': 'app-stock-disponible-char'},{'name': 'VentasFormComponent', 'selector': 'app-ventas-form'},{'name': 'VentasListComponent', 'selector': 'app-ventas-list'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ComprasFormComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ComprasFormComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

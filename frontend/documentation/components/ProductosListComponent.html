@@ -1,0 +1,941 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>front documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">front documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  ProductosListComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/features/productos/productos-list/productos-list.component.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-productos-list</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>CommonModule</code>
+                            <code>FormsModule</code>
+                            <code>ReactiveFormsModule</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./productos-list.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#appliedFiltersSig" >appliedFiltersSig</a>
+                            </li>
+                            <li>
+                                <a href="#fb" >fb</a>
+                            </li>
+                            <li>
+                                <a href="#filtroForm" >filtroForm</a>
+                            </li>
+                            <li>
+                                <a href="#productosFiltrados" >productosFiltrados</a>
+                            </li>
+                            <li>
+                                <a href="#router" >router</a>
+                            </li>
+                            <li>
+                                <a href="#svc" >svc</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#limpiar" >limpiar</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="limpiar"></a>
+                    <span class="name">
+                        <span ><b>limpiar</b></span>
+                        <a href="#limpiar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>limpiar()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="82"
+                                    class="link-to-prism">src/app/features/productos/productos-list/productos-list.component.ts:82</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="67"
+                                    class="link-to-prism">src/app/features/productos/productos-list/productos-list.component.ts:67</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appliedFiltersSig"></a>
+                    <span class="name">
+                        <span ><b>appliedFiltersSig</b></span>
+                        <a href="#appliedFiltersSig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>signal&lt;{
+    id: string;
+    nombre: string;
+    proveedor: string;
+    stockCategoria: string;
+  }&gt;({
+    id: &#x27;&#x27;,
+    nombre: &#x27;&#x27;,
+    proveedor: &#x27;&#x27;,
+    stockCategoria: &#x27;&#x27;,
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/features/productos/productos-list/productos-list.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fb"></a>
+                    <span class="name">
+                        <span ><b>fb</b></span>
+                        <a href="#fb"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(FormBuilder)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/features/productos/productos-list/productos-list.component.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filtroForm"></a>
+                    <span class="name">
+                        <span ><b>filtroForm</b></span>
+                        <a href="#filtroForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this.fb.group({
+    id: [&#x27;&#x27;],
+    nombre: [&#x27;&#x27;],
+    proveedor: [&#x27;&#x27;],
+    stockCategoria: [&#x27;&#x27;],
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/app/features/productos/productos-list/productos-list.component.ts:18</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="productosFiltrados"></a>
+                    <span class="name">
+                        <span ><b>productosFiltrados</b></span>
+                        <a href="#productosFiltrados"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>computed(() &#x3D;&gt; {
+    const filters &#x3D; this.appliedFiltersSig();
+    const idFiltro &#x3D; filters.id.trim().toLowerCase();
+    const nombreFiltro &#x3D; filters.nombre.trim().toLowerCase();
+    const proveedorFiltro &#x3D; filters.proveedor.trim().toLowerCase();
+    const stockCategoria &#x3D; filters.stockCategoria.trim();
+
+    return this.svc.productosSig().filter((p: Producto) &#x3D;&gt; {
+      const matchId &#x3D;
+        !idFiltro || p.id.toString().toLowerCase().includes(idFiltro);
+      const matchNombre &#x3D;
+        !nombreFiltro || p.nombre.toLowerCase().includes(nombreFiltro);
+      const matchProveedor &#x3D;
+        !proveedorFiltro ||
+        (p.proveedorNombre ?? &#x27;&#x27;).toLowerCase().includes(proveedorFiltro);
+
+      let matchStock &#x3D; true;
+      if (stockCategoria) {
+        if (stockCategoria &#x3D;&#x3D;&#x3D; &#x27;SIN_STOCK&#x27;) matchStock &#x3D; p.stock &lt;&#x3D; 0;
+        else if (stockCategoria &#x3D;&#x3D;&#x3D; &#x27;CRITICO&#x27;)
+          matchStock &#x3D; p.stock &gt;&#x3D; 1 &amp;&amp; p.stock &lt;&#x3D; 10;
+        else if (stockCategoria &#x3D;&#x3D;&#x3D; &#x27;BAJO&#x27;)
+          matchStock &#x3D; p.stock &gt; 10 &amp;&amp; p.stock &lt;&#x3D; 50;
+        else if (stockCategoria &#x3D;&#x3D;&#x3D; &#x27;DISPONIBLE&#x27;) matchStock &#x3D; p.stock &gt; 50;
+      }
+
+      return matchId &amp;&amp; matchNombre &amp;&amp; matchProveedor &amp;&amp; matchStock;
+    });
+  })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/features/productos/productos-list/productos-list.component.ts:37</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="router"></a>
+                    <span class="name">
+                        <span ><b>router</b></span>
+                        <a href="#router"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(Router)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/features/productos/productos-list/productos-list.component.ts:15</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="svc"></a>
+                    <span class="name">
+                        <span ><b>svc</b></span>
+                        <a href="#svc"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(ProductosService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/features/productos/productos-list/productos-list.component.ts:14</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, inject, signal, computed } from &#x27;@angular/core&#x27;;
+import { ProductosService, Producto } from &#x27;../productos.service&#x27;;
+import { Router } from &#x27;@angular/router&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormBuilder, ReactiveFormsModule, FormsModule } from &#x27;@angular/forms&#x27;;
+
+@Component({
+  standalone: true,
+  selector: &#x27;app-productos-list&#x27;,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  templateUrl: &#x27;./productos-list.component.html&#x27;,
+})
+export class ProductosListComponent {
+  svc &#x3D; inject(ProductosService);
+  router &#x3D; inject(Router);
+  fb &#x3D; inject(FormBuilder);
+
+  filtroForm &#x3D; this.fb.group({
+    id: [&#x27;&#x27;],
+    nombre: [&#x27;&#x27;],
+    proveedor: [&#x27;&#x27;],
+    stockCategoria: [&#x27;&#x27;],
+  });
+
+  appliedFiltersSig &#x3D; signal&lt;{
+    id: string;
+    nombre: string;
+    proveedor: string;
+    stockCategoria: string;
+  }&gt;({
+    id: &#x27;&#x27;,
+    nombre: &#x27;&#x27;,
+    proveedor: &#x27;&#x27;,
+    stockCategoria: &#x27;&#x27;,
+  });
+
+  productosFiltrados &#x3D; computed(() &#x3D;&gt; {
+    const filters &#x3D; this.appliedFiltersSig();
+    const idFiltro &#x3D; filters.id.trim().toLowerCase();
+    const nombreFiltro &#x3D; filters.nombre.trim().toLowerCase();
+    const proveedorFiltro &#x3D; filters.proveedor.trim().toLowerCase();
+    const stockCategoria &#x3D; filters.stockCategoria.trim();
+
+    return this.svc.productosSig().filter((p: Producto) &#x3D;&gt; {
+      const matchId &#x3D;
+        !idFiltro || p.id.toString().toLowerCase().includes(idFiltro);
+      const matchNombre &#x3D;
+        !nombreFiltro || p.nombre.toLowerCase().includes(nombreFiltro);
+      const matchProveedor &#x3D;
+        !proveedorFiltro ||
+        (p.proveedorNombre ?? &#x27;&#x27;).toLowerCase().includes(proveedorFiltro);
+
+      let matchStock &#x3D; true;
+      if (stockCategoria) {
+        if (stockCategoria &#x3D;&#x3D;&#x3D; &#x27;SIN_STOCK&#x27;) matchStock &#x3D; p.stock &lt;&#x3D; 0;
+        else if (stockCategoria &#x3D;&#x3D;&#x3D; &#x27;CRITICO&#x27;)
+          matchStock &#x3D; p.stock &gt;&#x3D; 1 &amp;&amp; p.stock &lt;&#x3D; 10;
+        else if (stockCategoria &#x3D;&#x3D;&#x3D; &#x27;BAJO&#x27;)
+          matchStock &#x3D; p.stock &gt; 10 &amp;&amp; p.stock &lt;&#x3D; 50;
+        else if (stockCategoria &#x3D;&#x3D;&#x3D; &#x27;DISPONIBLE&#x27;) matchStock &#x3D; p.stock &gt; 50;
+      }
+
+      return matchId &amp;&amp; matchNombre &amp;&amp; matchProveedor &amp;&amp; matchStock;
+    });
+  });
+
+  ngOnInit() {
+    this.svc.list();
+
+    this.filtroForm.valueChanges.subscribe(
+      ({ id, nombre, proveedor, stockCategoria }) &#x3D;&gt; {
+        this.appliedFiltersSig.set({
+          id: (id ?? &#x27;&#x27;).toString(),
+          nombre: nombre ?? &#x27;&#x27;,
+          proveedor: proveedor ?? &#x27;&#x27;,
+          stockCategoria: stockCategoria ?? &#x27;&#x27;,
+        });
+      },
+    );
+  }
+
+  limpiar() {
+    this.filtroForm.reset({
+      id: &#x27;&#x27;,
+      nombre: &#x27;&#x27;,
+      proveedor: &#x27;&#x27;,
+      stockCategoria: &#x27;&#x27;,
+    });
+    this.appliedFiltersSig.set({
+      id: &#x27;&#x27;,
+      nombre: &#x27;&#x27;,
+      proveedor: &#x27;&#x27;,
+      stockCategoria: &#x27;&#x27;,
+    });
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto&quot;&gt;
+  &lt;div class&#x3D;&quot;flex justify-between items-center mb-4&quot;&gt;
+    &lt;h2 class&#x3D;&quot;text-2xl font-bold&quot;&gt;Productos&lt;/h2&gt;
+  &lt;/div&gt;
+
+  &lt;div
+    [formGroup]&#x3D;&quot;filtroForm&quot;
+    class&#x3D;&quot;grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl&quot;
+  &gt;
+    &lt;input
+      type&#x3D;&quot;text&quot;
+      placeholder&#x3D;&quot;Filtrar por ID...&quot;
+      formControlName&#x3D;&quot;id&quot;
+      class&#x3D;&quot;border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full&quot;
+    /&gt;
+    &lt;input
+      type&#x3D;&quot;text&quot;
+      placeholder&#x3D;&quot;Filtrar por nombre...&quot;
+      formControlName&#x3D;&quot;nombre&quot;
+      class&#x3D;&quot;border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full&quot;
+    /&gt;
+    &lt;input
+      type&#x3D;&quot;text&quot;
+      placeholder&#x3D;&quot;Filtrar por proveedor...&quot;
+      formControlName&#x3D;&quot;proveedor&quot;
+      class&#x3D;&quot;border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full&quot;
+    /&gt;
+    &lt;select
+      formControlName&#x3D;&quot;stockCategoria&quot;
+      class&#x3D;&quot;border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full&quot;
+    &gt;
+      &lt;option value&#x3D;&quot;&quot;&gt;Todas las categorías&lt;/option&gt;
+      &lt;option value&#x3D;&quot;SIN_STOCK&quot;&gt;Sin Stock&lt;/option&gt;
+      &lt;option value&#x3D;&quot;CRITICO&quot;&gt;Crítico&lt;/option&gt;
+      &lt;option value&#x3D;&quot;BAJO&quot;&gt;Bajo&lt;/option&gt;
+      &lt;option value&#x3D;&quot;DISPONIBLE&quot;&gt;Disponible&lt;/option&gt;
+    &lt;/select&gt;
+
+    &lt;div
+      class&#x3D;&quot;md:col-span-4 flex flex-col sm:flex-row justify-between items-center mt-2 gap-3&quot;
+    &gt;
+      &lt;div class&#x3D;&quot;flex flex-col sm:flex-row gap-3 w-full sm:w-auto&quot;&gt;
+        &lt;button
+          type&#x3D;&quot;button&quot;
+          (click)&#x3D;&quot;limpiar()&quot;
+          class&#x3D;&quot;bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 w-full sm:w-auto&quot;
+        &gt;
+          Limpiar
+        &lt;/button&gt;
+      &lt;/div&gt;
+      &lt;button
+        class&#x3D;&quot;bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 w-full sm:w-auto&quot;
+        (click)&#x3D;&quot;router.navigate([&#x27;/productos/nuevo&#x27;])&quot;
+      &gt;
+        + Nuevo producto
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;overflow-x-auto&quot;&gt;
+    &lt;table
+      class&#x3D;&quot;w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center min-w-[600px]&quot;
+    &gt;
+      &lt;thead
+        class&#x3D;&quot;bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200&quot;
+      &gt;
+        &lt;tr&gt;
+          &lt;th class&#x3D;&quot;p-3 font-semibold&quot;&gt;ID&lt;/th&gt;
+          &lt;th class&#x3D;&quot;p-3 font-semibold&quot;&gt;Nombre&lt;/th&gt;
+          &lt;th class&#x3D;&quot;p-3 font-semibold&quot;&gt;Stock&lt;/th&gt;
+          &lt;th class&#x3D;&quot;p-3 font-semibold&quot;&gt;Precio&lt;/th&gt;
+          &lt;th class&#x3D;&quot;p-3 font-semibold&quot;&gt;Proveedor&lt;/th&gt;
+          &lt;th class&#x3D;&quot;p-3 font-semibold&quot;&gt;Acciones&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        @if (productosFiltrados().length &#x3D;&#x3D;&#x3D; 0) {
+          &lt;tr class&#x3D;&quot;border-t dark:border-gray-700&quot;&gt;
+            &lt;td colspan&#x3D;&quot;6&quot; class&#x3D;&quot;p-4 text-center text-gray-500&quot;&gt;
+              No se encontraron productos con esos filtros
+            &lt;/td&gt;
+          &lt;/tr&gt;
+        } @else {
+          @for (p of productosFiltrados(); track p.id) {
+            &lt;tr
+              class&#x3D;&quot;border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition&quot;
+            &gt;
+              &lt;td class&#x3D;&quot;p-3&quot;&gt;{{ p.id }}&lt;/td&gt;
+              &lt;td class&#x3D;&quot;p-3&quot;&gt;{{ p.nombre }}&lt;/td&gt;
+              &lt;td class&#x3D;&quot;p-3&quot;&gt;
+                &lt;span
+                  [ngStyle]&#x3D;&quot;{
+                    &#x27;background-color&#x27;:
+                      p.stock &gt; 50
+                        ? &#x27;#26a69a&#x27;
+                        : p.stock &gt; 10
+                          ? &#x27;#ffca28&#x27;
+                          : p.stock &gt;&#x3D; 1
+                            ? &#x27;#b71c1c&#x27;
+                            : &#x27;#7f0000&#x27;,
+                    color: &#x27;#fff&#x27;,
+                    padding: &#x27;0.25rem 0.5rem&#x27;,
+                    &#x27;border-radius&#x27;: &#x27;0.25rem&#x27;,
+                    display: &#x27;inline-block&#x27;,
+                  }&quot;
+                &gt;
+                  {{
+                    p.stock &gt; 50
+                      ? &quot;Disponible&quot;
+                      : p.stock &gt; 10
+                        ? &quot;Bajo&quot;
+                        : p.stock &gt;&#x3D; 1
+                          ? &quot;Crítico&quot;
+                          : &quot;Sin Stock&quot;
+                  }}
+                  ({{ p.stock }})
+                &lt;/span&gt;
+              &lt;/td&gt;
+              &lt;td class&#x3D;&quot;p-3&quot;&gt;{{ p.precio }}&lt;/td&gt;
+              &lt;td class&#x3D;&quot;p-3&quot;&gt;{{ p.proveedorNombre }}&lt;/td&gt;
+              &lt;td class&#x3D;&quot;p-3&quot;&gt;
+                &lt;button
+                  class&#x3D;&quot;bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800&quot;
+                  (click)&#x3D;&quot;router.navigate([&#x27;/productos&#x27;, p.id])&quot;
+                &gt;
+                  Editar
+                &lt;/button&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          }
+        }
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">  <div class="flex justify-between items-center mb-4">    <h2 class="text-2xl font-bold">Productos</h2>  </div>  <div    [formGroup]="filtroForm"    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"  >    <input      type="text"      placeholder="Filtrar por ID..."      formControlName="id"      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"    />    <input      type="text"      placeholder="Filtrar por nombre..."      formControlName="nombre"      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"    />    <input      type="text"      placeholder="Filtrar por proveedor..."      formControlName="proveedor"      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"    />    <select      formControlName="stockCategoria"      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"    >      <option value="">Todas las categorías</option>      <option value="SIN_STOCK">Sin Stock</option>      <option value="CRITICO">Crítico</option>      <option value="BAJO">Bajo</option>      <option value="DISPONIBLE">Disponible</option>    </select>    <div      class="md:col-span-4 flex flex-col sm:flex-row justify-between items-center mt-2 gap-3"    >      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">        <button          type="button"          (click)="limpiar()"          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 w-full sm:w-auto"        >          Limpiar        </button>      </div>      <button        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 w-full sm:w-auto"        (click)="router.navigate([\'/productos/nuevo\'])"      >        + Nuevo producto      </button>    </div>  </div>  <div class="overflow-x-auto">    <table      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center min-w-[600px]"    >      <thead        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"      >        <tr>          <th class="p-3 font-semibold">ID</th>          <th class="p-3 font-semibold">Nombre</th>          <th class="p-3 font-semibold">Stock</th>          <th class="p-3 font-semibold">Precio</th>          <th class="p-3 font-semibold">Proveedor</th>          <th class="p-3 font-semibold">Acciones</th>        </tr>      </thead>      <tbody>        @if (productosFiltrados().length === 0) {          <tr class="border-t dark:border-gray-700">            <td colspan="6" class="p-4 text-center text-gray-500">              No se encontraron productos con esos filtros            </td>          </tr>        } @else {          @for (p of productosFiltrados(); track p.id) {            <tr              class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"            >              <td class="p-3">{{ p.id }}</td>              <td class="p-3">{{ p.nombre }}</td>              <td class="p-3">                <span                  [ngStyle]="{                    \'background-color\':                      p.stock > 50                        ? \'#26a69a\'                        : p.stock > 10                          ? \'#ffca28\'                          : p.stock >= 1                            ? \'#b71c1c\'                            : \'#7f0000\',                    color: \'#fff\',                    padding: \'0.25rem 0.5rem\',                    \'border-radius\': \'0.25rem\',                    display: \'inline-block\',                  }"                >                  {{                    p.stock > 50                      ? "Disponible"                      : p.stock > 10                        ? "Bajo"                        : p.stock >= 1                          ? "Crítico"                          : "Sin Stock"                  }}                  ({{ p.stock }})                </span>              </td>              <td class="p-3">{{ p.precio }}</td>              <td class="p-3">{{ p.proveedorNombre }}</td>              <td class="p-3">                <button                  class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800"                  (click)="router.navigate([\'/productos\', p.id])"                >                  Editar                </button>              </td>            </tr>          }        }      </tbody>    </table>  </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ClientesFormComponent', 'selector': 'app-clientes-form'},{'name': 'ClientesListComponent', 'selector': 'app-clientes-list'},{'name': 'ComprasFormComponent', 'selector': 'app-compras-form'},{'name': 'ComprasListComponent', 'selector': 'app-compras-list'},{'name': 'CrecimientoClientesCharComponent', 'selector': 'app-crecimiento-clientes-char'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'GraficoBurbujasCharComponent', 'selector': 'app-grafico-burbujas-char'},{'name': 'InteraccionesFormComponent', 'selector': 'app-interacciones-form'},{'name': 'InteraccionesListComponent', 'selector': 'app-interacciones-list'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'LogoutComponent', 'selector': 'app-logout'},{'name': 'MetricsTableComponent', 'selector': 'app-metrics-table'},{'name': 'ProductosFormComponent', 'selector': 'app-productos-form'},{'name': 'ProductosListComponent', 'selector': 'app-productos-list'},{'name': 'ProveedorFormComponent', 'selector': 'app-proveedor-form'},{'name': 'ProveedorListComponent', 'selector': 'app-proveedor-list'},{'name': 'ShellComponent', 'selector': 'app-shell'},{'name': 'StockDisponibleCharComponent', 'selector': 'app-stock-disponible-char'},{'name': 'VentasFormComponent', 'selector': 'app-ventas-form'},{'name': 'VentasListComponent', 'selector': 'app-ventas-list'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ProductosListComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ProductosListComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

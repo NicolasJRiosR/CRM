@@ -29,10 +29,14 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       }))
       .sort((a, b) => a.date.getTime() - b.date.getTime());
 
+    const el = this.line.nativeElement;
+
     if (this.isMobile()) {
-      this.renderMobileChart(this.line.nativeElement, data);
+      this.renderMobileChart(el, data);
+    } else if (this.isIPadMini()) {
+      this.renderIPadMiniChart(el, data);
     } else {
-      this.renderDesktopChart(this.line.nativeElement, data);
+      this.renderDesktopChart(el, data);
     }
   }
 
@@ -199,6 +203,94 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .style('padding', '6px')
       .style('border-radius', '4px')
       .style('font-size', '10px')
+      .style('pointer-events', 'none')
+      .style('opacity', 0);
+
+    g.selectAll('circle')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('cx', (d) => x(d.date))
+      .attr('cy', (d) => y(d.value))
+      .attr('r', 3)
+      .attr('fill', '#1e3aa8')
+      .on('mouseover', function (event, d) {
+        tooltip
+          .style('opacity', 1)
+          .html(
+            `<strong>${d3.timeFormat('%d %b')(d.date)}</strong><br/>Clientes añadidos: ${d.value}`,
+          )
+          .style('left', event.pageX + 10 + 'px')
+          .style('top', event.pageY - 28 + 'px');
+      })
+      .on('mouseout', () => tooltip.style('opacity', 0));
+  }
+  private isIPadMini(): boolean {
+    const w = window.innerWidth;
+    return w >= 768 && w <= 820; // ancho típico iPad Mini vertical/horizontal
+  }
+  private renderIPadMiniChart(
+    el: HTMLElement,
+    data: { date: Date; value: number }[],
+  ) {
+    d3.select(el).selectAll('*').remove();
+
+    const w = el.offsetWidth; // ancho del contenedor
+    const h = w * 0.6; // altura proporcional
+    const fontSize = Math.max(10, w / 40); // fuente legible en iPad Mini
+    const m = { t: fontSize, r: fontSize, b: fontSize * 4, l: fontSize * 4 };
+    const maxY = Math.max(d3.max(data, (d) => d.value) ?? 0, 10);
+
+    const svg = d3.select(el).append('svg').attr('width', w).attr('height', h);
+    const g = svg.append('g');
+
+    const x = d3
+      .scaleTime()
+      .domain(d3.extent(data, (d) => d.date) as [Date, Date])
+      .range([m.l, w - m.r]);
+
+    const y = d3
+      .scaleLinear()
+      .domain([0, maxY])
+      .range([h - m.b, m.t]);
+
+    g.append('g')
+      .attr('transform', `translate(${m.l},0)`)
+      .call(d3.axisLeft(y).ticks(5));
+
+    // Texto explicativo
+    svg
+      .append('text')
+      .attr('x', w / 2)
+      .attr('y', h - m.t / 2)
+      .attr('text-anchor', 'middle')
+      .style('font-size', `${fontSize}px`)
+      .style('fill', '#555')
+      .text('Cada punto representa los nuevos clientes añadidos ese día');
+
+    const line = d3
+      .line<{ date: Date; value: number }>()
+      .x((d) => x(d.date))
+      .y((d) => y(d.value))
+      .curve(d3.curveMonotoneX);
+
+    g.append('path')
+      .datum(data)
+      .attr('fill', 'none')
+      .attr('stroke', '#3056d3')
+      .attr('stroke-width', 2)
+      .attr('d', line);
+
+    // Tooltip
+    const tooltip = d3
+      .select('body')
+      .append('div')
+      .style('position', 'absolute')
+      .style('background', '#fff')
+      .style('border', '1px solid #ccc')
+      .style('padding', '6px')
+      .style('border-radius', '4px')
+      .style('font-size', `${fontSize}px`)
       .style('pointer-events', 'none')
       .style('opacity', 0);
 
