@@ -31,7 +31,6 @@
     <div
       class="sm:col-span-2 md:col-span-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-2 sm:mt-0"
     >
-   
       <a
         href="#"
         (click)="limpiar(); $event.preventDefault()"
@@ -40,7 +39,6 @@
         Limpiar
       </a>
 
- 
       <a
         routerLink="/compras/nuevo"
         class="bg-brand-700 text-white px-4 py-2 rounded-xl hover:bg-brand-800 shadow-md active:scale-95 w-full sm:w-auto text-center"
@@ -81,19 +79,18 @@
               class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
             >
               <td class="p-3">{{ c.id }}</td>
-              <td class="p-3 min-w-[160px] truncate text-left pl-2">
+              <td class="p-3 min-w-[160px] truncate text-center">
                 {{ getNombreProductoDirecto(c.productoId) }}
               </td>
               <td class="p-3">{{ c.cantidad }}</td>
               <td class="p-3">{{ c.precioUnitario }}</td>
-              <td class="p-3 min-w-[160px] truncate text-left pl-2">
+              <td class="p-3 min-w-[160px] truncate text-center">
                 {{ getNombreProveedor(c.proveedorId) }}
               </td>
               <td class="p-3 whitespace-nowrap">
                 {{ getFechaSlash(c.fecha) }}
               </td>
               <td class="p-3">
-               
                 <a
                   [routerLink]="['/compras', c.id]"
                   class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800 inline-block whitespace-nowrap"
