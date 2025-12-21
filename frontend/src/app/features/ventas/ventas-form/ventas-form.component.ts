@@ -31,14 +31,15 @@ export class VentasFormComponent implements OnInit {
 
   clientesSig = this.clientesSvc.clientesSig;
 
+  // Formulario reactivo con validaciones específicas
   form = this.fb.nonNullable.group({
-    productoId: [0, Validators.required],
-    cantidad: [1, [Validators.required, Validators.min(1)]],
+    productoId: [0, Validators.required],                 // Producto obligatorio
+    cantidad: [1, [Validators.required, Validators.min(1)]], // Cantidad minima 1
     precioUnitario: [
-      { value: 0, disabled: true },
-      [Validators.required, Validators.min(0.01)],
+      { value: 0, disabled: true },                       // Se rellena el precio automaticamente al elegir producto
+      [Validators.required, Validators.min(0.01)],        // Debe ser mayor que 0
     ],
-    clienteId: [0, Validators.required],
+    clienteId: [0, Validators.required],                  // Cliente obligatorio
   });
 
   ngOnInit() {
@@ -62,7 +63,7 @@ export class VentasFormComponent implements OnInit {
         cantidadCtrl?.setValidators([
           Validators.required,
           Validators.min(1),
-          Validators.max(p.stock), 
+          Validators.max(p.stock), //se valida que la cantidad no supere el stock
         ]);
         cantidadCtrl?.updateValueAndValidity();
       }

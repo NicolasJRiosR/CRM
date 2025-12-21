@@ -30,6 +30,27 @@
       <button (click)="toggleIdioma()" class="idioma-btn px-3 py-1 rounded">
         {{ idiomaDestino === "es" ? "English" : "Español" }}
       </button>
+
+      <button
+        (click)="toggleDark()"
+        [disabled]="disabled"
+        class="relative w-[60px] h-[32px] rounded-full transition-colors duration-300 ease-in-out
+              bg-gray-300 dark:bg-gray-700 border border-gray-500 dark:border-white flex items-center"
+      >
+        <span
+          class="absolute left-[2px] w-[28px] h-[28px] rounded-full flex items-center justify-center
+                text-lg transition-all duration-300 ease-in-out
+                bg-white dark:bg-[#1d2022] text-black dark:text-white"
+          [ngStyle]="{ transform: isDark ? 'translateX(28px)' : 'translateX(0)' }"
+        >
+          @if (!isDark) {
+            ☾
+          } @else {
+            ☼
+          }
+        </span>
+      </button>
+
     </nav>
 
     <!-- Usuario Desktop -->
@@ -61,6 +82,27 @@
         >
           {{ idiomaDestino === "es" ? "English" : "Español" }}
         </button>
+
+        <button
+          (click)="toggleDark()"
+          [disabled]="disabled"
+          class="relative w-[60px] h-[32px] rounded-full transition-colors duration-300 ease-in-out
+                bg-gray-300 dark:bg-gray-700 border border-gray-500 dark:border-white flex items-center"
+        >
+          <span
+            class="absolute left-[2px] w-[28px] h-[28px] rounded-full flex items-center justify-center
+                  text-lg transition-all duration-300 ease-in-out
+                  bg-white dark:bg-[#1d2022] text-black dark:text-white"
+            [ngStyle]="{ transform: isDark ? 'translateX(28px)' : 'translateX(0)' }"
+          >
+            @if (!isDark) {
+              ☾
+            } @else {
+              ☼
+            }
+          </span>
+        </button>
+
       </nav>
 
       <!-- Usuario Móvil -->

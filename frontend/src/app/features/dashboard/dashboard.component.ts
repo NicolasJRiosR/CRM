@@ -45,6 +45,7 @@ export class DashboardComponent {
     precio: number;
     vendidos: number;
     stock: number;
+    proveedor: string;
   }[] = [];
 
   //Lista de metricas que se muestan en la tabla del dashboard
@@ -70,6 +71,7 @@ export class DashboardComponent {
 
   //series de datos para los graficos
   clientesSerie: { date: Date; value: number }[] = [];
+  clientesSerieCompleta: { date: string; value: number }[] = [];
   stockData: { nombre: string; stock: number }[] = [];
   interaccionesData: any[] = [];
 
@@ -117,6 +119,21 @@ export class DashboardComponent {
           const mesRegistro = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
           return mesRegistro === mesActual;
         }).length;
+
+        // Serie completa con TODOS los clientes (para filtrar por mes/año)
+        this.clientesSerieCompleta = clientes
+          .filter(c => c.fechaRegistro)
+          .map(c => {
+            const iso = String(c.fechaRegistro);
+
+            // Extraemos solo la parte de fecha sin tocar zonas horarias
+            const soloFecha = iso.slice(0, 10); // "2025-12-01"
+
+            return {
+              date: soloFecha, // SIEMPRE string YYYY-MM-DD
+              value: 1,
+            };
+          });
 
         //para el grafico de clientes nuevos por dia
         this.clientesSerie = this.buildNewClientsDailySeries(clientes);
@@ -260,6 +277,7 @@ export class DashboardComponent {
               precio: prod?.precioUnitario ?? prod?.precio ?? 0,
               vendidos,
               stock: prod?.stock ?? 0,
+              proveedor: prod?.proveedorNombre ?? prod?.proveedor ?? 'Desconocido', 
             };
           })
           .sort((a, b) => b.vendidos - a.vendidos)
