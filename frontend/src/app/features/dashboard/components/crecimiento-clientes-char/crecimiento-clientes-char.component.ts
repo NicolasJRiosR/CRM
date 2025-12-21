@@ -20,9 +20,9 @@ import * as d3 from 'd3';
 export class CrecimientoClientesCharComponent implements OnChanges {
   @Input() serie: { date: string; value: number }[] = [];
   serieFiltrada: { date: string; value: number }[] = [];
+
   @ViewChild('line', { static: true }) line!: ElementRef;
 
-  //FILTRADO DEL GRAFICO
   mesSeleccionado = new Date().getMonth() + 1;
   anoSeleccionado = new Date().getFullYear();
 
@@ -45,12 +45,10 @@ export class CrecimientoClientesCharComponent implements OnChanges {
 
   anios = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 
-  // FILTRADO INTERNO
-    filtrarDesdeComponente() {
-    // Resetear mensaje
+  // ---------------- FILTRADO ----------------
+  filtrarDesdeComponente() {
     this.mensajeInfo = null;
 
-    // Filtrar
     this.serieFiltrada = this.serie.filter((d) => {
       const [yearStr, monthStr] = d.date.split('-');
       const year = Number(yearStr);
@@ -58,29 +56,26 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       return month === this.mesSeleccionado && year === this.anoSeleccionado;
     });
 
-
-    // Limpiar gráfico SIEMPRE antes de decidir qué hacer
     d3.select(this.line.nativeElement).selectAll('*').remove();
 
-    // Si no hay datos → mensaje y salir
     if (this.serieFiltrada.length === 0) {
-      this.mensajeInfo = "No hay clientes para este periodo.";
+      this.mensajeInfo = 'No hay clientes para este periodo.';
       return;
     }
 
-    // Si hay datos → redibujar
     this.redibujar();
   }
 
- ngOnChanges() {
-  if (!this.serie?.length) return;
+  // ---------------- INICIALIZACIÓN ----------------
+  ngOnChanges() {
+    if (!this.serie?.length) return;
 
-  // Inicializar solo la primera vez
-  if (!this.serieFiltrada.length) {
-    this.serieFiltrada = [...this.serie];
-    this.redibujar();
+    // Primera carga → mostrar todo
+    if (!this.serieFiltrada.length) {
+      this.serieFiltrada = [...this.serie];
+      this.redibujar();
+    }
   }
-}
 
   @HostListener('window:resize')
   onResize() {
@@ -91,44 +86,38 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     return window.innerWidth < 768;
   }
 
-  getNombreMes(m: number): string {
-    const nombres = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
-    return nombres[m - 1] ?? '';
-  }
-  
+  // ---------------- REDIBUJAR ----------------
   private redibujar() {
-    const el = this.line.nativeElement;   // ← ESTO ES LO QUE TE FALTABA
+    const el = this.line.nativeElement;
 
-    // Limpiar antes de dibujar
     d3.select(el).selectAll('*').remove();
     d3.select(el).select('svg').remove();
 
-    // Si no hay datos, no dibujar nada
     if (!this.serieFiltrada.length) return;
 
-    // Agrupar por día (usando la fecha como string YYYY-MM-DD)
+    // Agrupar por día
     const counts: Record<string, number> = {};
     this.serieFiltrada.forEach((d) => {
       counts[d.date] = (counts[d.date] || 0) + 1;
     });
 
-    // Rellenar todos los días del mes seleccionado
+    // Rellenar todos los días del mes
     const start = new Date(this.anoSeleccionado, this.mesSeleccionado - 1, 1);
     const end = new Date(this.anoSeleccionado, this.mesSeleccionado, 0);
 
     const data: { date: Date; value: number }[] = [];
+
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      const key = d.toISOString().slice(0, 10); // YYYY-MM-DD
+      const key = d.toISOString().slice(0, 10);
+
+      // ← CONSTRUCCIÓN LOCAL SIN ZONA HORARIA
+      const [y, m, dd] = key.split('-').map(Number);
+
       data.push({
-        date: new Date(key),
+        date: new Date(y, m - 1, dd),
         value: counts[key] || 0,
       });
     }
-
-    console.log("REDIBUJAR DATA:", data);
 
     if (this.isMobile()) {
       this.renderMobileChart(el, data);
@@ -137,8 +126,7 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     }
   }
 
-
-  // ---------------- Desktop ----------------
+  // ---------------- DESKTOP ----------------
   private renderDesktopChart(
     el: HTMLElement,
     data: { date: Date; value: number }[],
@@ -151,7 +139,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     const maxY = Math.max(d3.max(data, (d) => d.value) ?? 0, 10);
 
     const svg = d3.select(el).append('svg').attr('width', w).attr('height', h);
-
     const g = svg.append('g').attr('transform', 'translate(-21, 0)');
 
     const x = d3
@@ -195,18 +182,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .attr('stroke-width', 2)
       .attr('d', line);
 
-    const tooltip = d3
-      .select('body')
-      .append('div')
-      .style('position', 'absolute')
-      .style('background', '#fff')
-      .style('border', '1px solid #ccc')
-      .style('padding', '6px')
-      .style('border-radius', '4px')
-      .style('font-size', '12px')
-      .style('pointer-events', 'none')
-      .style('opacity', 0);
-
     g.selectAll('circle')
       .data(data)
       .enter()
@@ -214,20 +189,10 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .attr('cx', (d) => x(d.date))
       .attr('cy', (d) => y(d.value))
       .attr('r', 3)
-      .attr('fill', '#1e3aa8')
-      .on('mouseover', function (event, d) {
-        tooltip
-          .style('opacity', 1)
-          .html(
-            `<strong>${d3.timeFormat('%d %b')(d.date)}</strong><br/>Clientes añadidos: ${d.value}`,
-          )
-          .style('left', event.pageX + 10 + 'px')
-          .style('top', event.pageY - 28 + 'px');
-      })
-      .on('mouseout', () => tooltip.style('opacity', 0));
+      .attr('fill', '#1e3aa8');
   }
 
-  // ---------------- Mobile ----------------
+  // ---------------- MOBILE ----------------
   private renderMobileChart(
     el: HTMLElement,
     data: { date: Date; value: number }[],
@@ -240,14 +205,12 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     const maxY = Math.max(d3.max(data, (d) => d.value) ?? 0, 10);
 
     const svg = d3.select(el).append('svg').attr('width', w).attr('height', h);
-
     const g = svg.append('g');
 
     const x = d3
       .scaleTime()
       .domain(d3.extent(data, (d) => d.date) as [Date, Date])
       .range([m.l, w - m.r]);
-    console.log("EJE X:", d3.extent(data, (d) => d.date));
 
     const y = d3
       .scaleLinear()
@@ -257,15 +220,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     g.append('g')
       .attr('transform', `translate(${m.l},0)`)
       .call(d3.axisLeft(y).ticks(5));
-
-    svg
-      .append('text')
-      .attr('x', w / 2)
-      .attr('y', h - 5)
-      .attr('text-anchor', 'middle')
-      .style('font-size', '10px')
-      .style('fill', '#555')
-      .text('Cada punto representa los nuevos clientes añadidos ese día');
 
     const line = d3
       .line<{ date: Date; value: number }>()
@@ -280,18 +234,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .attr('stroke-width', 2)
       .attr('d', line);
 
-    const tooltip = d3
-      .select('body')
-      .append('div')
-      .style('position', 'absolute')
-      .style('background', '#fff')
-      .style('border', '1px solid #ccc')
-      .style('padding', '6px')
-      .style('border-radius', '4px')
-      .style('font-size', '10px')
-      .style('pointer-events', 'none')
-      .style('opacity', 0);
-
     g.selectAll('circle')
       .data(data)
       .enter()
@@ -299,16 +241,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .attr('cx', (d) => x(d.date))
       .attr('cy', (d) => y(d.value))
       .attr('r', 3)
-      .attr('fill', '#1e3aa8')
-      .on('mouseover', function (event, d) {
-        tooltip
-          .style('opacity', 1)
-          .html(
-            `<strong>${d3.timeFormat('%d %b')(d.date)}</strong><br/>Clientes añadidos: ${d.value}`,
-          )
-          .style('left', event.pageX + 10 + 'px')
-          .style('top', event.pageY - 28 + 'px');
-      })
-      .on('mouseout', () => tooltip.style('opacity', 0));
+      .attr('fill', '#1e3aa8');
   }
 }
