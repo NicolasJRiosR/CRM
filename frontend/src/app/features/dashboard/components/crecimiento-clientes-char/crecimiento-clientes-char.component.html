@@ -1,13 +1,51 @@
 <div class="max-w-4xl mx-auto px-4">
+
   <!-- Encabezado -->
   <h3
-    class="text-lg font-semibold mb-6 text-gray-800 dark:text-white text-center"
+    class="text-lg font-semibold mb-10 text-gray-800 dark:text-white text-center"
   >
-    Crecimiento de nuevos clientes cada día
+    Crecimiento de nuevos clientes en 
+    {{ getNombreMes(mesSeleccionado) }} {{ anoSeleccionado }}
   </h3>
 
-  <!-- Contenedor del gráfico con proporción -->
-  <div class="w-full aspect-[5/3] relative" style="padding-bottom: 10%">
+  <!-- Filtros debajo del título -->
+  <div class="flex gap-4 mb-10 items-center justify-start">
+    <select class="border p-2 rounded" [(ngModel)]="mesSeleccionado">
+      @for (m of meses; track m.value) {
+        <option [value]="m.value">{{ m.label }}</option>
+      }
+    </select>
+
+    <select class="border p-2 rounded" [(ngModel)]="anoSeleccionado">
+      @for (y of anios; track y) {
+        <option [value]="y">{{ y }}</option>
+      }
+    </select>
+
+    <button
+      class="bg-blue-600 text-white px-4 py-2 rounded"
+      (click)="filtrarDesdeComponente()"
+    >
+      Filtrar
+    </button>
+  </div>
+
+  <!---MENSAJE INFORMATIVO SI NO HAY DATOS -->
+  @if (mensajeInfo) {
+    <div class="mt-4 mb-6 p-3 rounded 
+                bg-yellow-100 dark:bg-yellow-900 
+                text-yellow-800 dark:text-yellow-200 
+                border border-yellow-300 dark:border-yellow-700">
+      {{ mensajeInfo }}
+    </div>
+  }
+
+  <div
+    class="w-full aspect-[16/9] relative mt-10"
+    style="padding-bottom: 5%"
+    [style.display]="mensajeInfo ? 'none' : 'block'"
+  >
     <div #line class="absolute top-0 left-0 w-full h-full"></div>
   </div>
+
 </div>

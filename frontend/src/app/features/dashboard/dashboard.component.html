@@ -17,14 +17,12 @@
 <div
   class="max-w-[1000px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"
 >
-  <!-- Crecimiento de clientes (VERSIÓN ANTERIOR – altura fija) -->
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px] w-full">
-    <app-crecimiento-clientes-char
-      [serie]="clientesSerie"
-    ></app-crecimiento-clientes-char>
+  <!-- Crecimiento de clientes-->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[500px] w-full">
+    <app-crecimiento-clientes-char [serie]="clientesSerieCompleta"></app-crecimiento-clientes-char>
   </div>
 
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[400px] w-full">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 h-[500px] w-full">
     <app-stock-disponible-char [counts]="counts"></app-stock-disponible-char>
   </div>
 </div>

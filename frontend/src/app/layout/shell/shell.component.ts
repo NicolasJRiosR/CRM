@@ -26,7 +26,16 @@ export class ShellComponent implements OnInit, OnDestroy {
   traduciendo = false;
   private routerSub?: Subscription;
 
+  isDark = false;
+  disabled = false
+
   ngOnInit() {
+    const saved = localStorage.getItem('theme');
+    this.isDark = saved === 'dark';
+    if (this.isDark) {
+      document.documentElement.classList.add('dark');
+    }
+
     this.routerSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         if (this.idiomaDestino === 'en') {
@@ -35,6 +44,19 @@ export class ShellComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+    toggleDark() {
+      if (this.disabled) return;
+
+      this.isDark = !this.isDark;
+      document.documentElement.classList.toggle('dark', this.isDark);
+      localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
+
+      this.disabled = true;
+      setTimeout(() => {
+        this.disabled = false;
+      }, 600);
+    }
 
   ngOnDestroy() {
     this.routerSub?.unsubscribe();

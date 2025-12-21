@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   Input,
@@ -6,44 +7,136 @@ import {
   OnChanges,
   HostListener,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import * as d3 from 'd3';
 
 @Component({
   selector: 'app-crecimiento-clientes-char',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, CommonModule],
   templateUrl: './crecimiento-clientes-char.component.html',
   styleUrls: ['./crecimiento-clientes-char.component.css'],
 })
 export class CrecimientoClientesCharComponent implements OnChanges {
-  @Input() serie: { date: Date; value: number }[] = [];
+  @Input() serie: { date: string; value: number }[] = [];
+  serieFiltrada: { date: string; value: number }[] = [];
   @ViewChild('line', { static: true }) line!: ElementRef;
 
-  ngOnChanges() {
-    if (!this.serie?.length) return;
+  //FILTRADO DEL GRAFICO
+  mesSeleccionado = new Date().getMonth() + 1;
+  anoSeleccionado = new Date().getFullYear();
 
-    const data = this.serie
-      .map((d) => ({
-        date: d.date instanceof Date ? d.date : new Date(d.date),
-        value: Number(d.value) || 0,
-      }))
-      .sort((a, b) => a.date.getTime() - b.date.getTime());
+  mensajeInfo: string | null = null;
 
-    if (this.isMobile()) {
-      this.renderMobileChart(this.line.nativeElement, data);
-    } else {
-      this.renderDesktopChart(this.line.nativeElement, data);
+  meses = [
+    { value: 1, label: 'Enero' },
+    { value: 2, label: 'Febrero' },
+    { value: 3, label: 'Marzo' },
+    { value: 4, label: 'Abril' },
+    { value: 5, label: 'Mayo' },
+    { value: 6, label: 'Junio' },
+    { value: 7, label: 'Julio' },
+    { value: 8, label: 'Agosto' },
+    { value: 9, label: 'Septiembre' },
+    { value: 10, label: 'Octubre' },
+    { value: 11, label: 'Noviembre' },
+    { value: 12, label: 'Diciembre' },
+  ];
+
+  anios = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
+
+  // FILTRADO INTERNO
+    filtrarDesdeComponente() {
+    // Resetear mensaje
+    this.mensajeInfo = null;
+
+    // Filtrar
+    this.serieFiltrada = this.serie.filter((d) => {
+      const [yearStr, monthStr] = d.date.split('-');
+      const year = Number(yearStr);
+      const month = Number(monthStr);
+      return month === this.mesSeleccionado && year === this.anoSeleccionado;
+    });
+
+
+    // Limpiar gráfico SIEMPRE antes de decidir qué hacer
+    d3.select(this.line.nativeElement).selectAll('*').remove();
+
+    // Si no hay datos → mensaje y salir
+    if (this.serieFiltrada.length === 0) {
+      this.mensajeInfo = "No hay clientes para este periodo.";
+      return;
     }
+
+    // Si hay datos → redibujar
+    this.redibujar();
   }
+
+ ngOnChanges() {
+  if (!this.serie?.length) return;
+
+  // Inicializar solo la primera vez
+  if (!this.serieFiltrada.length) {
+    this.serieFiltrada = [...this.serie];
+    this.redibujar();
+  }
+}
 
   @HostListener('window:resize')
   onResize() {
-    this.ngOnChanges(); // re-renderiza según el tamaño actual
+    this.redibujar();
   }
 
   private isMobile(): boolean {
     return window.innerWidth < 768;
   }
+
+  getNombreMes(m: number): string {
+    const nombres = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+    return nombres[m - 1] ?? '';
+  }
+  
+  private redibujar() {
+    const el = this.line.nativeElement;   // ← ESTO ES LO QUE TE FALTABA
+
+    // Limpiar antes de dibujar
+    d3.select(el).selectAll('*').remove();
+    d3.select(el).select('svg').remove();
+
+    // Si no hay datos, no dibujar nada
+    if (!this.serieFiltrada.length) return;
+
+    // Agrupar por día (usando la fecha como string YYYY-MM-DD)
+    const counts: Record<string, number> = {};
+    this.serieFiltrada.forEach((d) => {
+      counts[d.date] = (counts[d.date] || 0) + 1;
+    });
+
+    // Rellenar todos los días del mes seleccionado
+    const start = new Date(this.anoSeleccionado, this.mesSeleccionado - 1, 1);
+    const end = new Date(this.anoSeleccionado, this.mesSeleccionado, 0);
+
+    const data: { date: Date; value: number }[] = [];
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      const key = d.toISOString().slice(0, 10); // YYYY-MM-DD
+      data.push({
+        date: new Date(key),
+        value: counts[key] || 0,
+      });
+    }
+
+    console.log("REDIBUJAR DATA:", data);
+
+    if (this.isMobile()) {
+      this.renderMobileChart(el, data);
+    } else {
+      this.renderDesktopChart(el, data);
+    }
+  }
+
 
   // ---------------- Desktop ----------------
   private renderDesktopChart(
@@ -80,7 +173,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
           .tickFormat(d3.format('d')),
       );
 
-    // Texto explicativo
     svg
       .append('text')
       .attr('x', w / 2)
@@ -103,7 +195,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .attr('stroke-width', 2)
       .attr('d', line);
 
-    // Tooltip
     const tooltip = d3
       .select('body')
       .append('div')
@@ -143,8 +234,8 @@ export class CrecimientoClientesCharComponent implements OnChanges {
   ) {
     d3.select(el).selectAll('*').remove();
 
-    const w = el.offsetWidth; // ancho del contenedor móvil
-    const h = w * 0.6; // altura proporcional
+    const w = el.offsetWidth;
+    const h = w * 0.6;
     const m = { t: 8, r: 8, b: 30, l: 30 };
     const maxY = Math.max(d3.max(data, (d) => d.value) ?? 0, 10);
 
@@ -156,6 +247,7 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .scaleTime()
       .domain(d3.extent(data, (d) => d.date) as [Date, Date])
       .range([m.l, w - m.r]);
+    console.log("EJE X:", d3.extent(data, (d) => d.date));
 
     const y = d3
       .scaleLinear()
@@ -166,7 +258,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .attr('transform', `translate(${m.l},0)`)
       .call(d3.axisLeft(y).ticks(5));
 
-    // Texto explicativo
     svg
       .append('text')
       .attr('x', w / 2)
@@ -189,7 +280,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .attr('stroke-width', 2)
       .attr('d', line);
 
-    // Tooltip
     const tooltip = d3
       .select('body')
       .append('div')
