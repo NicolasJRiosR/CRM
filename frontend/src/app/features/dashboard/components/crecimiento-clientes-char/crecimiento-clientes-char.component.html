@@ -10,13 +10,20 @@
 
   <!-- Filtros debajo del título -->
   <div class="flex gap-4 mb-10 items-center justify-start">
-    <select class="border p-2 rounded" [(ngModel)]="mesSeleccionado">
+
+    <!-- MES -->
+    <select class="border p-2 rounded"
+            [(ngModel)]="mesSeleccionado"
+            (ngModelChange)="filtrarDesdeComponente()">
       @for (m of meses; track m.value) {
         <option [value]="m.value">{{ m.label }}</option>
       }
     </select>
 
-    <select class="border p-2 rounded" [(ngModel)]="anoSeleccionado">
+    <!-- AÑO -->
+    <select class="border p-2 rounded"
+            [(ngModel)]="anoSeleccionado"
+            (ngModelChange)="filtrarDesdeComponente()">
       @for (y of anios; track y) {
         <option [value]="y">{{ y }}</option>
       }
@@ -30,7 +37,7 @@
     </button>
   </div>
 
-  <!---MENSAJE INFORMATIVO SI NO HAY DATOS -->
+  <!-- MENSAJE SI NO HAY DATOS -->
   @if (mensajeInfo) {
     <div class="mt-4 mb-6 p-3 rounded 
                 bg-yellow-100 dark:bg-yellow-900 

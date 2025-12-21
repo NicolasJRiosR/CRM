@@ -72,15 +72,14 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     this.redibujar();
   }
 
- ngOnChanges() {
-  if (!this.serie?.length) return;
+  ngOnChanges() {
+    if (!this.serie?.length) return;
 
-  // Inicializar solo la primera vez
-  if (!this.serieFiltrada.length) {
-    this.serieFiltrada = [...this.serie];
-    this.redibujar();
+    // Primera carga: mostrar todo el mes actual
+    if (!this.serieFiltrada.length) {
+      this.filtrarDesdeComponente();
+    }
   }
-}
 
   @HostListener('window:resize')
   onResize() {
@@ -100,32 +99,39 @@ export class CrecimientoClientesCharComponent implements OnChanges {
   }
   
   private redibujar() {
-  const el = this.line.nativeElement;   // ← ESTO ES LO QUE TE FALTABA
+    const el = this.line.nativeElement;   // ← ESTO ES LO QUE TE FALTABA
 
-  // Limpiar antes de dibujar
-  d3.select(el).selectAll('*').remove();
-  d3.select(el).select('svg').remove();
+    // Limpiar antes de dibujar
+    d3.select(el).selectAll('*').remove();
+    d3.select(el).select('svg').remove();
 
-  // Si no hay datos, no dibujar nada
-  if (!this.serieFiltrada.length) return;
+    // Si no hay datos, no dibujar nada
+    if (!this.serieFiltrada.length) return;
 
-  // Agrupar por día (usando la fecha como string YYYY-MM-DD)
-  const counts: Record<string, number> = {};
-  this.serieFiltrada.forEach((d) => {
-    counts[d.date] = (counts[d.date] || 0) + 1;
-  });
-
-  // Rellenar todos los días del mes seleccionado
-  const start = new Date(this.anoSeleccionado, this.mesSeleccionado - 1, 1);
-  const end = new Date(this.anoSeleccionado, this.mesSeleccionado, 0);
-
-  const data: { date: Date; value: number }[] = [];
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    const key = d.toISOString().slice(0, 10); // YYYY-MM-DD
-    data.push({
-      date: new Date(key),
-      value: counts[key] || 0,
+    // Agrupar por día (usando la fecha como string YYYY-MM-DD)
+    const counts: Record<string, number> = {};
+    this.serieFiltrada.forEach((d) => {
+      counts[d.date] = (counts[d.date] || 0) + 1;
     });
+
+  const year = this.anoSeleccionado;
+    const month = this.mesSeleccionado;
+
+    // último día del mes seleccionado
+    const lastDay = new Date(year, month, 0).getDate();
+
+    const data: { date: Date; value: number }[] = [];
+
+    for (let day = 1; day <= lastDay; day++) {
+      const key =
+        `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`; // YYYY-MM-DD
+
+      data.push({
+        // fecha LOCAL sin UTC de por medio
+        date: new Date(year, month - 1, day),
+        value: counts[key] || 0,
+      });
+
   }
 
   console.log("REDIBUJAR DATA:", data);
