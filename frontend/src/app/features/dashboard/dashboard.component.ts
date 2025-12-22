@@ -100,7 +100,7 @@ export class DashboardComponent {
   }
 
   //FUNCION PRINCIPAL PARA CARGAR TODAS LAS METRICAS DESDE LA API
-  private loadMetrics() {
+  loadMetrics() {
     //-------BLOQUE CLIENTES---------
     this.http.get<any[]>('http://localhost:9080/api/clientes').subscribe({
       next: (clientes) => {
@@ -121,19 +121,28 @@ export class DashboardComponent {
         }).length;
 
         // Serie completa con TODOS los clientes (para filtrar por mes/año)
-        this.clientesSerieCompleta = clientes
-          .filter(c => c.fechaRegistro)
-          .map(c => {
-            const iso = String(c.fechaRegistro);
+        this.clientesSerieCompleta = [
+          ...clientes
+            .filter(c => c.fechaRegistro)
+            .map(c => {
+              const iso = String(c.fechaRegistro);
+              const soloFecha = iso.slice(0, 10);
+              return {
+                date: soloFecha,
+                value: 1,
+              };
+            })
+        ];
+        console.log("📌 clientesSerieCompleta (primeros 20):", 
+          this.clientesSerieCompleta.slice(0, 20)
+        );
+        console.log("📌 clientesSerieCompleta (últimos 20):", 
+          this.clientesSerieCompleta.slice(-20)
+        );
+        console.log("📌 ¿Incluye 2025-12?:", 
+          this.clientesSerieCompleta.some(d => d.date.startsWith("2025-12"))
+        );
 
-            // Extraemos solo la parte de fecha sin tocar zonas horarias
-            const soloFecha = iso.slice(0, 10); // "2025-12-01"
-
-            return {
-              date: soloFecha, // SIEMPRE string YYYY-MM-DD
-              value: 1,
-            };
-          });
 
         //para el grafico de clientes nuevos por dia
         this.clientesSerie = this.buildNewClientsDailySeries(clientes);

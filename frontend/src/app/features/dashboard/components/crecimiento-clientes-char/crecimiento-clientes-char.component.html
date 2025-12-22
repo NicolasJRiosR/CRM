@@ -13,19 +13,17 @@
 
     <!-- MES -->
     <select class="border p-2 rounded"
-            [(ngModel)]="mesSeleccionado"
-            (ngModelChange)="filtrarDesdeComponente()">
+            [(ngModel)]="mesSeleccionado">
       @for (m of meses; track m.value) {
-        <option [value]="m.value">{{ m.label }}</option>
+        <option [ngValue]="m.value">{{ m.label }}</option>
       }
     </select>
 
     <!-- AÑO -->
     <select class="border p-2 rounded"
-            [(ngModel)]="anoSeleccionado"
-            (ngModelChange)="filtrarDesdeComponente()">
+            [(ngModel)]="anoSeleccionado">
       @for (y of anios; track y) {
-        <option [value]="y">{{ y }}</option>
+        <option [ngValue]="y">{{ y }}</option>
       }
     </select>
 
@@ -50,7 +48,7 @@
   <div
     class="w-full aspect-[16/9] relative mt-10"
     style="padding-bottom: 5%"
-    [style.display]="mensajeInfo ? 'none' : 'block'"
+    [hidden]="mensajeInfo"
   >
     <div #line class="absolute top-0 left-0 w-full h-full"></div>
   </div>
