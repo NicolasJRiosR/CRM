@@ -5,8 +5,24 @@
   Disponibilidad de productos
 </h3>
 
+<!-- Selector de modo -->
+<div class="flex justify-start mb-4 ml-4 mt-10">
+  <select
+    [(ngModel)]="modo"
+    (change)="aplicarModo()"
+    class="border p-2 rounded"
+  >
+    <option [ngValue]="1">Todos los productos</option>
+    <option [ngValue]="3">Productos sin stock</option>
+    <option [ngValue]="2">Productos disponibles</option>
+  </select>
+</div>
+
+<!-- LEYENDA A LA IZQUIERDA --> 
+ <div class="w-48" #legendContainer></div>
+
 <!-- Contenedor responsivo (proporción + espacio) -->
-<div class="w-full aspect-[5/4] relative">
+<div class="w-full aspect-[5/4] relative -mt-4">
   <!-- Contenido real del gráfico (altura real) -->
   <div #donut class="absolute inset-0"></div>
 </div>

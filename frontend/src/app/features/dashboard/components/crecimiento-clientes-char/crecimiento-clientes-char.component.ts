@@ -46,7 +46,7 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     { value: 12, label: 'Diciembre' },
   ];
 
-  anios = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
+  anios = [2025, 2026];
 
   // FILTRADO INTERNO
   filtrarDesdeComponente() {
@@ -58,10 +58,10 @@ export class CrecimientoClientesCharComponent implements OnChanges {
   console.log("   ➤ serie LENGTH:", this.serie?.length);
   console.log("   ➤ primeros 5 de serie:", this.serie.slice(0, 5));
 
-  // 🔥 LIMPIAR SIEMPRE ANTES DE FILTRAR
+  //LIMPIAR SIEMPRE ANTES DE FILTRAR
   this.mensajeInfo = null;
 
-  // 🔍 FILTRADO
+  //FILTRADO
   this.serieFiltrada = this.serie.filter((d) => {
     const [yearStr, monthStr] = d.date.split('-');
     const year = Number(yearStr);
@@ -72,38 +72,23 @@ export class CrecimientoClientesCharComponent implements OnChanges {
   console.log("   ➤ serieFiltrada LENGTH:", this.serieFiltrada.length);
   console.log("   ➤ primeros 5 de filtrada:", this.serieFiltrada.slice(0, 5));
 
-  // 🧹 LIMPIAR GRÁFICO
   d3.select(this.line.nativeElement).selectAll('*').remove();
 
-  // ❌ NO HAY DATOS
   if (this.serieFiltrada.length === 0) {
     this.mensajeInfo = "No hay clientes para este periodo.";
-    console.log("   🔴 NO HAY DATOS PARA ESTE PERIODO");
-    console.log("   ➤ mensajeInfo DESPUÉS:", this.mensajeInfo);
     return;
   }
-
-  // ✔️ HAY DATOS
-  console.log("   🟢 HAY DATOS, REDIBUJAR");
-  console.log("   ➤ mensajeInfo DESPUÉS:", this.mensajeInfo);
-
   this.redibujar();
 }
 
-
-
   ngOnChanges() {
-    console.log("🔵 ngOnChanges() DISPARADO");
 
     this.mensajeInfo = null;
     d3.select(this.line.nativeElement).selectAll("*").remove();
 
     if (!this.serie?.length) {
-      console.log("⛔ SERIE VACÍA EN ngOnChanges");
       return;
     }
-
-    console.log("📥 SERIE RECIBIDA EN ngOnChanges:", this.serie);
 
     if (this.serieFiltrada.length === 0) {
       this.filtrarDesdeComponente();
@@ -130,17 +115,9 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     ];
     return nombres[m - 1] ?? '';
   }
-  
-  constructor() {
-  console.log("🧱 COMPONENTE CREADO");
-}
-
-ngOnDestroy() {
-  console.log("💥 COMPONENTE DESTRUIDO");
-}
-
+ 
   private redibujar() {
-    const el = this.line.nativeElement;   // ← ESTO ES LO QUE TE FALTABA
+    const el = this.line.nativeElement;  
 
     // Limpiar antes de dibujar
     d3.select(el).selectAll('*').remove();
