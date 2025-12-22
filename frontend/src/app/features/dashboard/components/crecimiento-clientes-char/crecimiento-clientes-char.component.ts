@@ -6,6 +6,8 @@ import {
   ViewChild,
   OnChanges,
   HostListener,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as d3 from 'd3';
@@ -21,6 +23,7 @@ export class CrecimientoClientesCharComponent implements OnChanges {
   @Input() serie: { date: string; value: number }[] = [];
   serieFiltrada: { date: string; value: number }[] = [];
   @ViewChild('line', { static: true }) line!: ElementRef;
+  @Output() solicitarRefresco = new EventEmitter<void>();
 
   //FILTRADO DEL GRAFICO
   mesSeleccionado = new Date().getMonth() + 1;
@@ -46,39 +49,69 @@ export class CrecimientoClientesCharComponent implements OnChanges {
   anios = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 
   // FILTRADO INTERNO
-    filtrarDesdeComponente() {
-    // Resetear mensaje
+  filtrarDesdeComponente() {
+  console.log("🟦 filtrarDesdeComponente()");
+  console.log("   ➤ mesSeleccionado:", this.mesSeleccionado);
+  console.log("   ➤ anoSeleccionado:", this.anoSeleccionado);
+
+  console.log("   ➤ mensajeInfo ANTES:", this.mensajeInfo);
+  console.log("   ➤ serie LENGTH:", this.serie?.length);
+  console.log("   ➤ primeros 5 de serie:", this.serie.slice(0, 5));
+
+  // 🔥 LIMPIAR SIEMPRE ANTES DE FILTRAR
+  this.mensajeInfo = null;
+
+  // 🔍 FILTRADO
+  this.serieFiltrada = this.serie.filter((d) => {
+    const [yearStr, monthStr] = d.date.split('-');
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+    return month === this.mesSeleccionado && year === this.anoSeleccionado;
+  });
+
+  console.log("   ➤ serieFiltrada LENGTH:", this.serieFiltrada.length);
+  console.log("   ➤ primeros 5 de filtrada:", this.serieFiltrada.slice(0, 5));
+
+  // 🧹 LIMPIAR GRÁFICO
+  d3.select(this.line.nativeElement).selectAll('*').remove();
+
+  // ❌ NO HAY DATOS
+  if (this.serieFiltrada.length === 0) {
+    this.mensajeInfo = "No hay clientes para este periodo.";
+    console.log("   🔴 NO HAY DATOS PARA ESTE PERIODO");
+    console.log("   ➤ mensajeInfo DESPUÉS:", this.mensajeInfo);
+    return;
+  }
+
+  // ✔️ HAY DATOS
+  console.log("   🟢 HAY DATOS, REDIBUJAR");
+  console.log("   ➤ mensajeInfo DESPUÉS:", this.mensajeInfo);
+
+  this.redibujar();
+}
+
+
+
+  ngOnChanges() {
+    console.log("🔵 ngOnChanges() DISPARADO");
+
     this.mensajeInfo = null;
+    d3.select(this.line.nativeElement).selectAll("*").remove();
 
-    // Filtrar
-    this.serieFiltrada = this.serie.filter((d) => {
-      const [yearStr, monthStr] = d.date.split('-');
-      const year = Number(yearStr);
-      const month = Number(monthStr);
-      return month === this.mesSeleccionado && year === this.anoSeleccionado;
-    });
-
-
-    // Limpiar gráfico SIEMPRE antes de decidir qué hacer
-    d3.select(this.line.nativeElement).selectAll('*').remove();
-
-    // Si no hay datos → mensaje y salir
-    if (this.serieFiltrada.length === 0) {
-      this.mensajeInfo = "No hay clientes para este periodo.";
+    if (!this.serie?.length) {
+      console.log("⛔ SERIE VACÍA EN ngOnChanges");
       return;
     }
 
-    // Si hay datos → redibujar
-    this.redibujar();
-  }
+    console.log("📥 SERIE RECIBIDA EN ngOnChanges:", this.serie);
 
-  ngOnChanges() {
-    if (!this.serie?.length) return;
-
-    // Primera carga: mostrar todo el mes actual
-    if (!this.serieFiltrada.length) {
+    if (this.serieFiltrada.length === 0) {
       this.filtrarDesdeComponente();
     }
+  }
+
+  onCambioMesAno() {
+    this.filtrarDesdeComponente();
   }
 
   @HostListener('window:resize')
@@ -98,6 +131,14 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     return nombres[m - 1] ?? '';
   }
   
+  constructor() {
+  console.log("🧱 COMPONENTE CREADO");
+}
+
+ngOnDestroy() {
+  console.log("💥 COMPONENTE DESTRUIDO");
+}
+
   private redibujar() {
     const el = this.line.nativeElement;   // ← ESTO ES LO QUE TE FALTABA
 
