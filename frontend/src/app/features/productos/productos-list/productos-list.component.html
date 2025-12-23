@@ -1,33 +1,39 @@
-<div class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto">
+<div
+  class="bg-white dark:bg-[#2a2e31] p-6 rounded shadow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+>
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-2xl font-bold">Productos</h2>
   </div>
 
+  <!-- FILTROS -->
   <div
     [formGroup]="filtroForm"
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-6 bg-gray-100 dark:bg-[#2C3441] p-4 rounded-xl"
   >
     <input
       type="text"
       placeholder="Filtrar por ID..."
       formControlName="id"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+      class="border rounded-lg dark:border-gray-700 px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
+
     <input
       type="text"
       placeholder="Filtrar por nombre..."
       formControlName="nombre"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+      class="border rounded-lg dark:border-gray-700 px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
+
     <input
       type="text"
       placeholder="Filtrar por proveedor..."
       formControlName="proveedor"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+      class="border rounded-lg dark:border-gray-700 px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
+
     <select
       formControlName="stockCategoria"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+      class="border rounded-lg dark:border-gray-700 px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     >
       <option value="">Todas las categorías</option>
       <option value="SIN_STOCK">Sin Stock</option>
@@ -36,21 +42,17 @@
       <option value="DISPONIBLE">Disponible</option>
     </select>
 
-    <div
-      class="md:col-span-4 flex flex-col sm:flex-row justify-between items-center mt-2 gap-3"
-    >
+    <div class="md:col-span-4 flex flex-col sm:flex-row justify-between items-center mt-2 gap-3">
       <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-
         <a
-        href="#"
-        (click)="limpiar(); $event.preventDefault()"
-        class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 w-full sm:w-auto text-center"
-      >
-        Limpiar
-      </a>
+          href="#"
+          (click)="limpiar(); $event.preventDefault()"
+          class="bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-xl shadow-md active:scale-95 w-full sm:w-auto text-center"
+        >
+          Limpiar
+        </a>
       </div>
 
-    
       <a
         routerLink="/productos/nuevo"
         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 w-full sm:w-auto text-center"
@@ -60,12 +62,13 @@
     </div>
   </div>
 
+  <!-- TABLA -->
   <div class="overflow-x-auto">
     <table
-      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden text-center min-w-[600px]"
+      class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg text-center min-w-[600px]"
     >
       <thead
-        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+        class="bg-gray-100 dark:bg-[#2C3441] text-gray-700 dark:text-gray-200 border-b dark:border-[#e5e7eb]"
       >
         <tr>
           <th class="p-3 font-semibold">ID</th>
@@ -76,6 +79,7 @@
           <th class="p-3 font-semibold">Acciones</th>
         </tr>
       </thead>
+
       <tbody>
         @if (productosFiltrados().length === 0) {
           <tr class="border-t dark:border-gray-700">
@@ -86,43 +90,39 @@
         } @else {
           @for (p of productosFiltrados(); track p.id) {
             <tr
-              class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+              class="border-t dark:border-[#e5e7eb] hover:bg-gray-50 dark:hover:bg-[#353A40] transition"
             >
               <td class="p-3">{{ p.id }}</td>
               <td class="p-3">{{ p.nombre }}</td>
+
               <td class="p-3">
                 <span
                   [ngStyle]="{
                     'background-color':
-                      p.stock > 50
-                        ? '#26a69a'
-                        : p.stock > 10
-                          ? '#ffca28'
-                          : p.stock >= 1
-                            ? '#b71c1c'
-                            : '#7f0000',
+                      p.stock > 50 ? '#26a69a'
+                      : p.stock > 10 ? '#ffca28'
+                      : p.stock >= 1 ? '#b71c1c'
+                      : '#7f0000',
                     color: '#fff',
                     padding: '0.25rem 0.5rem',
                     'border-radius': '0.25rem',
-                    display: 'inline-block',
+                    display: 'inline-block'
                   }"
                 >
                   {{
-                    p.stock > 50
-                      ? "Disponible"
-                      : p.stock > 10
-                        ? "Bajo"
-                        : p.stock >= 1
-                          ? "Crítico"
-                          : "Sin Stock"
+                    p.stock > 50 ? "Disponible"
+                    : p.stock > 10 ? "Bajo"
+                    : p.stock >= 1 ? "Crítico"
+                    : "Sin Stock"
                   }}
                   ({{ p.stock }})
                 </span>
               </td>
+
               <td class="p-3">{{ p.precio }}</td>
               <td class="p-3">{{ p.proveedorNombre }}</td>
+
               <td class="p-3">
-                
                 <a
                   [routerLink]="['/productos', p.id]"
                   class="bg-brand-700 text-white px-3 py-1 rounded hover:bg-brand-800 inline-block"

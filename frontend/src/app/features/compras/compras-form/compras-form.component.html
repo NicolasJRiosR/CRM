@@ -1,63 +1,91 @@
-<div class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto">
+<div class="bg-white dark:bg-[#2a2e31] p-6 rounded shadow w-full max-w-md mx-auto">
   <h2 class="text-2xl font-bold mb-6 text-center">
      @if (current()) { Editar compra } @else { Nueva compra }
   </h2>
 
-
   <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
 
     <div>
-      <label class="block text-sm font-medium mb-1">Producto</label>
-      <select formControlName="productoId" class="w-full border rounded px-3 py-2 focus:ring">
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Producto</label>
+      <select
+        formControlName="productoId"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
+      >
         <option value="" disabled>Seleccione un producto</option>
         @for (p of productosSig(); track p.id) {
           <option [value]="p.id">{{ p.nombre }} (stock: {{ p.stock }})</option>
         }
       </select>
+
       @if (form.get('productoId')?.invalid && form.get('productoId')?.touched) {
         <div class="text-red-600 text-sm mt-1">Seleccione un producto válido</div>
       }
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-1">Cantidad</label>
-      <input type="number" formControlName="cantidad" placeholder="Ej. 5"
-             class="w-full border rounded px-3 py-2 focus:ring"/>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Cantidad</label>
+      <input
+        type="number"
+        formControlName="cantidad"
+        placeholder="Ej. 5"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
+      />
+
       @if (form.get('cantidad')?.invalid && form.get('cantidad')?.touched) {
         <div class="text-red-600 text-sm mt-1">Introduce una cantidad válida</div>
       }
     </div>
 
-
     <div>
-      <label class="block text-sm font-medium mb-1">Precio unitario</label>
-      <input type="number" formControlName="precioUnitario" placeholder="Ej. 100"
-             class="w-full border rounded px-3 py-2 focus:ring"/>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Precio unitario</label>
+      <input
+        type="number"
+        formControlName="precioUnitario"
+        placeholder="Ej. 100"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
+      />
+
       @if (form.get('precioUnitario')?.invalid && form.get('precioUnitario')?.touched) {
         <div class="text-red-600 text-sm mt-1">Introduce un precio válido</div>
       }
     </div>
 
-
     <div>
-      <label class="block text-sm font-medium mb-1">Proveedor</label>
-      <select formControlName="proveedorId" class="w-full border rounded px-3 py-2 focus:ring">
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Proveedor</label>
+      <select
+        formControlName="proveedorId"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
+      >
         <option value="" disabled>Seleccione un proveedor</option>
         @for (prov of proveedoresSig(); track prov.id) {
           <option [value]="prov.id">{{ prov.nombre }}</option>
         }
       </select>
+
       @if (form.get('proveedorId')?.invalid && form.get('proveedorId')?.touched) {
         <div class="text-red-600 text-sm mt-1">Seleccione un proveedor válido</div>
       }
     </div>
 
-
     <div class="flex gap-3 justify-center pt-4">
       <a
         href="#"
         (click)="form.valid && save(); $event.preventDefault()"
-        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 text-center"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 text-center
+               shadow-md active:scale-95 transition
+               dark:bg-brand-700 dark:hover:bg-brand-800"
         [class.opacity-50]="form.invalid"
         [class.pointer-events-none]="form.invalid"
       >
@@ -66,10 +94,12 @@
 
       <a
         routerLink="/compras"
-        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 text-center"
+        class="bg-gray-200 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded
+               hover:bg-gray-300 dark:hover:bg-gray-500 text-center"
       >
         Cancelar
       </a>
     </div>
+
   </form>
 </div>

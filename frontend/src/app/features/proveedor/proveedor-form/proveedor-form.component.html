@@ -1,55 +1,65 @@
-<div class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto">
+<div class="bg-white dark:bg-[#2a2e31] p-6 rounded shadow w-full max-w-md mx-auto">
   <h2 class="text-2xl font-bold mb-6 text-center">
     {{ isEdit ? "Editar Proveedor" : "Nuevo Proveedor" }}
   </h2>
 
   <form (ngSubmit)="save()" class="space-y-4">
+
     <div>
-      <label class="block text-sm font-medium mb-1">Nombre</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Nombre</label>
       <input
         [value]="proveedor().nombre"
         (input)="update('nombre', $any($event.target).value)"
         placeholder="Ej. Proveedor S.A."
         required
-        class="w-full border rounded px-3 py-2 focus:ring"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       />
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-1">Contacto</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Contacto</label>
       <input
         [value]="proveedor().contacto"
         (input)="update('contacto', $any($event.target).value)"
         placeholder="Persona de contacto"
-        class="w-full border rounded px-3 py-2 focus:ring"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       />
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-1">Teléfono</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Teléfono</label>
       <input
         [value]="proveedor().telefono"
         (input)="update('telefono', $any($event.target).value)"
         placeholder="Ej. 600123456"
         required
-        class="w-full border rounded px-3 py-2 focus:ring"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       />
     </div>
 
     <div class="flex gap-3 justify-center pt-4">
-     
       <a
         href="#"
         (click)="save(); $event.preventDefault()"
-        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 active:scale-95 text-center"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 active:scale-95 text-center
+               shadow-md transition dark:bg-brand-700 dark:hover:bg-brand-800"
       >
         {{ isEdit ? "Actualizar" : "Guardar" }}
       </a>
 
-     
       <a
         routerLink="/proveedores"
-        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 text-center"
+        class="bg-gray-200 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded
+               hover:bg-gray-300 dark:hover:bg-gray-500 text-center"
       >
         Cancelar
       </a>

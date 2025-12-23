@@ -1,6 +1,4 @@
-<div
-  class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto"
->
+<div class="bg-white dark:bg-[#2a2e31] p-6 rounded shadow w-full max-w-md mx-auto">
   <h2 class="text-2xl font-bold mb-6 text-center">
     @if (current) {
       Editar venta
@@ -10,34 +8,37 @@
   </h2>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+
     <div>
-      <label class="block text-sm font-medium mb-1">Producto</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Producto</label>
       <select
         formControlName="productoId"
-        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       >
         <option value="">Selecciona un producto</option>
         @for (p of productosDisponibles(); track p.id) {
-          <option [value]="p.id">
-            {{ p.nombre }} (stock: {{ p.stock }})
-          </option>
+          <option [value]="p.id">{{ p.nombre }} (stock: {{ p.stock }})</option>
         }
       </select>
 
       @if (form.get("productoId")?.hasError("required") && form.get("productoId")?.touched) {
-        <div class="text-red-600 text-sm mt-1">
-          Debes seleccionar un producto
-        </div>
+        <div class="text-red-600 text-sm mt-1">Debes seleccionar un producto</div>
       }
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-1">Cantidad</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Cantidad</label>
       <input
         type="number"
         formControlName="cantidad"
         placeholder="Cantidad"
-        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       />
 
       @if (form.get("cantidad")?.hasError("required") && form.get("cantidad")?.touched) {
@@ -52,11 +53,14 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-1">Precio unitario</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Precio unitario</label>
       <input
         type="number"
         formControlName="precioUnitario"
-        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300 bg-gray-100 dark:bg-gray-600"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       />
 
       @if (form.get("precioUnitario")?.hasError("min") && form.get("precioUnitario")?.touched) {
@@ -65,10 +69,13 @@
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-1">Cliente</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Cliente</label>
       <select
         formControlName="clienteId"
-        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       >
         <option value="">Selecciona un cliente</option>
         @for (c of clientesSig(); track c.id) {
@@ -81,23 +88,27 @@
       }
     </div>
 
-
     <div class="flex gap-3 justify-center pt-4">
       <a
         href="javascript:void(0)"
         (click)="save()"
-        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 cursor-pointer"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 cursor-pointer
+               shadow-md active:scale-95 transition
+               dark:bg-brand-700 dark:hover:bg-brand-800"
         [class.opacity-50]="form.invalid"
       >
         Guardar
       </a>
+
       <a
         href="javascript:void(0)"
         (click)="cancel()"
-        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 cursor-pointer"
+        class="bg-gray-200 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded
+               hover:bg-gray-300 dark:hover:bg-gray-500 cursor-pointer"
       >
         Cancelar
       </a>
     </div>
+
   </form>
 </div>

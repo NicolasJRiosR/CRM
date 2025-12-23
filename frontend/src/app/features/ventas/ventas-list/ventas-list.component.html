@@ -1,29 +1,31 @@
 <div
-  class="bg-white dark:bg-gray-800 p-6 rounded shadow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
+  class="bg-white dark:bg-[#2a2e31] p-6 rounded shadow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
 >
   <h2 class="text-2xl font-bold mb-6">Listado de ventas</h2>
 
   <!-- FILTROS -->
   <div
     [formGroup]="filtroForm"
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6 bg-gray-100 dark:bg-[#2C3441] p-4 rounded-xl"
   >
     <input
       type="text"
       placeholder="Filtrar por ID..."
       formControlName="id"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+      class="border rounded-lg dark:border-gray-700 px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
+
     <input
       type="date"
       formControlName="fecha"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+      class="border rounded-lg dark:border-gray-700 px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
+
     <input
       type="text"
       placeholder="Filtrar por producto..."
       formControlName="producto"
-      class="border rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
+      class="border rounded-lg dark:border-gray-700 px-3 py-2 shadow-sm bg-white dark:bg-gray-600 w-full"
     />
 
     <!-- Botones -->
@@ -48,13 +50,13 @@
     </div>
   </div>
 
-  <!-- TABLA RESPONSIVE -->
+  <!-- TABLA -->
   <div class="overflow-x-auto">
     <table
       class="w-full table-auto mb-6 border border-gray-200 dark:border-gray-700 rounded-lg text-center min-w-[600px]"
     >
       <thead
-        class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+        class="bg-gray-100 dark:bg-[#2C3441] text-gray-700 dark:text-gray-200 border-b dark:border-[#e5e7eb]"
       >
         <tr>
           <th class="p-3 font-semibold">ID</th>
@@ -65,6 +67,7 @@
           <th class="p-3 font-semibold">Acciones</th>
         </tr>
       </thead>
+
       <tbody>
         @if (ventasFiltradas().length === 0) {
           <tr class="border-t dark:border-gray-700">
@@ -75,7 +78,7 @@
         } @else {
           @for (v of ventasFiltradas(); track v.id) {
             <tr
-              class="border-t dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+              class="border-t dark:border-[#e5e7eb] hover:bg-gray-50 dark:hover:bg-[#353A40] transition"
             >
               <td class="p-3">{{ v.id }}</td>
 
@@ -85,6 +88,7 @@
 
               <td class="p-3">{{ v.cantidad }}</td>
               <td class="p-3">{{ v.precioUnitario }}</td>
+
               <td class="p-3 whitespace-nowrap">
                 {{ v.fecha | date: "dd/MM/yyyy" }}
               </td>

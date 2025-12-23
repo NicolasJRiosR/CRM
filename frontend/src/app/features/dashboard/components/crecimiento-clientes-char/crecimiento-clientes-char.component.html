@@ -1,6 +1,5 @@
 <div class="max-w-4xl mx-auto px-4">
 
-  <!-- Encabezado -->
   <h3
     class="text-lg font-semibold mb-10 text-gray-800 dark:text-white text-center"
   >
@@ -8,39 +7,50 @@
     {{ getNombreMes(mesSeleccionado) }} {{ anoSeleccionado }}
   </h3>
 
-  <!-- Filtros debajo del título -->
-  <div class="flex gap-4 mb-10 items-center justify-start">
+  <div class="flex gap-4 mb-10 items-center flex-wrap">
 
-    <!-- MES -->
-    <select class="border p-2 rounded"
-            [(ngModel)]="mesSeleccionado">
+    <select
+      class="border rounded-lg px-3 py-2 shadow-sm
+             bg-white dark:bg-gray-600
+             border-gray-300 dark:border-gray-700
+             text-gray-800 dark:text-gray-200"
+      [(ngModel)]="mesSeleccionado"
+    >
       @for (m of meses; track m.value) {
         <option [ngValue]="m.value">{{ m.label }}</option>
       }
     </select>
 
-    <!-- AÑO -->
-    <select class="border p-2 rounded"
-            [(ngModel)]="anoSeleccionado">
+    <select
+      class="border rounded-lg px-3 py-2 shadow-sm
+             bg-white dark:bg-gray-600
+             border-gray-300 dark:border-gray-700
+             text-gray-800 dark:text-gray-200"
+      [(ngModel)]="anoSeleccionado"
+    >
       @for (y of anios; track y) {
         <option [ngValue]="y">{{ y }}</option>
       }
     </select>
 
     <button
-      class="bg-blue-600 text-white px-4 py-2 rounded"
+      class="bg-brand-700 text-white px-4 py-2 rounded-lg shadow-md
+             hover:bg-brand-800 active:scale-95
+             dark:bg-brand-700 dark:hover:bg-brand-800"
       (click)="filtrarDesdeComponente()"
     >
       Filtrar
     </button>
+
   </div>
 
-  <!-- MENSAJE SI NO HAY DATOS -->
   @if (mensajeInfo) {
-    <div class="mt-4 mb-6 p-3 rounded 
-                bg-yellow-100 dark:bg-yellow-900 
-                text-yellow-800 dark:text-yellow-200 
-                border border-yellow-300 dark:border-yellow-700">
+    <div
+      class="mt-4 mb-6 p-3 rounded 
+             bg-yellow-100 dark:bg-yellow-900 
+             text-yellow-800 dark:text-yellow-200 
+             border border-yellow-300 dark:border-yellow-700"
+    >
       {{ mensajeInfo }}
     </div>
   }

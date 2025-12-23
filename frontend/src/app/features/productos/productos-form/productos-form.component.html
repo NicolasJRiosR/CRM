@@ -1,45 +1,60 @@
-<div
-  class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto"
->
+<div class="bg-white dark:bg-[#2a2e31] p-6 rounded shadow w-full max-w-md mx-auto">
   <h2 class="text-2xl font-bold mb-6 text-center">
     {{ id > 0 ? "Editar producto" : "Nuevo producto" }}
   </h2>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+
     <div>
-      <label class="block text-sm font-medium mb-1">Nombre</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Nombre</label>
+
       <input
         formControlName="nombre"
         placeholder="Ej. Producto X"
-        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       />
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-1">Stock</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Stock</label>
+
       <input
         type="number"
         formControlName="stock"
         placeholder="Ej. 10"
-        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       />
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-1">Precio</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Precio</label>
+
       <input
         type="number"
         formControlName="precio"
         placeholder="Ej. 99.99"
-        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       />
     </div>
 
     <div>
-      <label class="block text-sm font-medium mb-1">Proveedor</label>
+      <label class="block text-sm font-medium mb-1 dark:text-gray-200">Proveedor</label>
+
       <select
         formControlName="proveedorId"
-        class="w-full border rounded px-3 py-2 focus:ring focus:ring-brand-300"
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40"
       >
         @for (prov of proveedoresSig(); track prov.id) {
           <option [value]="prov.id">{{ prov.nombre }}</option>
@@ -52,7 +67,9 @@
       <a
         href="#"
         (click)="form.valid && save(); $event.preventDefault()"
-        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 text-center"
+        class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 text-center
+               shadow-md active:scale-95 transition
+               dark:bg-brand-700 dark:hover:bg-brand-800"
         [class.opacity-50]="form.invalid"
         [class.pointer-events-none]="form.invalid"
       >
@@ -61,10 +78,12 @@
 
       <a
         [routerLink]="['/productos']"
-        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 text-center"
+        class="bg-gray-200 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded
+               hover:bg-gray-300 dark:hover:bg-gray-500 text-center"
       >
         Cancelar
       </a>
     </div>
+
   </form>
 </div>

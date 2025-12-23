@@ -1,57 +1,76 @@
-<div class="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-md mx-auto">
+<div class="bg-white dark:bg-[#2a2e31] p-6 rounded shadow w-full max-w-md mx-auto">
   <h2 class="text-2xl font-bold mb-6 text-center">
     @if (id) { Editar cliente } @else { Nuevo cliente }
   </h2>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
- 
+
     <div>
-      <label for="nombre" class="block text-sm font-medium mb-1">Nombre completo</label>
+      <label for="nombre" class="block text-sm font-medium mb-1 dark:text-gray-200">
+        Nombre completo
+      </label>
+
       <input id="nombre" formControlName="nombre" placeholder="Ej. Juan Pérez"
-             class="w-full border rounded px-3 py-2 focus:ring"/>
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40" />
+
       @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
-        <div class="text-red-600 text-sm mt-1" aria-live="assertive">
-          El nombre es obligatorio
-        </div>
+        <div class="text-red-600 text-sm mt-1">El nombre es obligatorio</div>
       }
     </div>
 
-    
     <div>
-      <label for="email" class="block text-sm font-medium mb-1">Correo electrónico</label>
+      <label for="email" class="block text-sm font-medium mb-1 dark:text-gray-200">
+        Correo electrónico
+      </label>
+
       <input id="email" formControlName="email" type="email" placeholder="Ej. juan@email.com"
-             class="w-full border rounded px-3 py-2 focus:ring"/>
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40" />
+
       @if (form.get('email')?.invalid && form.get('email')?.touched) {
-        <div class="text-red-600 text-sm mt-1" aria-live="assertive">
-          Introduce un correo electrónico válido
-        </div>
+        <div class="text-red-600 text-sm mt-1">Introduce un correo electrónico válido</div>
       }
     </div>
 
- 
     <div>
-      <label for="telefono" class="block text-sm font-medium mb-1">Teléfono</label>
+      <label for="telefono" class="block text-sm font-medium mb-1 dark:text-gray-200">
+        Teléfono
+      </label>
+
       <input id="telefono" formControlName="telefono" placeholder="Ej. 600123456"
-             class="w-full border rounded px-3 py-2 focus:ring"/>
+        class="w-full border rounded-lg px-3 py-2 shadow-sm
+               bg-white dark:bg-gray-600
+               border-gray-300 dark:border-gray-700
+               focus:ring focus:ring-brand-700/40" />
+
       @if (form.get('telefono')?.invalid && form.get('telefono')?.touched) {
-        <div class="text-red-600 text-sm mt-1" aria-live="assertive">
-          Introduce un teléfono válido
-        </div>
+        <div class="text-red-600 text-sm mt-1">Introduce un teléfono válido</div>
       }
     </div>
 
- 
     <div class="flex gap-3 justify-center pt-4">
-      <a href="#" (click)="form.valid && save()"
-         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 text-center"
+
+      <a href="#"
+         (click)="form.valid && save()"
+         class="bg-brand-700 text-white px-4 py-2 rounded hover:bg-brand-800 text-center
+                shadow-md active:scale-95
+                transition
+                dark:bg-brand-700 dark:hover:bg-brand-800"
          [class.opacity-50]="form.invalid"
          [class.pointer-events-none]="form.invalid">
         Guardar
       </a>
+
       <a [routerLink]="['/clientes']"
-         class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 text-center">
+         class="bg-gray-200 dark:bg-gray-600 dark:text-gray-200 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500 text-center">
         Cancelar
       </a>
     </div>
+
   </form>
 </div>
