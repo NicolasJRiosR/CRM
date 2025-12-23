@@ -50,13 +50,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
 
   // FILTRADO INTERNO
   filtrarDesdeComponente() {
-  console.log("🟦 filtrarDesdeComponente()");
-  console.log("   ➤ mesSeleccionado:", this.mesSeleccionado);
-  console.log("   ➤ anoSeleccionado:", this.anoSeleccionado);
-
-  console.log("   ➤ mensajeInfo ANTES:", this.mensajeInfo);
-  console.log("   ➤ serie LENGTH:", this.serie?.length);
-  console.log("   ➤ primeros 5 de serie:", this.serie.slice(0, 5));
 
   //LIMPIAR SIEMPRE ANTES DE FILTRAR
   this.mensajeInfo = null;
@@ -68,9 +61,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     const month = Number(monthStr);
     return month === this.mesSeleccionado && year === this.anoSeleccionado;
   });
-
-  console.log("   ➤ serieFiltrada LENGTH:", this.serieFiltrada.length);
-  console.log("   ➤ primeros 5 de filtrada:", this.serieFiltrada.slice(0, 5));
 
   d3.select(this.line.nativeElement).selectAll('*').remove();
 
@@ -152,8 +142,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
 
   }
 
-  console.log("REDIBUJAR DATA:", data);
-
   if (this.isMobile()) {
     this.renderMobileChart(el, data);
   } else {
@@ -168,6 +156,8 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     data: { date: Date; value: number }[],
   ) {
     d3.select(el).selectAll('*').remove();
+
+    const isDark = document.documentElement.classList.contains('dark');
 
     const w = 470;
     const h = 290;
@@ -191,20 +181,24 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     g.append('g')
       .attr('transform', `translate(${m.l}, 0)`)
       .call(
-        d3
-          .axisLeft<number>(y)
+        d3.axisLeft<number>(y)
           .tickValues(d3.range(2, maxY + 2, 2))
           .tickFormat(d3.format('d')),
-      );
+      )
+      .selectAll('text')
+      .style('fill', isDark ? '#ffffff' : '#000000');
 
     svg
       .append('text')
       .attr('x', w / 2)
       .attr('y', h - 5)
       .attr('text-anchor', 'middle')
-      .style('font-size', '12px')
-      .style('fill', '#555')
+      .attr('style', `fill:${isDark ? '#ffffff' : '#000000'} !important`)
+      .style('font-size', '13px')
+      .style('stroke', 'none')
+      .style('paint-order', 'normal')
       .text('Cada punto representa los nuevos clientes añadidos ese día');
+
 
     const line = d3
       .line<{ date: Date; value: number }>()
@@ -258,6 +252,8 @@ export class CrecimientoClientesCharComponent implements OnChanges {
   ) {
     d3.select(el).selectAll('*').remove();
 
+    const isDark = document.documentElement.classList.contains('dark'); 
+
     const w = el.offsetWidth;
     const h = w * 0.6;
     const m = { t: 8, r: 8, b: 30, l: 30 };
@@ -280,15 +276,19 @@ export class CrecimientoClientesCharComponent implements OnChanges {
 
     g.append('g')
       .attr('transform', `translate(${m.l},0)`)
-      .call(d3.axisLeft(y).ticks(5));
+      .call(d3.axisLeft(y).ticks(5))
+      .selectAll('text')
+      .style('fill', isDark ? '#ffffff' : '#000000');
 
     svg
       .append('text')
       .attr('x', w / 2)
       .attr('y', h - 5)
       .attr('text-anchor', 'middle')
-      .style('font-size', '10px')
-      .style('fill', '#555')
+      .attr('style', `fill:${isDark ? '#ffffff' : '#000000'} !important`)
+      .style('font-size', '13px')
+      .style('stroke', 'none')
+      .style('paint-order', 'normal')
       .text('Cada punto representa los nuevos clientes añadidos ese día');
 
     const line = d3
