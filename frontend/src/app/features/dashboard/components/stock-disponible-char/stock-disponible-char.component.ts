@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as d3 from 'd3';
 
@@ -9,7 +9,7 @@ import * as d3 from 'd3';
   templateUrl: './stock-disponible-char.component.html',
   styleUrl: './stock-disponible-char.component.css',
 })
-export class StockDisponibleCharComponent {
+export class StockDisponibleCharComponent implements OnInit, OnDestroy {
   @Input() counts: Record<'disponible' | 'agotado', number> = {
     disponible: 0,
     agotado: 0,
@@ -21,8 +21,27 @@ export class StockDisponibleCharComponent {
 
   modo: number = 1;
 
+  darkModeObserver!: MutationObserver;
+
   ngOnChanges() {
     this.aplicarModo();
+  }
+
+  ngOnInit() {
+    this.darkModeObserver = new MutationObserver(() => {
+      this.aplicarModo(); 
+    });
+
+    this.darkModeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.darkModeObserver) {
+      this.darkModeObserver.disconnect();
+    }
   }
 
   aplicarModo() {
@@ -99,6 +118,8 @@ export class StockDisponibleCharComponent {
     }
 
     if (this.modo === 1) {
+      const isDark = document.documentElement.classList.contains('dark');
+
       const legend = svg.append('g')
         .attr('transform', `translate(${width * 0.78}, ${height / 10})`);
 
@@ -123,7 +144,7 @@ export class StockDisponibleCharComponent {
         .attr('x', 22)
         .attr('y', 12)
         .style('font-size', '14px')
-        .style('fill', '#333')
+        .style('fill', isDark ? '#ffffff' : '#333333')
         .text(d => d.label);
     }
 
@@ -141,12 +162,15 @@ export class StockDisponibleCharComponent {
       .innerRadius(radius * 0.5)
       .outerRadius(radius);
 
+    const isDark = document.documentElement.classList.contains('dark');
+
     const tooltip = d3
       .select(element)
       .append('div')
       .style('position', 'absolute')
-      .style('background', '#fff')
-      .style('border', '1px solid #ccc')
+      .style('background', isDark ? '#1f2937' : '#ffffff')
+      .style('color', isDark ? '#f9fafb' : '#111827')      
+      .style('border', isDark ? '1px solid #4b5563' : '1px solid #ccc')
       .style('padding', '6px')
       .style('border-radius', '4px')
       .style('font-size', '12px')
@@ -177,8 +201,8 @@ export class StockDisponibleCharComponent {
         tooltip
           .style('opacity', 1)
           .html(html)
-          .style('left', event.clientX - rect.left + 10 + 'px')
-          .style('top', event.clientY - rect.top - 28 + 'px');
+          .style('left', event.offsetX + 15 + 'px')
+          .style('top', event.offsetY - 10 + 'px');
       })
       .on('mouseout', () => tooltip.style('opacity', 0));
 
