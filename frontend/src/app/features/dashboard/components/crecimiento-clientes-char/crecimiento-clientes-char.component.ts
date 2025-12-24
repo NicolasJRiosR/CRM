@@ -8,6 +8,8 @@ import {
   HostListener,
   EventEmitter,
   Output,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as d3 from 'd3';
@@ -19,11 +21,12 @@ import * as d3 from 'd3';
   templateUrl: './crecimiento-clientes-char.component.html',
   styleUrls: ['./crecimiento-clientes-char.component.css'],
 })
-export class CrecimientoClientesCharComponent implements OnChanges {
+export class CrecimientoClientesCharComponent implements OnChanges, OnInit, OnDestroy {
   @Input() serie: { date: string; value: number }[] = [];
   serieFiltrada: { date: string; value: number }[] = [];
   @ViewChild('line', { static: true }) line!: ElementRef;
   @Output() solicitarRefresco = new EventEmitter<void>();
+  darkModeObserver!: MutationObserver;  
 
   //FILTRADO DEL GRAFICO
   mesSeleccionado = new Date().getMonth() + 1;
@@ -85,6 +88,23 @@ export class CrecimientoClientesCharComponent implements OnChanges {
     }
   }
 
+  ngOnInit() {
+    this.darkModeObserver = new MutationObserver(() => {
+      this.redibujar();
+    });
+
+    this.darkModeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.darkModeObserver) {
+      this.darkModeObserver.disconnect();
+    }
+  }
+
   onCambioMesAno() {
     this.filtrarDesdeComponente();
   }
@@ -135,7 +155,6 @@ export class CrecimientoClientesCharComponent implements OnChanges {
         `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`; // YYYY-MM-DD
 
       data.push({
-        // fecha LOCAL sin UTC de por medio
         date: new Date(year, month - 1, day),
         value: counts[key] || 0,
       });
@@ -217,8 +236,9 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .select('body')
       .append('div')
       .style('position', 'absolute')
-      .style('background', '#fff')
-      .style('border', '1px solid #ccc')
+      .style('background', isDark ? '#1f2937' : '#ffffff') 
+      .style('color', isDark ? '#f9fafb' : '#111827')    
+      .style('border', isDark ? '1px solid #4b5563' : '1px solid #ccc')
       .style('padding', '6px')
       .style('border-radius', '4px')
       .style('font-size', '12px')
@@ -308,8 +328,9 @@ export class CrecimientoClientesCharComponent implements OnChanges {
       .select('body')
       .append('div')
       .style('position', 'absolute')
-      .style('background', '#fff')
-      .style('border', '1px solid #ccc')
+      .style('background', isDark ? '#1f2937' : '#ffffff') 
+      .style('color', isDark ? '#f9fafb' : '#111827')      
+      .style('border', isDark ? '1px solid #4b5563' : '1px solid #ccc')
       .style('padding', '6px')
       .style('border-radius', '4px')
       .style('font-size', '10px')
