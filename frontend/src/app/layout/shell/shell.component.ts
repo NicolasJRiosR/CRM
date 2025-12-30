@@ -27,7 +27,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   private routerSub?: Subscription;
 
   isDark = false;
-  disabled = false
+  disabled = false;
 
   ngOnInit() {
     const saved = localStorage.getItem('theme');
@@ -45,18 +45,18 @@ export class ShellComponent implements OnInit, OnDestroy {
     });
   }
 
-    toggleDark() {
-      if (this.disabled) return;
+  toggleDark() {
+    if (this.disabled) return;
 
-      this.isDark = !this.isDark;
-      document.documentElement.classList.toggle('dark', this.isDark);
-      localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
+    this.isDark = !this.isDark;
+    document.documentElement.classList.toggle('dark', this.isDark);
+    localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
 
-      this.disabled = true;
-      setTimeout(() => {
-        this.disabled = false;
-      }, 600);
-    }
+    this.disabled = true;
+    setTimeout(() => {
+      this.disabled = false;
+    }, 600);
+  }
 
   ngOnDestroy() {
     this.routerSub?.unsubscribe();
@@ -135,5 +135,8 @@ export class ShellComponent implements OnInit, OnDestroy {
     });
 
     this.traduciendo = false;
+  }
+  toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
   }
 }
